@@ -210,20 +210,6 @@
             </span>
         </div>
 
-        <div class="field col-12 lg:col-12 xl:col-12">
-            <span class="p-float-label">
-                <input type="text" id="purpose_of_device" pInputText [(ngModel)]="purpose_of_device" class="p-inputtext-sm"/>
-                <label for="purpose_of_device" class="block font-bold">Purpose of Use</label>
-            </span>
-        </div>
-
-        <div class="field col-12 lg:col-12 xl:col-12">
-            <span class="p-float-label">
-                <input type="text" id="ip_address" pInputText [(ngModel)]="ip_address" class="p-inputtext-sm"/>
-                <label for="ip_address" class="block font-bold">IP Address</label>
-            </span>
-        </div>
-
         <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
             <span class="p-float-label">
                 <p-dropdown
@@ -247,6 +233,20 @@
                 placeholder="Select Database Type"
                 (onChange)="assignLocationId(selectedLocation)"></p-dropdown>
                 <label for="diection" class="block font-bold">Location</label>
+            </span>
+        </div>
+
+        <div class="field col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <input type="text" id="purpose_of_device" pInputText [(ngModel)]="purpose_of_device" class="p-inputtext-sm"/>
+                <label for="purpose_of_device" class="block font-bold">Purpose of Use</label>
+            </span>
+        </div>
+
+        <div class="field col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <input type="text" id="ip_address" pInputText [(ngModel)]="ip_address" class="p-inputtext-sm"/>
+                <label for="ip_address" class="block font-bold">IP Address</label>
             </span>
         </div>
     </div>
