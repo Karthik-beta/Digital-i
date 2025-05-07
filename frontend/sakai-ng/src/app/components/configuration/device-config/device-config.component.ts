@@ -448,8 +448,8 @@ export class DeviceConfigComponent implements OnInit {
             serial_number: this.serial_number,
             direction_of_use: this.selectedDirection,
             purpose_of_device: this.purpose_of_device,
-            ip_address: this.selectedCompany ? this.selectedCompany.id : null,
-            company: this.company,
+            ip_address: this.ip_address,
+            company: this.selectedCompany ? this.selectedCompany.id : null,
             location: this.selectedLocation ? this.selectedLocation.id : null,
         };
 
