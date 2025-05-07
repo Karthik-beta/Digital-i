@@ -251,9 +251,19 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     selectedSecondWeekoff: any | null;
 
     fixed_shift_select: boolean = false;
+    first_weekoff_select: boolean = false;
+    second_weekoff_select: boolean = false;
 
     setFixedShiftSelect(): void {
         this.fixed_shift_select = true;
+    }
+
+    setFirstWeekoffSelect(): void {
+        this.first_weekoff_select = true;
+    }
+
+    setSecondWeekoffSelect(): void {
+        this.second_weekoff_select = true;
     }
 
     assignShiftId(selectedShift: any) {

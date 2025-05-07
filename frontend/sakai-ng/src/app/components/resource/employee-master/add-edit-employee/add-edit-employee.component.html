@@ -626,10 +626,11 @@
                             <!-- <p-fieldset legend="Default/Auto Shift Rotation Setting" [toggleable]="true" [(collapsed)]="shiftRotationCollapsed" (onBeforeToggle)="toggleWeeklyOff()"> -->
                                 <p-fieldset legend="Shift Configuration" [toggleable]="true" [(collapsed)]="shiftRotationCollapsed" (onBeforeToggle)="toggleWeeklyOff()">
 
-                                <div class="flex align-items-center gap-2">
-                                    <p-inputSwitch [(ngModel)]="fixed_shift_select"  (onClick)="setFixedShiftSelect()" class="p-inputswitch-sm"></p-inputSwitch>
-                                    <span class="block font-bold">Fixed Shift</span>
-                                </div>
+
+
+
+
+
 
                                 <div class="grid p-fluid">
                                     <!-- <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
@@ -646,21 +647,35 @@
                                             <span class="block font-bold">Assign Shift</span>
                                         </div>
                                     </div> -->
-                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12 mt-4" *ngIf="fixed_shift_select">
+                                    <div class="flex col-12 md:col-12 lg:col-12 xl:col-12 align-items-center gap-1">
+                                        <p-inputSwitch [(ngModel)]="fixed_shift_select" (onClick)="setFixedShiftSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                        <span class="block font-bold">Fixed Shift</span>
+                                    </div>
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="fixed_shift_select">
                                         <span class="p-float-label">
                                             <p-dropdown [options]="shifts" [(ngModel)]="selectedFixedShift" (onChange)="assignFixedShift(selectedFixedShift)" placeholder="Select Shift" optionLabel="name" class="p-inputtext-sm" inputId="shift"></p-dropdown>
                                             <label for="shift">Assigned Shift</label>
                                         </span>
                                     </div>
 
-                                    <div class="field col-12 md:col-6 lg:col-6 xl:col-6 mt-4">
+                                    <div class="flex col-12 md:col-12 lg:col-12 xl:col-12 align-items-center gap-1">
+                                        <p-inputSwitch [(ngModel)]="first_weekoff_select" (onClick)="setFirstWeekoffSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                        <span class="block font-bold">First Weekly Off</span>
+                                    </div>
+
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="first_weekoff_select">
                                         <span class="p-float-label">
                                             <p-dropdown [options]="week_days" [(ngModel)]="selectedFirstWeekoff" (onChange)="assignFirstWeekOff(selectedFirstWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1" (onChange)="assignFirstWeeklyOff(selectedShift1)"></p-dropdown>
                                             <label for="shift_1" class="font-small">1st Week Off</label>
                                         </span>
                                     </div>
 
-                                    <div class="field col-12 md:col-6 lg:col-6 xl:col-6 mt-4">
+                                    <div class="flex col-12 md:col-12 lg:col-12 xl:col-12 align-items-center gap-1">
+                                        <p-inputSwitch [(ngModel)]="second_weekoff_select" (onClick)="setSecondWeekoffSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                        <span class="block font-bold">Second Weekly Off</span>
+                                    </div>
+
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="second_weekoff_select">
                                         <span class="p-float-label">
                                             <p-dropdown [options]="week_days" [(ngModel)]="selectedSecondWeekoff" (onChange)="assignSecondWeekOff(selectedSecondWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1"></p-dropdown>
                                             <label for="shift_1" class="font-small">2nd Week Off</label>
