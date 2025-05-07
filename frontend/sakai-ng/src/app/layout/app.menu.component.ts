@@ -222,7 +222,7 @@ export class AppMenuComponent implements OnInit {
                         label: 'Settings', icon: 'fa-solid fa-gear',
                         items: [
                             { label: 'Configuration', icon: 'fa-solid fa-cogs', routerLink: ['/configuration'] },
-                            { label: 'Device Config', icon: 'fa-solid fa-cogs', routerLink: ['/device_config']}
+                            { label: 'Device Configuration', icon: 'fa-solid fa-cogs', routerLink: ['/device_config']}
                         ]
                     }
                 ]
