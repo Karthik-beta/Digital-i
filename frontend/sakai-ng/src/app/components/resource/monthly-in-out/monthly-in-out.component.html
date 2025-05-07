@@ -1,0 +1,520 @@
+<div class="card">
+    <p-chart type="bar" [data]="data" [options]="options" />
+</div>
+
+<div class="card" *ngIf="showElements === 'false'">
+
+    <div class="grid p-fluid mt-2">
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-calendar
+                [(ngModel)]="month"
+                view="month"
+                dateFormat="mm/yy"
+                [readonlyInput]="true" (onSelect)="onMonthSelect($event)"/>
+                <label for="month">Select Month</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-multiSelect [options]="employeeList" [(ngModel)]="selectedEmployees" placeholder="Select a Employee"
+                [autoDisplayFirst]="true" optionLabel="combined_field" class="p-inputtext-sm"
+                inputId="employee" (onChange)="assignEmployeeId(selectedEmployees)">
+                </p-multiSelect>
+                <label for="employee">Employee</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-multiSelect [options]="companies" [(ngModel)]="selectedCompanies" placeholder="Select a Company"
+                [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm"
+                inputId="company" (onChange)="assignCompanyId(selectedCompanies)">
+                </p-multiSelect>
+                <label for="company">Company</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" placeholder="Select Locations"
+                [autoDisplayFirst]="true" optionLabel="name" class="p-multiselect-sm"
+                inputId="location" (onChange)="assignLocationId(selectedLocations)">
+                </p-multiSelect>
+                <label for="location">Location</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-multiSelect [options]="departments" [(ngModel)]="selectedDepartments" placeholder="Select a Department"
+                [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm"
+                inputId="department" (onChange)="assignDepartmentId(selectedDepartments)">
+                </p-multiSelect>
+                <label for="department">Department</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-multiSelect [options]="designations" [(ngModel)]="selectedDesignations" placeholder="Select a Designation"
+                [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm"
+                inputId="designation" (onChange)="assignDesignationId(selectedDesignations)">
+                </p-multiSelect>
+                <label for="designation">Designation</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+            <span class="p-float-label">
+                <p-dropdown
+                [options]="criteria"
+                [(ngModel)]="selectedCity"
+                optionLabel="name"
+                placeholder="Select a City" (onChange)="onCriteriaChange($event)"></p-dropdown>
+                <label for="shift">Criteria</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+            <div class="flex justify-content-end">
+                <p-button label="Export" severity="info" icon="pi pi-file-export" iconPos="right" (click)="onExportClick()" />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card">
+    <p-table #dt [lazy]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} - {last} of {totalRecords} entries" [globalFilterFields]="['employee_name', 'logdate']" responsiveScroll="true"
+    [totalRecords]="totalRecords" [loading]="loading" (onLazyLoad)="getAttendanceReport($event)"responsiveLayout="scroll"
+    [value]="reportList"
+    styleClass="p-datatable-sm p-datatable-gridlines"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    >
+    <ng-template pTemplate="caption">
+        <div class="flex justify-content-between flex-column sm:flex-row">
+            <div>
+                <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+                <button pButton label="Filter" class="p-button-outlined mb-2 ml-1" icon="pi pi-filter" (click)="showElements = 'false'"></button>
+                <!-- <p-splitButton icon="pi pi-bars" [model]="items" styleClass="p-button-primary mb-2 ml-1"></p-splitButton> -->
+            </div>
+            <span class="p-input-icon-left mb-2">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" #searchInput (input)="onSearchChange(searchInput.value)" placeholder="Search Keyword" class="w-full" />
+            </span>
+        </div>
+    </ng-template>
+        <ng-template pTemplate="header">
+            <tr style="white-space: nowrap;">
+                <th style="min-width: auto">
+                    <div class="flex justify-content-between align-items-center">
+                        #
+                    </div>
+                </th>
+                <th>
+                    Employee ID
+                </th>
+                <th>
+                    Device Enroll ID
+                </th>
+                <th>
+                    Employee Name
+                </th>
+                <th>
+                    Company
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Job Type
+                </th>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Employee Type
+                </th>
+                <th>
+                    Designation
+                </th>
+                <th>
+                    Log Date
+                </th>
+                <th>
+                    Shift
+                </th>
+                <th>
+                    Shift Status
+                </th>
+                <th>
+                    In Time
+                </th>
+                <th>
+                    Out Time
+                </th>
+                <th>
+                    Total Hours
+                </th>
+                <th>
+                    Late Entry
+                </th>
+                <th>
+                    Early Exit
+                </th>
+                <th>
+                    OT Hours
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-i="rowIndex">
+            <tr style="white-space: nowrap;">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.employee_id_id }}</td>
+                <td>{{ item.device_enroll_id }}</td>
+                <td>
+                    <img src="{{ item.profile_pic }}" width="32" style="vertical-align: middle"/>
+                    <span class="image-text ml-2">{{ item.employee_name }}</span>
+                </td>
+                <td>{{ item.company_name }}</td>
+                <td>{{ item.location_name }}</td>
+                <td>{{ item.job_type }}</td>
+                <!-- <td>{{ log.shift }}</td> -->
+                <td>{{ item.department_name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.designation_name }}</td>
+                <td>{{ item.logdate | date: 'dd/MM/yyyy' }}</td>
+                <td></td>
+                <td><span [class]="'status-badge status-' + item.shift_status">{{ item.shift_status }}</span></td>
+                <td>{{ item.first_logtime }}</td>
+                <td>{{ item.last_logtime }}</td>
+                <td>{{ item.total_time }}</td>
+                <td *ngIf="item.late_entry !== '00:00:00'; else emptyLateEntry">{{ item.late_entry }}</td>
+                <ng-template #emptyLateEntry><td></td></ng-template>
+                <td *ngIf="item.early_exit !== '00:00:00'; else emptyEarlyExit">{{ item.early_exit }}</td>
+                <ng-template #emptyEarlyExit><td></td></ng-template>
+                <td *ngIf="item.overtime !== '00:00:00'; else emptyOvertime">{{ item.overtime }}</td>
+                <ng-template #emptyOvertime><td></td></ng-template>
+                <td style="padding: 0em">
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No Data found.</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+            <tr>
+                <td colspan="8">Loading data. Please wait.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    header=""
+    [(visible)]="visible"
+    [position]="position"
+    [style]="{ width: '35rem' }">
+    <span class="p-text-secondary block text-center mb-5">
+        Preparing report for download. Please wait... ({{ counter.toFixed(1) }} seconds elapsed)
+    </span>
+    <p-progressBar mode="indeterminate" [style]="{ height: '8px' }"></p-progressBar>
+</p-dialog>
+
+
+<p-toast></p-toast>
+
+
+
+
+
+<!-- <div class="card">
+    <p-table
+        [value]="customers"
+        rowGroupMode="rowspan"
+        groupRowsBy="representative.name"
+        sortField="representative.name"
+        sortMode="single"
+        [tableStyle]="{'min-width': '75rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:3rem">#</th>
+                    <th>Employee Name</th>
+                    <th>Day 1</th>
+                    <th>Day 2</th>
+                    <th>Day 3</th>
+                    <th>Day 4</th>
+                    <th>Day 5</th>
+                </tr>
+            </ng-template>
+            <ng-template
+                pTemplate="body"
+                let-customer
+                let-rowIndex="rowIndex"
+                let-rowgroup="rowgroup"
+                let-rowspan="rowspan">
+                    <tr>
+                        <td>{{rowIndex + 1}}</td>
+                        <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+                            <img
+                                [alt]="customer.representative.name"
+                                src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}"
+                                width="32" style="vertical-align: middle" />
+                            <span class="font-bold ml-2">{{customer.representative.name}}</span>
+                        </td>
+                        <td>{{customer.day_1.time_in}} - {{customer.day_1.time_out}}</td>
+                        <td>{{customer.day_2.time_in}} - {{customer.day_2.time_out}}</td>
+                        <td>{{customer.day_3.time_in}} - {{customer.day_3.time_out}}</td>
+                        <td>{{customer.day_4.time_in}} - {{customer.day_4.time_out}}</td>
+                        <td>{{customer.day_5.time_in}} - {{customer.day_5.time_out}}</td>
+                    </tr>
+            </ng-template>
+    </p-table>
+</div>
+
+<div class="card">
+    <p-table
+        [value]="customers2"
+        sortField="representative.name"
+        sortMode="single"
+        dataKey="representative.name"
+        rowGroupMode="subheader"
+        groupRowsBy="representative.name"
+        [tableStyle]="{'min-width': '70rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:20%">Day</th>
+                    <th style="width:20%">Time In</th>
+                    <th style="width:20%">Time Out</th>
+                    <th style="width:20%">Total Time</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="groupheader" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
+                <tr>
+                    <td colspan="5">
+                        <button
+                            type="button"
+                            pButton
+                            pRipple
+                            [pRowToggler]="customer"
+                            class="p-button-text p-button-rounded p-button-plain mr-2"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                        <img
+                            [alt]="customer.representative.name"
+                            src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}"
+                            width="32"
+                            style="vertical-align: middle" />
+                        <span class="font-bold ml-2">{{customer.representative.name}}</span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="groupfooter" let-customer>
+                <tr class="p-rowgroup-footer">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Time</td>
+                    <td style="font-weight: bold;">{{customer.total_time}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-customer>
+                <tr *ngFor="let day of customer.days">
+                    <td>{{day.day}}</td>
+                    <td>{{day.time_in}}</td>
+                    <td>{{day.time_out}}</td>
+                    <td>{{day.duration}}</td>
+                </tr>
+            </ng-template>
+    </p-table>
+</div>
+
+<div class="card">
+    <p-table
+        [value]="customers2"
+        sortField="representative.name"
+        sortMode="single"
+        dataKey="representative.name"
+        rowGroupMode="subheader"
+        groupRowsBy="representative.name"
+        [tableStyle]="{'min-width': '75rem'}">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <div>
+                    <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+                    <button pButton label="Filter" class="p-button-outlined mb-2 ml-1" icon="pi pi-filter" (click)="showElements = 'false'"></button>
+                    <p-splitButton icon="pi pi-bars" [model]="items" styleClass="p-button-primary mb-2 ml-1"></p-splitButton>
+                </div>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #searchInput (input)="onSearchChange(searchInput.value)" placeholder="Search Keyword" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:3rem">#</th>
+                    <th>Employee Name</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Total Time</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="groupheader" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
+                <tr>
+                    <td colspan="2">
+                        <button
+                            type="button"
+                            pButton
+                            pRipple
+                            [pRowToggler]="customer"
+                            class="p-button-text p-button-rounded p-button-plain mr-2"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                        <img
+                            [alt]="customer.representative.name"
+                            src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}"
+                            width="32" style="vertical-align: middle" />
+                        <span class="font-bold ml-2">{{customer.representative.name}}</span>
+                    </td>
+                    <td>{{customer.company}}</td>
+                    <td>{{customer.location}}</td>
+                    <td>{{customer.department}}</td>
+                    <td>{{customer.designation}}</td>
+                    <td>{{customer.total_time}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-customer>
+                <tr>
+                    <td colspan="7">
+                        <p-table [value]="customer.days" [tableStyle]="{'width': '100%'}">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Shift</th>
+                                    <th>Duty In</th>
+                                    <th>Duty Out</th>
+                                    <th>Total Time</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-day>
+                                <tr>
+                                    <td>{{day.day}}</td>
+                                    <td>{{day.shift}}</td>
+                                    <td>{{day.time_in}}</td>
+                                    <td>{{day.time_out}}</td>
+                                    <td>{{day.duration}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </td>
+                </tr>
+            </ng-template>
+    </p-table>
+</div>
+
+<div class="card">
+    <p-table
+        [value]="customers2"
+        sortField="representative.name"
+        sortMode="single"
+        dataKey="representative.name"
+        rowGroupMode="subheader"
+        groupRowsBy="representative.name"
+        [tableStyle]="{'min-width': '75rem'}">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <div>
+                    <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+                    <button pButton label="Filter" class="p-button-outlined mb-2 ml-1" icon="pi pi-filter" (click)="showElements = 'false'"></button>
+                    <p-splitButton icon="pi pi-bars" [model]="items" styleClass="p-button-primary mb-2 ml-1"></p-splitButton>
+                </div>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #searchInput (input)="onSearchChange(searchInput.value)" placeholder="Search Keyword" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:3rem">#</th>
+                    <th>Employee Name</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Total Time</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="groupheader" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
+                <tr>
+                    <td colspan="2">
+                        <button
+                            type="button"
+                            pButton
+                            pRipple
+                            [pRowToggler]="customer"
+                            class="p-button-text p-button-rounded p-button-plain mr-2"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                        <img
+                            [alt]="customer.representative.name"
+                            src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}"
+                            width="32" style="vertical-align: middle" />
+                        <span class="font-bold ml-2">{{customer.representative.name}}</span>
+                    </td>
+                    <td>{{customer.company}}</td>
+                    <td>{{customer.location}}</td>
+                    <td>{{customer.department}}</td>
+                    <td>{{customer.designation}}</td>
+                    <td>{{customer.total_time}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-customer>
+                <tr>
+                    <td colspan="7">
+                        <p-table [value]="customer.days" [tableStyle]="{'width': '100%'}">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Day</th>
+                                    <td>{{day.day}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Shift</th>
+                                    <td>{{day.shift}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Duty In</th>
+                                    <td>{{day.time_in}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Duty Out</th>
+                                    <td>{{day.time_out}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-day>
+                                <tr>
+                                    <th>Total Time</th>
+                                    <td>{{day.duration}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </td>
+                </tr>
+            </ng-template>
+    </p-table>
+</div> -->

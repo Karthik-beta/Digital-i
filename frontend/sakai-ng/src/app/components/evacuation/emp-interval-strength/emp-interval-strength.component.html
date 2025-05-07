@@ -1,0 +1,267 @@
+<div class="card">
+  <div class="header-box">
+      <p class="page-header">Monthly</p>
+      <div class="clock-container">
+          <span>{{ currentDate }}</span> => <span>{{ currentTime }}</span>
+      </div>
+  </div>
+  
+  
+      <div class="shadow-box ">
+        <div class="container">
+          <div class="chart-box-container">
+            <div class="sidebar">
+              <button
+                *ngFor="let btn of buttons"
+                pButton
+                type="button"
+                class="side-btn"
+                [ngStyle]="{ 'background-color': colorMap[btn] }"
+                [ngClass]="{ 'active-btn': btn === yearSelectedCategory }"
+                (click)="updateYearChartData(btn)"
+              >
+                {{ btn }}
+              </button>
+            </div>
+        
+            <div class="chart-section">
+              <!-- <h5>Employee Strength</h5> -->
+        
+              <div class="chart-container">
+                <p-chart
+                  type="bar"
+                  [data]="yearBarChartData"
+                  [options]="barChartOptions"
+                  [plugins]="plugins"
+                ></p-chart>
+              </div>
+            </div>
+          </div>
+        
+          
+            <div class="leave-dashboard-container">
+              <h3 class="head">Leave & On-Duty</h3>
+        
+              <div class="tabs">
+                <button
+                  *ngFor="let label of leaveChartData.labels; let i = index"
+                  pButton
+                  class="side-btn"
+                  [ngStyle]="{
+                    'background-color': leaveChartData.datasets[0].backgroundColor[i],
+                    border: activeLeaveType === label ? '0.05rem solid black' : 'none',
+                    'box-shadow':
+                      activeLeaveType === label
+                        ? '0px 0px 8px rgba(0, 0, 0, 0.5)'
+                        : 'none'
+                  }"
+                  (click)="filterEmployees(label)"
+                >
+                  {{ label }}
+                </button>
+              </div>
+              
+              <div class="content">
+                <div class="employee-list">
+                  <div *ngFor="let emp of filteredEmployees" class="employee-card">
+                    <img [src]="emp.image" class="employee-image" />
+                    <div class="employee-details">
+                      <p class="emp-name">{{ emp.name }}</p>
+                      <p class="emp-id">Emp. Id: {{ emp.empId }}</p>
+                      <span
+                        class="leave-badge"
+                        [ngStyle]="{ color: getLeaveColor(emp.leaveType) }"
+                      >
+                        Leave Type:
+                        {{ emp.leaveType }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+        
+                <div class="pie-chart-container">
+                  <p-chart
+                    type="doughnut"
+                    [data]="leaveChartData"
+                    [options]="donutChartOptions"
+                    [plugins]="plugin"
+                  ></p-chart>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </div>
+      <p class="page-header">Previous 30 Days</p>
+      <div class="shadow-box">
+        <div class="container">
+          <div class="chart-box-container">
+            <div class="sidebar">
+              <button
+                *ngFor="let btn of buttons"
+                pButton
+                type="button"
+                class="side-btn"
+                [ngStyle]="{ 'background-color': colorMap[btn] }"
+                [ngClass]="{ 'active-btn': btn === monthSelectedCategory }"
+                (click)="updateMonthChartData(btn)"
+              >
+                {{ btn }}
+              </button>
+            </div>
+        
+            <div class="chart-section">
+              <!-- <h5>Employee Strength</h5> -->
+        
+              <div class="chart-container">
+                <p-chart
+                  type="bar"
+                  [data]="monthBarChartData"
+                  [options]="barChartOptions"
+                  [plugins]="plugins"
+                ></p-chart>
+              </div>
+            </div>
+          </div>
+        
+          
+            <div class="leave-dashboard-container">
+              <h3 class="head">Leave & On-Duty</h3>
+        
+              <div class="tabs">
+                <button
+                  *ngFor="let label of leaveChartData.labels; let i = index"
+                  pButton
+                  class="side-btn"
+                  [ngStyle]="{
+                    'background-color': leaveChartData.datasets[0].backgroundColor[i],
+                    border: activeLeaveType === label ? '0.05rem solid black' : 'none',
+                    'box-shadow':
+                      activeLeaveType === label
+                        ? '0px 0px 8px rgba(0, 0, 0, 0.5)'
+                        : 'none'
+                  }"
+                  (click)="filterEmployees(label)"
+                >
+                  {{ label }}
+                </button>
+              </div>
+              
+              <div class="content">
+                <div class="employee-list">
+                  <div *ngFor="let emp of filteredEmployees" class="employee-card">
+                    <img [src]="emp.image" class="employee-image" />
+                    <div class="employee-details">
+                      <p class="emp-name">{{ emp.name }}</p>
+                      <p class="emp-id">Emp. Id: {{ emp.empId }}</p>
+                      <span
+                        class="leave-badge"
+                        [ngStyle]="{ color: getLeaveColor(emp.leaveType) }"
+                      >
+                        Leave Type:
+                        {{ emp.leaveType }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+        
+                <div class="pie-chart-container">
+                  <p-chart
+                    type="doughnut"
+                    [data]="leaveChartData"
+                    [options]="donutChartOptions"
+                    [plugins]="plugin"
+                  ></p-chart>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </div>
+      <p class="page-header">Last 7 Days</p>
+      <div class="shadow-box">
+        <div class="container">
+          <div class="chart-box-container">
+            <div class="sidebar">
+              <button
+                *ngFor="let btn of buttons"
+                pButton
+                type="button"
+                class="side-btn"
+                [ngStyle]="{ 'background-color': colorMap[btn] }"
+                [ngClass]="{ 'active-btn': btn === daysSelectedCategory }"
+                (click)="updateDaysChartData(btn)"
+              >
+                {{ btn }}
+              </button>
+            </div>
+        
+            <div class="chart-section">
+              <!-- <h5>Employee Strength</h5> -->
+        
+              <div class="chart-container">
+                <p-chart
+                  type="bar"
+                  [data]="daysBarChartData"
+                  [options]="barChartOptions"
+                  [plugins]="plugins"
+                ></p-chart>
+              </div>
+            </div>
+          </div>
+        
+          
+            <div class="leave-dashboard-container">
+              <h3 class="head">Leave & On-Duty</h3>
+        
+              <div class="tabs">
+                <button
+                  *ngFor="let label of leaveChartData.labels; let i = index"
+                  pButton
+                  class="side-btn"
+                  [ngStyle]="{
+                    'background-color': leaveChartData.datasets[0].backgroundColor[i],
+                    border: activeLeaveType === label ? '0.05rem solid black' : 'none',
+                    'box-shadow':
+                      activeLeaveType === label
+                        ? '0px 0px 8px rgba(0, 0, 0, 0.5)'
+                        : 'none'
+                  }"
+                  (click)="filterEmployees(label)"
+                >
+                  {{ label }}
+                </button>
+              </div>
+              
+              <div class="content">
+                <div class="employee-list">
+                  <div *ngFor="let emp of filteredEmployees" class="employee-card">
+                    <img [src]="emp.image" class="employee-image" />
+                    <div class="employee-details">
+                      <p class="emp-name">{{ emp.name }}</p>
+                      <p class="emp-id">Emp. Id: {{ emp.empId }}</p>
+                      <span
+                        class="leave-badge"
+                        [ngStyle]="{ color: getLeaveColor(emp.leaveType) }"
+                      >
+                        Leave Type:
+                        {{ emp.leaveType }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+        
+                <div class="pie-chart-container">
+                  <p-chart
+                    type="doughnut"
+                    [data]="leaveChartData"
+                    [options]="donutChartOptions"
+                    [plugins]="plugin"
+                  ></p-chart>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </div>
+</div>

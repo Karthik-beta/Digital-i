@@ -1,0 +1,88 @@
+
+<div class="p-datatable-sm">
+    <p-table #dt [value]="locations" [tableStyle]="{ 'min-width': '5rem' }" class="p-datatable-sm"
+    [lazy]="true" [paginator]="true"[rows]="rows" [showCurrentPageReport]="false" [totalRecords]="totalRecords"
+    [loading]="loading" (onLazyLoad)="getLocationsList($event)" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row gap-2">
+                <div class="flex gap-1">
+                    <div>
+                        <p-button label="Clear" icon="pi pi-filter-slash" size="small" (click)="clear(dt)" [outlined]="true" severity="info"></p-button>
+                    </div>
+                    <div>
+                        <p-button label="Add" icon="fa-solid fa-plus" size="small" (click)="addClick()"></p-button>
+                    </div>
+                </div>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <!-- <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full p-inputtext-sm"/> -->
+                    <input pInputText type="text" #searchInput (input)="onSearchChange(searchInput.value)" placeholder="Search" class="w-full p-inputtext-sm"/>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="code">Code <p-sortIcon [field]="'code'"></p-sortIcon></th>
+                <th pSortableColumn="name">Location Name <p-sortIcon [field]="'name'"></p-sortIcon></th>
+                <th>Edit</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>
+                    <div class="flex">
+                        <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" size="small" (click)="editClick(item)"></p-button>
+                        <p-button icon="pi pi-trash" [rounded]="true" [text]="true" size="small" (click)="deleteClick(item)" severity="danger"></p-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal Snippet -->
+<!-- <div class="modal fade" id="staticBackdrop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog modal-xl modal-dialog-centered" ><div class="modal-content"><div class="modal-header" ><h5 class="modal-title" id="exampleModalLabel">{{ModalTitle}}</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeClick()"><span aria-hidden="true">&times;</span></button></div><div class="modal-body" style="width:100%; background-color: aliceblue;"><app-add-edit-prod-plan [prodplan]="prodplan" *ngIf="ActivateAddEditProdPlanComp" (prodPlanAdded)="onprodPlanAdded()"></app-add-edit-prod-plan></div></div></div></div> -->
+<p-toast></p-toast>
+<p-dialog header="{{ ModalTitle }}" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+  <ng-template pTemplate="content">
+    <!-- <app-add-edit-company [company]="company" *ngIf="ActivateAddEditCompanyComp" (companyAdded)="onCompanyAdded()"></app-add-edit-company> -->
+    <div class="grid p-fluid mt-1">
+
+        <div class="col-12 lg:col-6 xl:col-6">
+            <span class="p-float-label">
+                <input type="text" id="code" pInputText [(ngModel)]="code" class="p-inputtext-sm"/>
+                <label for="code">Location Code</label>
+            </span>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-6">
+            <span class="p-float-label">
+                <input type="text" id="name" pInputText [(ngModel)]="name" class="p-inputtext-sm"/>
+                <label for="name">Location Name</label>
+            </span>
+        </div>
+
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+      <div class="mt-2">
+          <button pButton icon="fa-solid fa-x" (click)="display=false" label="Close" class="p-button-outlined"></button>
+          <button pButton icon="fa-solid fa-floppy-disk" *ngIf="id == 0" (click)="addLocation()" label="Save" class="p-button-success"></button>
+          <button pButton icon="fa-solid fa-pencil" *ngIf="id !== 0" (click)="updateLocation()" label="Update" class="p-button-info"></button>
+      </div>
+  </ng-template>
+</p-dialog>

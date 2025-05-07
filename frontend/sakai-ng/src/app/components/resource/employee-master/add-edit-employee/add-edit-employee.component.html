@@ -1,0 +1,794 @@
+<div class="card">
+    <p-stepper [(activeStep)]="activeStepperNumber">
+
+
+
+        <p-stepperPanel header="Employee Onboarding">
+            <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
+                <!-- <div class="flex flex-column h-12rem">
+                    <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content I</div>
+                </div> -->
+                <div class="grid flex justify-content-center">
+
+                    <div class="col-12 md:col-8 lg:col-9 xl:col-9">
+                        <div class="grid p-fluid mt-1">
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="employee_id" pInputText [(ngModel)]="employee_id" class="p-inputtext-sm"/>
+                                    <label for="employee_id">Employee ID <span class="text-red-500">*</span></label>
+                                    <small *ngIf="employee_id_error">Employee Id Already Exists</small>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="enroll_id" pInputText [(ngModel)]="enroll_id" class="p-inputtext-sm"/>
+                                    <label for="enroll_id">Device Enroll ID <span class="text-red-500">*</span></label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="employee_name" pInputText [(ngModel)]="employee_name" class="p-inputtext-sm"/>
+                                    <label for="employee_name">Employee Name <span class="text-red-500">*</span></label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="access_card_no" pInputText [(ngModel)]="access_card_no" class="p-inputtext-sm"/>
+                                    <label for="access_card_no">Access Card No</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="email" pInputText [(ngModel)]="email" class="p-inputtext-sm"/>
+                                    <label for="email">E-Mail</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <p-inputMask mask="99 9999 9999" [(ngModel)]="mobile_no" id="mobile_no" class="p-inputtext-sm"></p-inputMask>
+                                    <label for="mobile_no">Mobile No</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="pf_no" pInputText [(ngModel)]="pf_no" class="p-inputtext-sm"/>
+                                    <label for="pf_no">PF No</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="esi_no" pInputText [(ngModel)]="esi_no" class="p-inputtext-sm"/>
+                                    <label for="esi_no">ESI No</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="insurance_no" pInputText [(ngModel)]="insurance_no" class="p-inputtext-sm"/>
+                                    <label for="insurance_no">Insurance No</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="ar_no" pInputText class="p-inputtext-sm"/>
+                                    <label for="ar_no">AR Number</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="ap_no" pInputText class="p-inputtext-sm"/>
+                                    <label for="ap_no">AP Number</label>
+                                </span>
+                            </div>
+
+                            <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                                <span class="p-float-label">
+                                    <input type="text" id="cn_no" pInputText class="p-inputtext-sm"/>
+                                    <label for="cn_no">CN Number</label>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="field col-12 md:col-3 lg:col-3 xl:col-3 align-items-center">
+
+                        <!-- <small class="flex justify-content-center" id="username-help">Only JPG and PNG files supported.</small> -->
+                        <div class="flex justify-content-center mt-4">
+                            <div class="image-container">
+                                <img *ngIf="!preview" src="assets/layout/images/profile_placeholder.jpg"/>
+                                <img [src]="preview" class="preview img-cropped" />
+                            </div>
+                        </div>
+
+                        <div class="flex justify-content-center pt-2">
+                            <div class="flex justify-content-between gap-2">
+                                <p-button label="Choose" icon="pi pi-plus" size="small" (onClick)="fileInput.click()" [raised]="true" severity="success" [pTooltip]="tooltipContent" tooltipPosition="bottom"></p-button>
+                                <p-button label="Capture" icon="pi pi-camera" size="small" [raised]="true" severity="secondary"></p-button>
+                            </div>
+                            <!-- <p-button label="Choose File" size="small" (onClick)="fileInput.click()" [raised]="true" severity="success" [pTooltip]="tooltipContent" tooltipPosition="bottom"></p-button> -->
+                            <ng-template #tooltipContent>
+                                <div class="flex align-items-center">
+                                    <span>Only JPG and PNG files supported.</span>
+                                </div>
+                            </ng-template>
+                            <input #fileInput type="file" accept="image/*" (change)="selectFile($event)" style="display: none;" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <p-fieldset legend="Bank Details" [toggleable]="true" [collapsed]="true">
+
+                    <div class="grid p-fluid">
+
+                        <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                            <span class="p-float-label">
+                                <input type="text" id="bank_name" pInputText [(ngModel)]="bank_name" class="p-inputtext-sm"/>
+                                <label for="bank_name">Bank Name</label>
+                            </span>
+                        </div>
+
+                        <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                            <span class="p-float-label">
+                                <input type="text" id="branch_name" pInputText [(ngModel)]="branch_name" class="p-inputtext-sm"/>
+                                <label for="branch_name">Branch Name</label>
+                            </span>
+                        </div>
+
+                        <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                            <span class="p-float-label">
+                                <input type="text" id="account_no" pInputText [(ngModel)]="account_no" class="p-inputtext-sm"/>
+                                <label for="account_no">Account No</label>
+                            </span>
+                        </div>
+
+                        <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                            <span class="p-float-label">
+                                <input type="text" id="account_name" pInputText [(ngModel)]="account_name" class="p-inputtext-sm"/>
+                                <label for="account_name">Account Name</label>
+                            </span>
+                        </div>
+
+                        <!-- <div class="col-12 lg:col-4 xl:col-4">
+                            <p-floatLabel>
+                                <input id="account_type" type="text" pInputText [(ngModel)]="account_type" class="p-inputtext-sm" />
+                                <label for="account_type">Account Type</label>
+                            </p-floatLabel>
+                        </div> -->
+
+                        <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                            <span class="p-float-label">
+                                <p-dropdown [options]="account_types" [(ngModel)]="selectedAccountType"
+                                placeholder="Select a Account Type" optionLabel="display_name" class="p-inputtext-sm"
+                                inputId="account_type" (onChange)="assignAccountValue($event.value)"></p-dropdown>
+                                <label for="account_type">Account Type</label>
+                            </span>
+                        </div>
+
+                        <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                            <span class="p-float-label">
+                                <input type="text" id="ifsc_code" pInputText [(ngModel)]="ifsc_code" class="p-inputtext-sm"/>
+                                <label for="ifsc_code">IFSC Code</label>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </p-fieldset>
+
+                <div class="flex pt-4 justify-content-end">
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
+            ></ng-template>
+        </p-stepperPanel>
+
+
+
+
+
+
+        <p-stepperPanel header="Official Details">
+            <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
+                <!-- <div class="flex flex-column h-12rem">
+                    <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content II</div>
+                </div> -->
+                <div class="grid p-fluid mt-1">
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown
+                            [options]="companies" [(ngModel)]="selectedCompany" placeholder="Select a Company"
+                            [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm"
+                            inputId="company" (onChange)="assignCompanyId(selectedCompany)"></p-dropdown>
+                            <label for="company">Company <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown
+                            [options]="locations" [(ngModel)]="selectedLocation" placeholder="Select a Location"
+                            optionLabel="name" class="p-inputtext-sm" inputId="location" (onChange)="assignLocationId(selectedLocation)"></p-dropdown>
+                            <label for="location">Location <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" placeholder="Select a Category"
+                            optionLabel="display_name" class="p-inputtext-sm" inputId="category"
+                            (onChange)="assignCategoryValue($event.value)"></p-dropdown>
+                            <label for="category">Category <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="cities" [(ngModel)]="agency" [disabled]="agencyDisabled" placeholder="Select a Agency" optionLabel="name" class="p-inputtext-sm" inputId="agency"></p-dropdown>
+                            <label for="agency">Agency</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
+                            placeholder="Select a Department" optionLabel="name"
+                            class="p-inputtext-sm" inputId="department" (onChange)="assignDepartmentId(selectedDepartment)"></p-dropdown>
+                            <label for="department">Department <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="designations" [(ngModel)]="selectedDesignation"
+                            placeholder="Select a Designation" optionLabel="name"
+                            class="p-inputtext-sm" inputId="designation" (onChange)="assignDesignationId(selectedDesignation)"></p-dropdown>
+                            <label for="designation">Designation <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="divisions" [(ngModel)]="selectedDivision"
+                            placeholder="Select a Division" optionLabel="name"
+                            class="p-inputtext-sm" inputId="division" (onChange)="assignDivisionId(selectedDivision)"></p-dropdown>
+                            <label for="division">Division <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="subDivisions" [(ngModel)]="selectedSubDivision"
+                            placeholder="Select a Sub Division" optionLabel="name"
+                            class="p-inputtext-sm" inputId="sub_division" (onChange)="assignSubDivisionId(selectedSubDivision)"></p-dropdown>
+                            <label for="sub_division">Sub Division</label>
+                        </span>
+                    </div>
+
+                    <!-- <div class="field col-12 md:col-3 lg:col-3 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="cities" [(ngModel)]="cost_center" placeholder="Select a Cost Center" optionLabel="name" class="p-inputtext-sm" inputId="cost_center"></p-dropdown>
+                            <label for="cost_center">Cost Center</label>
+                        </span>
+                    </div> -->
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="shopfloors" [(ngModel)]="selectedShopfloor"
+                            placeholder="Select a Shopfloor" optionLabel="name"
+                            class="p-inputtext-sm" inputId="shopfloor" (onChange)="assignShopfloorId(selectedShopfloor)"></p-dropdown>
+                            <label for="shopfloor">Shopfloor</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType"
+                            placeholder="Select a Job Type" optionLabel="display_name"
+                            class="p-inputtext-sm" inputId="job_type" (onChange)="assignJobValue(selectedJobType)"></p-dropdown>
+                            <label for="job_type">Job Type <span class="text-red-500">*</span></label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-calendar [(ngModel)]="date_of_joining" inputId="doj"
+                            [iconDisplay]="'input'" [showIcon]="true"
+                            class="p-inputtext-sm" dateFormat="dd/mm/yy"></p-calendar>
+                            <label for="doj">Date of Joining</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-calendar [(ngModel)]="date_of_leaving" inputId="dol"
+                            [iconDisplay]="'input'" [showIcon]="true"
+                            class="p-inputtext-sm" dateFormat="dd/mm/yy"></p-calendar>
+                            <label for="dol">Date of Leaving</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-6 lg:col-6 xl:col-3">
+                        <h6 class="block">Job Status : <span class="text-red-500">*</span></h6>
+                        <div class="flex flex-wrap gap-2">
+                            <div class="flex align-items-center">
+                                <p-radioButton name="jobStatus" value="Active" [(ngModel)]="jobStatus" inputId="jobStatus1"></p-radioButton>
+                                <label for="jobStatus1" class="ml-2">Active</label>
+                            </div>
+
+                            <div class="flex align-items-center">
+                                <p-radioButton name="jobStatus" value="Resigned" [(ngModel)]="jobStatus" inputId="jobStatus2" (ngModelChange)="jobstatus()"></p-radioButton>
+                                <label for="jobStatus2" class="ml-2">Resigned</label>
+                            </div>
+
+                            <div class="flex align-items-center">
+                                <p-radioButton name="jobStatus" value="Absconded" [(ngModel)]="jobStatus" inputId="jobStatus3" (ngModelChange)="jobstatus()"></p-radioButton>
+                                <label for="jobStatus3" class="ml-2">Absconded</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field col-12 md:col-6 lg:col-6 xl:col-4 justify-content-between">
+                        <div class="field">
+                            <span class="p-float-label">
+                                <p-dropdown [options]="cities" [(ngModel)]="reporting_manager" placeholder="Select Reporting Manager" optionLabel="name" class="p-inputtext-sm" inputId="reporting_manager"></p-dropdown>
+                                <label for="reporting_manager">Reporting Manager</label>
+                            </span>
+                        </div>
+                        <div class="field">
+                            <span class="p-float-label">
+                                <p-dropdown [options]="cities" [(ngModel)]="reporting_manager" placeholder="Select Reporting Manager" optionLabel="name" class="p-inputtext-sm" inputId="reporting_manager"></p-dropdown>
+                                <label for="reporting_manager">Alt Reporting Manager</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="field col-12 md:col-12 lg:col-12 xl:col-5">
+                        <span class="p-float-label">
+                            <textarea [(ngModel)]="reason_for_leaving" inputId="textarea" rows="4" cols="30" pInputTextarea></textarea>
+                            <label for="textarea">Reason for Absconding / Resignation</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="flex pt-4 justify-content-between">
+                    <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="prevCallback.emit()" />
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
+            ></ng-template>
+        </p-stepperPanel>
+
+
+        <p-stepperPanel header="Personnel Details">
+            <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
+                <!-- <div class="flex flex-column h-12rem">
+                    <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content II</div>
+                </div> -->
+                <div class="grid p-fluid mt-1">
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="emergency_contact_name" pInputText [(ngModel)]="emergency_contact_name" class="p-inputtext-sm"/>
+                            <label for="emergency_contact_name">Emergency Contact Name</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-inputMask mask="99 9999 9999" [(ngModel)]="emergency_contact_no" id="emergency_contact_no" class="p-inputtext-sm"></p-inputMask>
+                            <label for="emergency_contact_no">Emergency Contact No</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="marital_statuses" [(ngModel)]="selectedMaritalStatus"
+                            placeholder="Select Marital Status" optionLabel="display_name"
+                            class="p-inputtext-sm" inputId="reporting_manager" (ngModelChange)="assignMaritalValue(selectedMaritalStatus)"></p-dropdown>
+                            <label for="marital_status">Marital Status</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="spouse_name" pInputText [(ngModel)]="spouse_name" class="p-inputtext-sm"/>
+                            <label for="spouse_name">Father/Spouse Name</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="blood_group" pInputText [(ngModel)]="blood_group" class="p-inputtext-sm"/>
+                            <label for="blood_group">Blood Group</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-calendar [(ngModel)]="date_of_birth" inputId="dob"
+                            [iconDisplay]="'input'" [showIcon]="true"
+                            class="p-inputtext-sm" dateFormat="dd/mm/yy"></p-calendar>
+                            <label for="dob">Date of Birth</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="countries" [(ngModel)]="selectedCountry" placeholder="Select Nationality" optionLabel="name" [showClear]="true" class="p-inputtext-sm" inputId="nationality" (ngModelChange)="assignCountry(selectedCountry)">
+                                <ng-template pTemplate="selectedItem">
+                                    <div class="flex align-items-center gap-2" *ngIf="selectedCountry">
+                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px"/>
+                                        <div>{{ selectedCountry.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-country pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/>
+                                        <div>{{ country.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            <label for="nationality">Nationality</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="uid" pInputText [(ngModel)]="uid_no" class="p-inputtext-sm"/>
+                            <label for="uid">UID No</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="pan" pInputText [(ngModel)]="pan_no" class="p-inputtext-sm"/>
+                            <label for="pan">PAN No</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="voter_id" pInputText [(ngModel)]="voter_id" class="p-inputtext-sm"/>
+                            <label for="voter_id">Voter ID</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
+                        <span class="p-float-label">
+                            <input type="text" id="dl" pInputText [(ngModel)]="driving_license" class="p-inputtext-sm"/>
+                            <label for="dl">Driving Licence</label>
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="grid p-fluid mt-1">
+
+                    <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                        <h6 class="block">Gender :</h6>
+                        <div class="flex flex-wrap gap-2">
+                            <div class="flex align-items-center">
+                                <p-radioButton name="gender" value="Male" [(ngModel)]="gender" inputId="gender1"></p-radioButton>
+                                <label for="gender1" class="ml-2">Male</label>
+                            </div>
+
+                            <div class="flex align-items-center">
+                                <p-radioButton name="gender" value="Female" [(ngModel)]="gender" inputId="gender2"></p-radioButton>
+                                <label for="gender2" class="ml-2">Female</label>
+                            </div>
+
+                            <div class="flex align-items-center">
+                                <p-radioButton name="gender" value="Other" [(ngModel)]="gender" inputId="gender3"></p-radioButton>
+                                <label for="gender3" class="ml-2">Other</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                        <span class="p-float-label">
+                            <textarea [(ngModel)]="present_address" id="float-input" rows="3" cols="30" pInputTextarea></textarea>
+                            <label for="float-input">Present Address</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
+                        <span class="p-float-label">
+                            <textarea [(ngModel)]="permanent_address" id="float-input" rows="3" cols="30" pInputTextarea></textarea>
+                            <label for="float-input">Permanent Address</label>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="flex pt-4 justify-content-between">
+                    <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="prevCallback.emit()" />
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
+            ></ng-template>
+        </p-stepperPanel>
+
+
+
+        <p-stepperPanel header="Additional Details">
+            <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
+                <!-- <div class="flex flex-column h-12rem">
+                    <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content II</div>
+                </div> -->
+
+                <div class="grid p-fluid mt-1">
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                        <span class="p-float-label">
+                            <input type="text" id="graduation" pInputText [(ngModel)]="graduation" class="p-inputtext-sm"/>
+                            <label for="graduation">Graduation</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                        <span class="p-float-label">
+                            <p-dropdown [options]="course_types" [(ngModel)]="course_type" placeholder="Select Course Type" optionLabel="display_name" class="p-inputtext-sm" inputId="course_type"></p-dropdown>
+                            <label for="course_type">Course Type</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                        <span class="p-float-label">
+                            <input type="text" id="course" pInputText [(ngModel)]="course" class="p-inputtext-sm"/>
+                            <label for="course">Course</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                        <span class="p-float-label">
+                            <input type="text" id="place_of_graduation" pInputText [(ngModel)]="place_of_graduation" class="p-inputtext-sm"/>
+                            <label for="place_of_graduation">Place of Graduation</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                        <span class="p-float-label">
+                            <input type="text" id="aggregate" pInputText [(ngModel)]="aggregate" class="p-inputtext-sm"/>
+                            <label for="aggregate">Aggregate</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-4 lg:col-4 xl:col-4">
+                        <span class="p-float-label">
+                            <p-calendar [(ngModel)]="year_of_graduation" inputId="year_of_graduation" view="year" dateFormat="yy" [iconDisplay]="'input'" [showIcon]="true" class="p-inputtext-sm"></p-calendar>
+                            <!-- <p-calendar [(ngModel)]="year_of_graduation" inputId="year_of_graduation" [iconDisplay]="'input'" [showIcon]="true" class="p-inputtext-sm"></p-calendar> -->
+                            <label for="year_of_graduation">Year of Graduation</label>
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="grid">
+
+                    <div class="field p-fluid col-12 md:col-12 lg:col-12 xl:col-6">
+                        <span class="p-float-label">
+                            <textarea id="float-input" rows="10" cols="100" pInputTextarea></textarea>
+                            <label for="float-input">Add Any Additional Details</label>
+                        </span>
+                    </div>
+
+                    <div class="col-12 md:col-12 lg:col-12 xl:col-6">
+                        <p-toast></p-toast>
+                        <p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000">
+                            <ng-template pTemplate="content">
+                                <ul *ngIf="uploadedFiles.length">
+                                    <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                                </ul>
+                                <p-divider></p-divider>
+                                <div *ngIf="!uploadedFiles.length">Drag and drop files</div>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
+
+                </div>
+                <div class="flex pt-4 justify-content-between">
+                    <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="prevCallback.emit()" />
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
+            ></ng-template>
+        </p-stepperPanel>
+
+
+
+
+
+        <p-stepperPanel header="Work Configuration">
+            <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
+                <!-- <div class="flex flex-column h-12rem">
+                    <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content II</div>
+                </div> -->
+                <div class="grid">
+
+                    <div class="col-12 md:col-12 lg:col-12 xl:col-6">
+
+                        <!-- <div class="col-12">
+                            <div class="grid p-fluid">
+                                <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+                                    <span class="p-float-label">
+                                        <p-dropdown [options]="shifts" [(ngModel)]="selectedFixedShift" (onChange)="assignFixedShift(selectedFixedShift)" placeholder="Select Shift" optionLabel="name" class="p-inputtext-sm" inputId="shift"></p-dropdown>
+                                        <label for="shift">Assigned Shift</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-12">
+                            <!-- <p-fieldset legend="Default/Auto Shift Rotation Setting" [toggleable]="true" [(collapsed)]="shiftRotationCollapsed" (onBeforeToggle)="toggleWeeklyOff()"> -->
+                                <p-fieldset legend="Shift Configuration" [toggleable]="true" [(collapsed)]="shiftRotationCollapsed" (onBeforeToggle)="toggleWeeklyOff()">
+
+                                <div class="flex align-items-center gap-2">
+                                    <p-inputSwitch [(ngModel)]="fixed_shift_select"  (onClick)="setFixedShiftSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                    <span class="block font-bold">Fixed Shift</span>
+                                </div>
+
+                                <div class="grid p-fluid">
+                                    <!-- <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="fixed_shift" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Fixed Shift</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="auto_shift" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Auto shift</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="assign_shift" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Assign Shift</span>
+                                        </div>
+                                    </div> -->
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12 mt-4" *ngIf="fixed_shift_select">
+                                        <span class="p-float-label">
+                                            <p-dropdown [options]="shifts" [(ngModel)]="selectedFixedShift" (onChange)="assignFixedShift(selectedFixedShift)" placeholder="Select Shift" optionLabel="name" class="p-inputtext-sm" inputId="shift"></p-dropdown>
+                                            <label for="shift">Assigned Shift</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="field col-12 md:col-6 lg:col-6 xl:col-6 mt-4">
+                                        <span class="p-float-label">
+                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedFirstWeekoff" (onChange)="assignFirstWeekOff(selectedFirstWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1" (onChange)="assignFirstWeeklyOff(selectedShift1)"></p-dropdown>
+                                            <label for="shift_1" class="font-small">1st Week Off</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="field col-12 md:col-6 lg:col-6 xl:col-6 mt-4">
+                                        <span class="p-float-label">
+                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedSecondWeekoff" (onChange)="assignSecondWeekOff(selectedSecondWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1"></p-dropdown>
+                                            <label for="shift_1" class="font-small">2nd Week Off</label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+
+
+                        <!-- <div class="col-12">
+                            <p-fieldset legend="Select Weekly Off Days" [toggleable]="true" [(collapsed)]="weeklyOffCollapsed" (onBeforeToggle)="toggleShiftRotation()">
+
+                                <div class="grid p-fluid">
+                                    <div class="field col-12 md:col-6 lg:col-6 xl:col-6">
+                                        <span class="p-float-label">
+                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedFirstWeekoff" (onChange)="assignFirstWeekOff(selectedFirstWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1" (onChange)="assignFirstWeeklyOff(selectedShift1)"></p-dropdown>
+                                            <label for="shift_1" class="font-small">1st Week Off</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="field col-12 md:col-6 lg:col-6 xl:col-6">
+                                        <span class="p-float-label">
+                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedSecondWeekoff" (onChange)="assignSecondWeekOff(selectedSecondWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1"></p-dropdown>
+                                            <label for="shift_1" class="font-small">2nd Week Off</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+                                        <span class="p-float-label">
+                                            <p-calendar [(ngModel)]="week_off_date" inputId="week_off_date" [iconDisplay]="'input'" [showIcon]="true" class="p-inputtext-sm"></p-calendar>
+                                            <label for="week_off_date">Week Off Effective Date</label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </p-fieldset>
+                        </div> -->
+                    </div>
+
+
+                    <div class="col-12 md:col-12 lg:col-12 xl:col-6">
+                        <div class="col-12">
+                            <p-fieldset legend="Late/Early/Overtime/Flexi Time" [toggleable]="true" [(collapsed)]="timeCollapsed" (onBeforeToggle)="togglePunchSetting()">
+
+                                <div class="grid p-fluid">
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="flexi_time" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Flexi Work</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="consider_late_entry" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Consider Late Coming</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="consider_early_exit" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Consider Early Leaving</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="consider_extra_hours_worked" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Consider Extra Hours Worked</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="consider_late_entry_on_holiday" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Consider Late Coming on Holidays/Week Off</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="consider_early_exit_on_holiday" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Consider Early Leaving on Holidays/Week Off</span>
+                                        </div>
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="consider_extra_hours_worked_on_holiday" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Consider Extra Hours Worked on Holidays/Week Off</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+
+                        <div class="col-12">
+                            <p-fieldset legend="Punch Out Settings If Single Punches"  [toggleable]="true" [(collapsed)]="punchCollapsed" (onBeforeToggle)="toggleTimeSetting()">
+
+                                <div class="grid p-fluid">
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+                                        <div class="flex align-items-center gap-2">
+                                            <p-inputSwitch [(ngModel)]="search_next_day" class="p-inputswitch-sm"></p-inputSwitch>
+                                            <span class="block font-bold">Search next day punched if single/odd punched made</span>
+                                        </div>
+                                        <div class="p-fluid mt-2">
+                                            <!-- <h6 class="block">Gender :</h6> -->
+                                            <div class="flex flex-column">
+                                                <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium p-2">
+                                                    <div class="flex flex-wrap gap-2">
+                                                        <div class="flex align-items-center">
+                                                            <p-radioButton name="pizza" value="Cheese" [(ngModel)]="ingredient" inputId="ingredient1"></p-radioButton>
+                                                            <label for="ingredient1" class="block font-bold ml-2">Consider next day's first punch at out time</label>
+                                                        </div>
+
+                                                        <div class="flex align-items-center">
+                                                            <p-radioButton name="pizza" value="Mushroom" [(ngModel)]="ingredient" inputId="ingredient2"></p-radioButton>
+                                                            <label for="ingredient2" class="block font-bold ml-2">Consider next day's punch max search</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="flex pt-4 justify-content-between">
+                    <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="prevCallback.emit()" />
+                    <p-button label="Save" *ngIf="id == null" icon="pi pi-save" severity="success" (click)="PostEmployee()" />
+                    <p-button label="Update" *ngIf="id !== null" icon="pi pi-pencil" severity="info" (click)="updateEmployee()" /></div
+            ></ng-template>
+        </p-stepperPanel>
+
+    </p-stepper>
+</div>
+
+
+<p-toast></p-toast>

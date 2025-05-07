@@ -1,0 +1,134 @@
+<div class="card">
+    <div class="header-box">
+        <p class="page-header">Employee Strength</p>
+        <div class="clock-container">
+          <span>{{ currentDate }}</span> => <span>{{ currentTime }}</span>
+        </div>
+    </div>
+    <div class="shadow-box">
+      <div class="dashboard-container">
+        <div class="stats-container">
+          <div *ngFor="let stat of stats" class="stat-card">
+            <div class="stat-content">
+              <div class="text">
+                <span class="stat-title">{{ stat.title }}</span>
+                <i [class]="stat.icon" [style.color]="stat.color"></i>
+              </div>
+              <span class="stat-value">{{ stat.value }}</span>
+            </div>
+        </div>
+      
+          <div class="chart-card stat-chart-card">
+            <p-chart
+              type="bar"
+              [data]="activeBarChartData"
+              [options]="activeBarChartOptions"
+              [plugins]="plugins"
+            ></p-chart>
+          </div>
+      
+        </div>
+      </div>
+      <div class="cards">
+        <div class="status-container">
+          <div
+            *ngFor="let status of statuses"
+            class="status-card"
+            [ngStyle]="{ 'border-left': '5px solid ' + status.color }"
+          >
+            <div class="status-content">
+              <span class="status-count" [style.color]="status.color">{{
+                status.count
+              }}</span>
+              <i class="{{ status.icon }}" [style.color]="status.color"></i>
+            </div>
+            <span class="status-label">{{ status.label }}</span>
+        </div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="chart-box-container">
+          <div class="sidebar">
+            <button
+              *ngFor="let btn of buttons"
+              pButton
+              type="button"
+              class="side-btn"
+              [ngStyle]="{ 'background-color': colorMap[btn] }"
+              [ngClass]="{ 'active-btn': btn === selectedCategory }"
+              (click)="updateChartData(btn)"
+            >
+              {{ btn }}
+            </button>
+          </div>
+      
+          <div class="chart-section">
+            <!-- <h5>Employee Strength</h5> -->
+      
+            <div class="chart-container">
+              <p-chart
+                type="bar"
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [plugins]="plugins"
+              ></p-chart>
+            </div>
+          </div>
+        </div>
+      
+        
+          <div class="leave-dashboard-container">
+            <h3 class="head">Leave & On-Duty</h3>
+      
+            <div class="tabs">
+              <button
+                *ngFor="let label of leaveChartData.labels; let i = index"
+                pButton
+                class="side-btn"
+                [ngStyle]="{
+                  'background-color': leaveChartData.datasets[0].backgroundColor[i],
+                  border: activeLeaveType === label ? '0.05rem solid black' : 'none',
+                  'box-shadow':
+                    activeLeaveType === label
+                      ? '0px 0px 8px rgba(0, 0, 0, 0.5)'
+                      : 'none'
+                }"
+                (click)="filterEmployees(label)"
+              >
+                {{ label }}
+              </button>
+            </div>
+            
+            <div class="content">
+              <div class="employee-list">
+                <div *ngFor="let emp of filteredEmployees" class="employee-card">
+                  <img [src]="emp.image" class="employee-image" />
+                  <div class="employee-details">
+                    <p class="emp-name">{{ emp.name }}</p>
+                    <p class="emp-id">Emp. Id: {{ emp.empId }}</p>
+                    <span
+                      class="leave-badge"
+                      [ngStyle]="{ color: getLeaveColor(emp.leaveType) }"
+                    >
+                      Leave Type:
+                      {{ emp.leaveType }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="pie-chart-container">
+                <p-chart
+                  type="doughnut"
+                  [data]="leaveChartData"
+                  [options]="donutChartOptions"
+                  [plugins]="plugin"
+                ></p-chart>
+              </div>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+</div>

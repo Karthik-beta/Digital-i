@@ -1,0 +1,82 @@
+
+<div class="p-datatable-sm">
+    <p-table [value]="rulesList" [tableStyle]="{ 'min-width': '5rem' }" class="p-datatable-sm"
+    [loading]="loading">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row gap-2">
+                <div class="flex gap-1">
+                    <!-- <div>
+                        <p-button label="Clear" icon="pi pi-filter-slash" size="small" (click)="clear(dt)" [outlined]="true" severity="info"></p-button>
+                    </div> -->
+                    <div>
+                        <p-button label="Edit" icon="fa-solid fa-pencil" size="small" (click)="EditClick()"></p-button>
+                    </div>
+                </div>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <!-- <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full p-inputtext-sm"/> -->
+                    <input pInputText type="text" placeholder="Search" class="w-full p-inputtext-sm"/>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Roundoff Interval</th>
+                <th>Roundoff Direction</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td>{{ item.round_off_interval }}</td>
+                <td>{{ item.round_off_direction }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+
+<!-- Modal Snippet -->
+<p-toast></p-toast>
+<p-dialog header="{{ ModalTitle }}" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw', height: '20vw'}" [breakpoints]="{'960px': '75vw'}">
+  <ng-template pTemplate="content">
+    <!-- <app-add-edit-company [company]="company" *ngIf="ActivateAddEditCompanyComp" (companyAdded)="onCompanyAdded()"></app-add-edit-company> -->
+    <div class="grid p-fluid mt-1">
+
+        <div class="col-12 lg:col-6 xl:col-6">
+            <span class="p-float-label">
+                <p-inputNumber
+                    [(ngModel)]="round_off_interval"
+                    [showButtons]="true"
+                    inputId="round_off_interval"
+                    spinnerMode="horizontal"
+                    [step]="1"
+                    [iconDisplay]="'input'"
+                    class="p-inputtext-sm"
+                    [min]="0"
+                    [max]="1440"
+                    mode="decimal" />
+                <label for="round_off_interval" class="block font-bold">Roundoff Interval (in Min)</label>
+            </span>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-6">
+            <span class="p-float-label">
+                <p-dropdown
+                [options]="direction"
+                [(ngModel)]="selectedDirection"
+                optionLabel="name"
+                placeholder="Select a direction" (onChange)="assignDirection($event.value)"></p-dropdown>
+                <label for="round_off_direction" class="block font-bold">Roundoff Direction</label>
+            </span>
+        </div>
+
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+      <div class="mt-2">
+          <button pButton icon="fa-solid fa-x" (click)="display=false" label="Close" class="p-button-outlined"></button>
+          <button pButton icon="fa-solid fa-pencil" *ngIf="id !== null" (click)="updateRules()" label="Update" class="p-button-info"></button>
+      </div>
+  </ng-template>
+</p-dialog>

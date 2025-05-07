@@ -1,0 +1,326 @@
+<div class="grid justify-content-center">
+
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="value.includes(1)">
+        <div class="card mb-0">
+            <div class="flex justify-content-center">
+                <div>
+                    <span class="block text-purple-500 font-medium mb-3">INDUCTION</span>
+                </div>
+            </div>
+            <div class="grid justify-content-center">
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-medium mb-3">0</div>
+                        <span class="block text-cyan-500 font-medium">Planned</span>
+                    </div>
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-medium mb-3">0</div>
+                    <span class="block text-cyan-500 font-medium">Check In</span>
+                </div>
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-medium red-dot mb-3"></div>
+                    <span class="block text-cyan-500 font-medium">Status</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="value.includes(2)">
+        <div class="card mb-0">
+            <div class="flex justify-content-center">
+                <div>
+                    <span class="block text-indigo-500 font-medium mb-3">BOTTLE</span>
+                </div>
+            </div>
+            <div class="grid justify-content-center">
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-large mb-3">0</div>
+                        <span class="block text-cyan-500 font-medium">Planned</span>
+                    </div>
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-large mb-3">0</div>
+                    <span class="block text-cyan-500 font-medium">Check In</span>
+                </div>
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-large yellow-dot mb-3"></div>
+                    <span class="block text-cyan-500 font-medium">Status</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-4" *ngIf="value.includes(3)">
+        <div class="card mb-0">
+            <div class="flex justify-content-center">
+                <div>
+                    <span class="block text-blue-500 font-medium mb-3">COOKER</span>
+                </div>
+            </div>
+            <div class="grid justify-content-center">
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-large mb-3">0</div>
+                        <span class="block text-cyan-500 font-medium">Planned</span>
+                    </div>
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-large mb-3">0</div>
+                    <span class="block text-cyan-500 font-medium">Check In</span>
+                </div>
+                <div class="col text-center">
+                    <div class="text-800 text-center font-bold font-large green-dot mb-3"></div>
+                    <span class="block text-cyan-500 font-medium">Status</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<div class="col-12">
+    <div class="flex justify-content-center">
+        <p-selectButton [options]="cardOptions" [(ngModel)]="value" [multiple]="true" optionLabel="name" optionValue="value"></p-selectButton>
+    </div>
+</div>
+
+
+
+
+
+<div class="col-12">
+    <div class="card text-900" *ngIf="value.includes(1)">
+        <h6>INDUCTION</h6>
+
+        <p-table [value]="dummyList1" [rowHover]="true" styleClass="p-datatable-sm p-datatable-gridlines" [tableStyle]="{ 'font-size': 'small' }">
+            <ng-template pTemplate="header">
+                <tr style="white-space: nowrap;">
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Operation
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Skill Matrix
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            SSO ID & Name
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Status
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Substitute Employee
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr style="white-space: nowrap;">
+                    <td>PL-01</td>
+                    <td>TEST</td>
+                    <td>RAMESH, 001 <span style="font-weight: bold; color: red;">(AB)</span></td>
+                    <td *ngIf="selectedEmployeeSubAssembly; else defaultStatusCell" style="background-color:darkturquoise">
+                        {{ selectedEmployeeSubAssembly }} (S)
+                    </td>
+                    <td style="width: auto; ">
+                        <select class="form-control" style="height: 28px;" id="exampleFormControlSelect1" [(ngModel)]="selectedEmployeeSubAssembly">
+                        <option value="" disabled selected>Select</option>
+                        <option *ngFor="let employee of employeeOptions">{{ employee }}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr style="white-space: nowrap;">
+                    <td>PL-02</td>
+                    <td>TEST</td>
+                    <td>RAMESH, 001<span style="font-weight: bold; color: red;">(AB)</span></td>
+                    <td *ngIf="selectedEmployeeSubAssembly2; else defaultStatusCell" style="background-color:darkturquoise">
+                        {{ selectedEmployeeSubAssembly2 }} (S)
+                    </td>
+                    <td style="width: auto; ">
+                        <select class="form-control" style="height: 28px;" id="exampleFormControlSelect1" [(ngModel)]="selectedEmployeeSubAssembly2">
+                        <option value="" disabled selected>Select</option>
+                        <option *ngFor="let employee of employeeOptions">{{ employee }}</option>
+                        </select>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No Data found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading data. Please wait.</td>
+                </tr>
+            </ng-template>
+            <ng-template #defaultStatusCell>
+                <td style="background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), red);">AB</td>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+
+
+<div class="col-12">
+    <div class="card" *ngIf="value.includes(2)">
+        <h6>BOTTLE</h6>
+
+        <p-table [value]="dummyList2" [rowHover]="true" styleClass="p-datatable-sm p-datatable-gridlines" [tableStyle]="{ 'font-size': 'small' }">
+            <ng-template pTemplate="header">
+                <tr style="white-space: nowrap;">
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Operation
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Skill Matrix
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            SSO ID & Name
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Status
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Substitute Employee
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr style="white-space: nowrap;">
+                    <td>PL-01</td>
+                    <td>TEST</td>
+                    <td>RAMESH, 001<span style="font-weight: bold; color: red;">(AB)</span></td>
+                    <td *ngIf="selectedEmployeeMainAssembly; else defaultStatusCell" style="background-color:darkturquoise">
+                        {{ selectedEmployeeMainAssembly }} (S)
+                    </td>
+                    <td style="width: auto;">
+                        <select class="form-control" style="height: 28px;" id="exampleFormControlSelect1" [(ngModel)]="selectedEmployeeMainAssembly">
+                        <option value="" disabled selected>Select</option>
+                        <option *ngFor="let employee of employeeOptions">{{ employee }}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr style="white-space: nowrap;">
+                    <td>PL-02</td>
+                    <td>TEST</td>
+                    <td>RAMESH, 001<span style="font-weight: bold; color: red;">(AB)</span></td>
+                    <td *ngIf="selectedEmployeeSubAssembly2; else defaultStatusCell" style="background-color:darkturquoise">
+                        {{ selectedEmployeeSubAssembly2 }} (S)
+                    </td>
+                    <td style="width: auto; ">
+                        <select class="form-control" style="height: 28px;" id="exampleFormControlSelect1" [(ngModel)]="selectedEmployeeSubAssembly2">
+                        <option value="" disabled selected>Select</option>
+                        <option *ngFor="let employee of employeeOptions">{{ employee }}</option>
+                        </select>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No Data found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading data. Please wait.</td>
+                </tr>
+            </ng-template>
+            <ng-template #defaultStatusCell>
+                <td style="background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), red);">AB</td>
+            </ng-template>
+        </p-table>
+
+    </div>
+</div>
+
+
+
+<div class="col-12">
+    <div class="card" *ngIf="value.includes(3)">
+        <h6>COOKER</h6>
+
+        <p-table [value]="dummyList2" [rowHover]="true" styleClass="p-datatable-sm p-datatable-gridlines" [tableStyle]="{ 'font-size': 'small' }">
+            <ng-template pTemplate="header">
+                <tr style="white-space: nowrap;">
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Operation
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Skill Matrix
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            SSO ID & Name
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Status
+                        </div>
+                    </th>
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            Substitute Employee
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr style="white-space: nowrap;">
+                    <td>PL-01</td>
+                    <td>TEST</td>
+                    <td>SURESH, 001</td>
+                    <td>P - 06:31:00</td>
+                    <td></td>
+                </tr>
+                <tr style="white-space: nowrap;">
+                    <td>PL-02</td>
+                    <td>TEST</td>
+                    <td>SURESH, 001</td>
+                    <td>P - 06:21:30</td>
+                    <td></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No Data found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading data. Please wait.</td>
+                </tr>
+            </ng-template>
+            <ng-template #defaultStatusCell>
+                <td style="background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), red);">AB</td>
+            </ng-template>
+        </p-table>
+
+    </div>
+</div>

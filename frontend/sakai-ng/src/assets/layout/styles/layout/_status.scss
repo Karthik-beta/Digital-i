@@ -1,0 +1,50 @@
+.status-badge {
+    border-radius: var(--border-radius);
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
+
+.status-badge {
+    &.status-P {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-Resigned {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+
+    &.status-A {
+        background: #FFCDD2;
+        color: #C63737;
+        }
+
+        &.status-HD,
+        &.status-WO,
+        &.status-PH,
+        &.status-FH {
+        background: #FFD54F;
+        color: #8A5340;
+        }
+
+        &.status-MP {
+        background: #FFF4E6; // Pale Orange Peach
+        color: #D84315;      // Burnt Orange
+        }
+
+        &.status-IH {
+        background: #FFF3CD; // Pale Red
+        color: #856404;      // Crimson Red
+        }
+
+        &.status-PW,
+        &.status-FW,
+        &.status-WW {
+        background: #C8E6C9;
+        color: #256029;
+    }
+}

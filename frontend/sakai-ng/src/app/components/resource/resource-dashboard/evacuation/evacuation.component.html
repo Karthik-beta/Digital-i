@@ -1,0 +1,353 @@
+<h5 *ngIf="showElements === 'true'">EVACUATION</h5>
+
+
+<div class="grid justify-content-center" *ngIf="showElements === 'true'">
+    <div class="col-12 lg:col-6 xl:col-4">
+        <div class="card shadow mb-0">
+            <div class="flex justify-content-between">
+                <div>
+                    <span class="block text-800 font-large">LIVE HEADCOUNT</span>
+                    <h4 class="card-title text-900 text-bold">0</h4>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="fas fa-people-group text-cyan-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-4">
+        <div class="card shadow mb-0">
+            <div class="flex justify-content-between">
+                <div>
+                    <span class="block text-800 font-large">IN</span>
+                    <h4 class="card-title text-900 text-bold">0</h4>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="fas fa-sign-in text-green-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-4">
+        <div class="card shadow mb-0">
+            <div class="flex justify-content-between">
+                <div>
+                    <span class="block text-800 font-large">OUT</span>
+                    <h4 class="card-title text-900 text-bold">0</h4>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-orange-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="fas fa-sign-out text-orange-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<h5 *ngIf="showElements === 'true'">CATEGORISED</h5>
+
+
+
+
+<div class="grid justify-content-center" *ngIf="showElements === 'true'">
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #CD5C5D;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">EMPLOYEE</span>
+                    <!-- <div class="text-900 font-medium">ENGINEERING</div> -->
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #62CD37;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">CONTRACT</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #A7B289;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">TEMPORARY</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #7F8000;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">TRAINEE</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #088F8F;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">HO EMPLOYEE</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">2</div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #8f4983;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">VENDOR</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #666580;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">GLOBAL VISITOR</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #FF6C22;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">VISITORS</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #BBBAA8;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">VEHICLE</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-4 xl:col-3">
+        <div class="card mb-0" style="background-color: #2979BF;">
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <span class="block text-900 font-medium mr-2">AMC</span>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <div class="font-medium text-xl">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<div class="">
+    <div class="card">
+            <!-- <p-table #dt1 [value]="dummyList" dataKey="id" [rows]="10" [rowHover]="true" styleClass="p-datatable-sm p-datatable-gridlines" [tableStyle]="{ 'font-size': 'small' }" [paginator]="true" [globalFilterFields]="['id','country.name','representative.name','status']" responsiveLayout="scroll" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"> -->
+        <p-table #dt1
+        [value]=""
+        class="p-datatable-sm"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [tableStyle]="{ 'font-size': 'small' }"
+        [paginator]="true"
+        [rows]="rows"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="1 - 1 of 1"
+        >
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <div class="d-flex align-items-center">
+                        <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                        <!-- <button pButton icon="fa-solid fa-person-circle-plus" label="Add" (click)="addClick()" (click)="display=true" class="p-button-primary mb-2 ml-1 mr-1"></button> -->
+                        <p-splitButton icon="pi pi-bars" [model]="items" styleClass="p-button-primary mb-2 ml-1 mr-1"></p-splitButton>
+                        <p-selectButton [options]="stateOptions" class="mb-2 mr-1" [(ngModel)]="showElements" optionLabel="label" optionValue="value"></p-selectButton>
+                    </div>
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr style="white-space: nowrap;">
+                    <th style="min-width: auto">
+                        <div class="flex justify-content-between align-items-center">
+                            #
+                                <!-- <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter> -->
+                        </div>
+                    </th>
+                    <th>
+                        EMPLOYEE ID
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        DEVICE ENROLL ID
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        EMPLOYEE NAME
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        COMPANY
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        LOCATION
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        JOB TYPE
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        DEPARTMENT
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        EMPLOYEE TYPE
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        DESIGNATION
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        LOG DATE
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        SHIFT
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        SHIFT STATUS
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        IN TIME
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        OUT TIME
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        TOTAL HOURS
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        LATE ENTRY
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        EARLY EXIT
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <th>
+                        OT HOURS
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                    <!-- <th>TOTAL LUNCH HOURS</th> -->
+                    <th>
+                        STATUS
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-i="rowIndex">
+                <tr style="white-space: nowrap;">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.employee_id }}</td>
+                    <td>{{ item.device_enroll_id }}</td>
+                    <td>{{ item.employee_name }}</td>
+                    <td>{{ item.company }}</td>
+                    <td>{{ item.location }}</td>
+                    <td>{{ item.job_type }}</td>
+                    <!-- <td>{{ log.shift }}</td> -->
+                    <td>{{ item.department }}</td>
+                    <td>{{ item.designation }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.date_of_joining }}</td>
+                    <td></td>
+                    <td><span [class]="'status-badge status-' + item.status">{{ item.status }}</span></td>
+                    <!-- <td><span [class]="'status-badge '+ (item.planned_date ? 'status-planned' : '')">{{ item.planned_date }}</span></td>
+                    <td><span [class]="'status-badge '+ (item.processing_date ? 'status-processing' : '')">{{ item.processing_date }}</span></td>
+                    <td><span [class]="'status-badge '+ (item.completed_date ? 'status-completed' : '')">{{ item.completed_date }}</span></td> -->
+                    <td style="padding: 0em">
+                        <div class="row">
+                            <div class="col d-flex justify-content-between">
+                                <button type="button" class="btn btn-sm btn-info mr-1" (click)="editClick(item)" (click)="display=true" data-toggle="modal" data-target="#staticBackdrop" data-backdrop="static">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" (click)="deleteClick(item)">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No Data found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading data. Please wait.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

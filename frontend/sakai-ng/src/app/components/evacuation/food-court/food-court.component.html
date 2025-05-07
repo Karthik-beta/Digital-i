@@ -1,0 +1,60 @@
+<p>food-court works!</p>
+<div class="clock-container">
+    <span>{{ currentDate }}</span> => <span>{{ currentTime }}</span>
+  </div>
+  <div class="header-box">
+    <div class="logo-box">
+        <img src="download7.jpeg" class="logo-image" />
+        <p class="page-header">Maharaja Readymades Food Court</p>
+        <p class="page-header"></p>
+    </div>
+    <div class="label-box">
+        <p class="p-tag b-bg">Active</p>
+        <p class="p-tag r-bg">Booked</p>
+      <p class="p-tag g-bg">Utilized</p>
+    </div>
+  </div>
+  <div class="dashboard">
+    <p-carousel
+      [value]="paginatedSections"
+      [numVisible]="1"
+      [numScroll]="1"
+      [responsiveOptions]="responsiveOptions"
+      [circular]="true"
+      [autoplayInterval]="5000">
+
+      <ng-template let-sectionGroup pTemplate="item">
+        <div class="dashboard-slide">
+          <div class="flex-box">
+            <div *ngFor="let section of sectionGroup.sections" class="dashboard-card">
+              <h3 class="dashboard-title">{{ section.name }}</h3>
+
+              <div class="charts-wrapper">
+                <div class="pie-chart-box">
+                  <p-chart
+                    class="pie"
+                    type="pie"
+                    [data]="getPieChartData(section.pieData)"
+                    [options]="pieChartOptions"
+                    [plugins]="plugins">
+                  </p-chart>
+                </div>
+
+                <div class="chart-box">
+                  <p-chart
+                    class="chart"
+                    type="bar"
+                    [data]="getBarChartData(section.barDataIn, section.barDataOut)"
+                    [options]="chartOptions"
+                    [plugins]="plugins">
+                  </p-chart>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+  </div>
+
+  

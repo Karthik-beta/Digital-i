@@ -1,0 +1,234 @@
+.card{
+  height: calc(100vh - 12rem);
+  padding: 0 !important;
+}
+.header-box{
+  display: flex;
+  justify-content: space-between;
+  max-width: 94vw;
+}
+
+.clock-container {
+  font-family: 'Digital-7', monospace;
+  font-size: 24px;
+  color: rgb(85, 82, 82); /* Green color */
+  text-shadow: 0 0 5px rgb(156, 215, 238);
+  background-color: rgba(0, 0, 0,0.9);
+  // padding: 5px 10px;
+  border-radius: 5px;
+  background-color: transparent;
+  margin: 0 auto;
+  // max-width: 70rem;
+}
+.main-box{
+  overflow-y: hidden !important;
+  margin: 0;
+  margin-top: -1rem;
+  padding-bottom: 1rem;
+}
+
+
+//   .page-header{
+//     color: rgb(85, 82, 82); /* Green color */
+//     text-shadow: 0 0 5px rgb(156, 215, 238);
+//     background-color: rgba(0, 0, 0,0.9);
+//     border-radius: 5px;
+//     font-weight: 800;
+//     background-color: transparent;
+//     margin-left: 1rem;
+//     margin-bottom: 0;
+//   }
+.page-header{
+  color: rgb(85, 82, 82); /* Green color */
+  text-shadow: 0 0 5px rgb(156, 215, 238);
+  background-color: rgba(0, 0, 0,0.9);
+  border-radius: 5px;
+  font-weight: 800;
+  background-color: transparent;
+  margin-left: 1rem;
+  margin-bottom: 0;
+}
+.shadow-box{
+  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+  margin-left: 1rem;
+  border-radius: 0.5rem;
+  padding-bottom: 0.3rem;
+  width: 95%;
+}
+.first-box{
+  margin-top: -1rem;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  height:fit-content;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 1rem 1rem 1rem 3rem ;
+}
+
+.side-btn {
+  width: fit-content;
+  font-size: 9px;
+  padding: 0.3rem 1rem;
+  background-color: rgb(77, 77, 235);
+  border: none;
+  border-radius: 0.2rem;
+  color: #ffffff;
+}
+
+.side-btn:hover {
+  filter: brightness(85%);
+  transform: scale(1.05);
+}
+.active-btn {
+  border: 0.05rem solid #383737;
+  font-weight: bold;
+  transform: scale(1.1);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+}
+.chart-section {
+  text-align: center;
+  flex: 1;
+}
+// .chart-section {
+//     flex: 1;
+//     display: flex;
+//     gap: 1rem;
+//     align-items: center;
+//     width: 85%;
+//   }
+/* 
+.export-btn {
+  float: right;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.export-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.export-dropdown {
+  width: 150px;
+}
+
+.export-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+} */
+//   .chart-container {
+//     flex: 1;
+//     text-align: center;
+//     padding: 1rem;
+//     border-radius: 0.5rem;
+//     border: 1px solid rgb(247, 245, 245);
+//     background-color: #ffffff;
+
+//     min-width: 180px;
+//     border-radius: 10px;
+//     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+//     margin: 0.3rem 0;
+//   }
+.chart-container {
+  // width: 70%;
+  height: 20%;
+  margin: -1.5rem auto;
+}
+.chart-box-container{
+  background: white;
+  padding: 0 0.2rem;
+  width: 44%;
+  margin: 0.3rem auto;
+}
+
+.leave-dashboard-container {
+  background: white;
+  border-radius: 2rem;
+  padding: 1px;
+  box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.3), 
+            inset 0px -5px 10px rgba(0, 0, 0, 0.2);
+  width: 40%;
+  max-height: 48%;
+  margin: 0.1rem auto;
+}
+
+.emp-name{
+  /* margin-top: 0.1rem; */
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+.emp-id{
+  margin-top: 0;
+  font-size: 10px;
+  margin-bottom: 0rem;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #444;
+}
+.leave-badge {
+  font-size: 12px;
+}
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin: 1px ;
+}
+
+.content {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  height: 8.2rem;
+}
+
+.employee-list {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.employee-card {
+  display: flex;
+  align-items: center;
+  background: #2ecc71;
+  padding: 0.1rem 1rem;
+  border-radius: 5px;
+  color: white;
+  max-height: 3.5rem;
+  gap: 0.2rem;
+  min-width: 14rem;
+  margin: 0.1rem 0;
+}
+.head{
+  margin: 0;
+  font-size: 14px;
+}
+.employee-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: #ffffff;
+}
+
+.pie-chart-container {
+  height: 22%;
+  width: 22%;
+  margin-top: -7rem;
+}

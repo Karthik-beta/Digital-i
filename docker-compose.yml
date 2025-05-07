@@ -1,0 +1,79 @@
+volumes:
+  postgres_data: {}
+  postgres_data_backups: {}
+  
+  production_redis_data: {}
+
+services:
+  django: &django
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/usr/src/app
+    restart: always
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=True
+      - SECRET_KEY='}Z(=*+t(]sdsdc!&&-"!sdsdvsdv-.serdffgpO{*/q8/IFkx)'
+      - ALLOWED_HOSTS=*
+      - DATABASE_HOST=192.168.1.40
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=maso
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=password123
+
+      # Celery Configuration
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - CELERY_ACCEPT_CONTENT=json
+      - CELERY_TASK_SERIALIZER=json
+      - CELERY_RESULT_SERIALIZER=json
+      - CELERY_TIMEZONE=Asia/Kolkata
+
+      # MSSQL Configuration
+      - MSSQL_DATABASE_NAME=biotime
+      - MSSQL_DATABASE_USER=Digitali
+      - MSSQL_DATABASE_PASSWORD=Digitali
+      - MSSQL_DATABASE_HOST=192.168.1.40
+      - MSSQL_DATABASE_PORT=1433
+
+    depends_on:
+      - postgres
+      - redis
+    
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: maso
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    restart: always    
+    volumes:
+      - production_redis_data:/data
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "4200:80"
+      - "443:443"  # Map HTTPS port
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - django
+    restart: always

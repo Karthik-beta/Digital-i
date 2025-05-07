@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "start": "concurrently \"cd frontend/sakai-ng && ng serve\" \"cmd /c \\\"cd backend && call venv\\Scripts\\activate && uv run manage.py runserver\\\"\"",
+        "dev": "concurrently \"cd frontend/sakai-ng && ng serve\" \"cmd /c \\\"cd backend && call venv\\Scripts\\activate && uv run manage.py runserver\\\"\""
+    },
+    "dependencies": {
+        "concurrently": "^9.1.2"
+    }
+}

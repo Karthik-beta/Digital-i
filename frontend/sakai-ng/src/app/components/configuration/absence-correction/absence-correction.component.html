@@ -1,0 +1,28 @@
+<div class="grid p-fluid mt-1">
+    <div class="col-12 lg:col-6 xl:col-6">
+        <div class="flex align-items-center gap-2">
+            <p-inputSwitch [(ngModel)]="enable_feature" class="p-inputswitch-sm"></p-inputSwitch>
+            <span class="block font-bold">Enable Auto Absence Correction Feature</span>
+        </div>
+    </div>
+
+    <div class="col-12 lg:col-6 xl:col-6" *ngIf="enable_feature">
+        <p-floatLabel>
+            <p-calendar
+                inputId="cutoff_time"
+                [(ngModel)]="cutoff_time"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                [timeOnly]="true"
+                class="p-inputtext-sm"
+                inputId="templatedisplay"
+                (onChange)="onCutoffTimeChange($event)">
+                    <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                        <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
+                    </ng-template>
+            </p-calendar>
+            <label for="cutoff_time" class="block font-bold">Cutoff Time</label>
+        </p-floatLabel>
+    </div>
+
+</div>

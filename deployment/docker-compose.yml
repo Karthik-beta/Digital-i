@@ -1,0 +1,65 @@
+name: digital_i
+
+services:
+  django:
+    image: karth1k/backend_digitali
+    container_name: backend_digitali
+    ports:
+      - "8000:8000"
+    restart: always
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=True
+      - SECRET_KEY='}Z(=*+t(]sdsdc!&&-"!sdsdvsdv-.serdffgpO{*/q8/IFkx)'
+      - ALLOWED_HOSTS=*
+      - DATABASE_HOST=10.177.8.143
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=skf
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=password123
+
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+
+      - MSSQL_DATABASE_NAME=biotime
+      - MSSQL_DATABASE_USER=Digitali
+      - MSSQL_DATABASE_PASSWORD=Digitali
+      - MSSQL_DATABASE_HOST=10.177.8.143
+      - MSSQL_DATABASE_PORT=1433
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    image: karth1k/frontend_digitali
+    container_name: frontend_digitali
+    ports:
+      - "4200:80"
+      - "443:443"
+    restart: always
+    depends_on:
+      - django
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: skf
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis_2
+    restart: always
+    volumes:
+      - production_redis_data:/data
+
+volumes:
+  postgres_data: {}
+  production_redis_data: {}
+

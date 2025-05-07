@@ -1,0 +1,77 @@
+Frontend image :
+	build : 
+	docker build -t frontend_digitali:1 .
+
+	tag :
+	docker tag frontend_digitali:1 karth1k/frontend_digitali
+
+	push :
+	docker push karth1k/frontend_digitali
+
+	consolidated :
+	docker build -t frontend_digitali:1 . && docker tag frontend_digitali:1 karth1k/frontend_digitali && docker push karth1k/frontend_digitali
+
+Pull Image :
+sudo docker pull karth1k/frontend_digital:latest
+
+Running Frontend :
+sudo docker run -d -p 8080:80 --name frontend --restart always karth1k/frontend_digital:latest
+
+Stopping Frontend Container :
+sudo docker stop frontend
+
+Delete Frontend Container :
+sudo docker rm frontend
+
+backend docker image :
+	build :
+	docker build -t backend_digitali:1 .
+	
+	tag :
+	docker tag backend_digitali:1 karth1k/backend_digitali
+
+	push :
+	docker push karth1k/backend_digitali
+
+	consolidated :
+	docker build -t backend_digitali:1 . && docker tag backend_digitali:1 karth1k/backend_digitali && docker push karth1k/backend_digitali
+
+Pull Image :
+sudo docker pull karth1k/backend_digitali:latest
+
+Running Backend :
+sudo docker run -d -p 8000:8000 --name backend --restart always karth1k/backend_digital:latest
+
+Consolidated Update Command :
+docker compose pull && docker compose down && docker compose up -d
+ 
+
+Database : 
+sudo docker run -d \
+    --name database_digital \
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=password123 \
+    -p 5432:5432 \
+    --restart always \
+    postgres:alpine3.19
+
+
+sudo docker run -d --name decan2 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password123 -p 5433:5433 --restart always -v postgres_data:/var/lib/postgresql/data postgres:alpine3.19
+
+To Execute commands in container :
+sudo docker exec -it backend /bin/bash
+
+
+sudo nano /etc/redis/redis.conf
+
+
+Docker Compose:
+
+	build:
+	docker compose build
+
+	tag:
+	docker tag Digitali:1.0 karth1k/Digitali:1.0
+
+	push:
+	docker push karth1k/Digitali:1.0

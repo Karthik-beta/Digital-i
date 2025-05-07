@@ -1,0 +1,30 @@
+.employee-badge {
+    border-radius: var(--border-radius);
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
+
+.employee-badge {
+    &.status-Permanent {
+        background: #C8E6C9;
+        color: #256029;
+    }
+
+    &.status-Temporary {
+        background: #FFCDD2;
+        color: #C63737;
+    }
+
+    &.status-Probation {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+
+    &.status-Contractor {
+        background: #B3E5FC;
+        color: #0D47A1;
+    }
+}

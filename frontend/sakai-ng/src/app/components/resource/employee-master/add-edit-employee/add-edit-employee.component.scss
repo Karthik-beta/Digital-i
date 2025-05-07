@@ -1,0 +1,39 @@
+/* Define the size of the image container */
+.image-container {
+    width: 150px; /* Set the desired width */
+    height: 150px; /* Set the desired height */
+    overflow: hidden; /* Ensure the image is cropped */
+    justify-content: center;
+    align-items: center; /* Center vertically */
+    position: relative; /* Position placeholder image */
+
+    /* Border properties */
+    border: 1px solid #ced4da; /* Example border style */
+    border-radius: 0.5rem; /* Example border radius */
+    padding: 1rem; /* Example padding */
+}
+
+.image-container img {
+    max-width: 100%; /* Ensure the image scales within the container */
+    max-height: 100%; /* Ensure the image scales within the container */
+    width: auto; /* Maintain aspect ratio */
+    height: auto; /* Maintain aspect ratio */
+    position: absolute; /* Position placeholder image */
+    top: 0; /* Position placeholder image */
+    left: 0; /* Position placeholder image */
+    right: 0; /* Position placeholder image */
+    bottom: 0; /* Position placeholder image */
+    margin: auto; /* Center the image */
+}
+
+/* Define the size and behavior of the image */
+.preview {
+    width: 100%; /* Ensure the image fills its container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Ensure the image behaves as a block element */
+}
+
+/* Ensure the image maintains its aspect ratio */
+.img-cropped {
+    object-fit: cover; /* Crop the image to cover the container */
+}

@@ -1,0 +1,23 @@
+.green-dot {
+    width: 10px; /* Adjust the size of the dot */
+    height: 10px; /* Adjust the size of the dot */
+    background-color: green;
+    border-radius: 50%; /* Ensures the shape is a circle */
+    display: inline-block; /* Makes it an inline block, so it doesn't break the flow */
+}
+
+.red-dot {
+    width: 10px; /* Adjust the size of the dot */
+    height: 10px; /* Adjust the size of the dot */
+    background-color: red;
+    border-radius: 50%; /* Ensures the shape is a circle */
+    display: inline-block; /* Makes it an inline block, so it doesn't break the flow */
+}
+
+.yellow-dot {
+    width: 15px; /* Adjust the size of the dot */
+    height: 15px; /* Adjust the size of the dot */
+    background-color: yellow;
+    border-radius: 50%; /* Ensures the shape is a circle */
+    display: inline-block; /* Makes it an inline block, so it doesn't break the flow */
+}

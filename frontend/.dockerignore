@@ -1,0 +1,78 @@
+# Exclude node_modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Exclude build output
+dist/
+out-tsc/
+coverage/
+
+# Exclude environment files
+*.env
+*.local
+
+# Exclude temporary files
+*.tmp
+*.log
+
+# Exclude IDE/editor specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Exclude version control directories
+.git/
+.gitignore
+
+# Exclude Docker-related files if not needed
+Dockerfile
+docker-compose.yml
+*.dockerignore
+
+# Exclude other files that are not needed in the image
+src/**/*.spec.ts
+src/**/*.test.ts
+src/**/*.spec.ts.map
+src/**/*.test.ts.map
+src/**/*.stories.ts
+README.md
+LICENSE
+
+# Ignore Angular/Bun/Node cache files
+.angular/
+.bun/
+.bun-windows/
+.bun-linux/
+.bun-macos/
+.bun.lockb
+pnpm-lock.yaml
+
+# Ignore logs and cache files
+logs/
+*.log
+.npm/
+.npm-cache/
+.pnpm-debug.log
+.yarn/
+.yarn-cache/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore Sakai-ng specific directories
+sakai-ng/node_modules/
+sakai-ng/dist/
+sakai-ng/.angular/
+sakai-ng/.cache/
+sakai-ng/.vscode/
+sakai-ng/.idea/
+sakai-ng/.git/
+sakai-ng/*.log
+sakai-ng/coverage/
