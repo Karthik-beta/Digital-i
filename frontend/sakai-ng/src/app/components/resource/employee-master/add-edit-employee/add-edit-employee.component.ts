@@ -264,7 +264,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     // Method to assign the selected company's ID to the 'selectedCompanyId' variable
     assignCompanyId(selectedCompany: any) {
         this.company = selectedCompany ? selectedCompany.id : null;
-        console.log("Selected Company ID:", this.company);
+        // console.log("Selected Company ID:", this.company);
     }
 
     assignLocationId(selectedLocation: any) {

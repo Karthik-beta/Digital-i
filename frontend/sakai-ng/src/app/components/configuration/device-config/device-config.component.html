@@ -122,9 +122,9 @@
 <div class="p-datatable-sm">
     <!-- <p-table #dt [value]="biometricsDevices" [tableStyle]="{ 'min-width': '5rem' }" class="p-datatable-sm"
     [lazy]="true" [paginator]="true" [showCurrentPageReport]="false" responsiveLayout="scroll" (onLazyLoad)="getBiometricsDevicesList($event)"> -->
-    <p-table #dt [value]="biometricsDevices" [tableStyle]="{ 'min-width': '5rem' }" class="p-datatable-sm"
-    [lazy]="true" [paginator]="true" [rows]="rows" [showCurrentPageReport]="false" [totalRecords]="totalRecords"
-    [loading]="loading" responsiveLayout="scroll">
+    <p-table #dt [value]="biometricsDevices" class="p-datatable-sm" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} - {last} of {totalRecords} Entries"
+    [lazy]="true" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
+    [loading]="loading" responsiveLayout="scroll" (onLazyLoad)="getBiometricsDevicesList($event)">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row gap-2">
                 <div class="flex gap-1">
@@ -144,25 +144,31 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th>#</th>
                 <th>Device Name</th>
                 <th>Serial No</th>
                 <th>Direction of Use</th>
                 <th>Purpose</th>
                 <th>IP Address</th>
-                <th>Edit</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Actions</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-item>
+        <ng-template pTemplate="body" let-item let-i="rowIndex">
             <tr>
+                <td>{{ i + 1 }}</td>
                 <td>{{ item.device_no }}</td>
-                <td>{{ item.serial_no }}</td>
+                <td>{{ item.serial_number }}</td>
                 <td>{{ item.direction_of_use }}</td>
-                <td>{{ item.purpose }}</td>
+                <td>{{ item.purpose_of_device }}</td>
                 <td>{{ item.ip_address }}</td>
+                <td>{{ item.company_name }}</td>
+                <td>{{ item.location_name }}</td>
                 <td>
                     <div class="flex">
                         <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" size="small" (click)="editClick(item)"></p-button>
-                        <p-button icon="pi pi-trash" [rounded]="true" [text]="true" size="small" (click)="deleteClick(item)" severity="danger"></p-button>
+                        <p-button icon="pi pi-trash" [rounded]="true" [text]="true" size="small" (click)="deleteDevice(item)" severity="danger"></p-button>
                     </div>
                 </td>
             </tr>
@@ -172,314 +178,84 @@
 
 
 <p-toast></p-toast>
-<p-dialog header="{{ ModalTitle }}" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+<p-dialog header="{{ ModalTitle }}" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'560px': '50vw'}">
   <ng-template pTemplate="content">
     <!-- <app-add-edit-company [company]="company" *ngIf="ActivateAddEditCompanyComp" (companyAdded)="onCompanyAdded()"></app-add-edit-company> -->
     <div class="grid p-fluid mt-1">
 
-        <div class="col-12 lg:col-6 xl:col-6">
+        <div class="field col-12 lg:col-12 xl:col-12">
             <span class="p-float-label">
-                <input type="text" id="name" pInputText [(ngModel)]="name" class="p-inputtext-sm"/>
-                <label for="name" class="block font-bold">Shift Name</label>
+                <input type="text" id="device_no" pInputText [(ngModel)]="device_no" class="p-inputtext-sm"/>
+                <label for="device_no" class="block font-bold">Device Name / Shortname</label>
             </span>
         </div>
 
-        <div class="col-12 lg:col-6 xl:col-6">
+        <div class="field col-12 lg:col-12 xl:col-12">
             <span class="p-float-label">
-                <input type="text" id="name" pInputText [(ngModel)]="shift_id" class="p-inputtext-sm"/>
-                <label for="shift_id" class="block font-bold">Shift ID</label>
+                <input type="text" id="serial_number" pInputText [(ngModel)]="serial_number" class="p-inputtext-sm"/>
+                <label for="serial_number" class="block font-bold">Serial No</label>
             </span>
         </div>
 
-        <div class="col-12 lg:col-12 xl:col-12">
-            <p-floatLabel>
-                <p-calendar
-                    inputId="start_time"
-                    [(ngModel)]="start_time"
-                    [iconDisplay]="'input'"
-                    [showIcon]="true"
-                    [hourFormat]="24"
-                    [timeOnly]="true"
-                    class="p-inputtext-sm"
-                    inputId="templatedisplay">
-                        <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
-                            <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
-                        </ng-template>
-                </p-calendar>
-                <label for="start_time" class="block font-bold">Shift Start</label>
-            </p-floatLabel>
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <p-dropdown
+                [options]="directions"
+                [(ngModel)]="selectedDirection"
+                optionLabel="name"
+                [optionValue]="'value'"
+                class="p-inputtext-sm"
+                placeholder="Select Database Type"></p-dropdown>
+                <label for="diection" class="block font-bold">Direction of Use</label>
+            </span>
         </div>
 
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="tolerance_before_start_time"
-                    [showButtons]="true"
-                    inputId="tolerance_before_start_time"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="tolerance_before_start_time" class="block font-bold">Tolerance Before Shift Start (in Min)</label>
-            </p-floatLabel>
+        <div class="field col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <input type="text" id="purpose_of_device" pInputText [(ngModel)]="purpose_of_device" class="p-inputtext-sm"/>
+                <label for="purpose_of_device" class="block font-bold">Purpose of Use</label>
+            </span>
         </div>
 
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="tolerance_after_start_time"
-                    [showButtons]="true"
-                    inputId="tolerance_after_start_time"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="tolerance_after_start_time" class="block font-bold">Tolerance After Shift Start (in Min)</label>
-            </p-floatLabel>
+        <div class="field col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <input type="text" id="ip_address" pInputText [(ngModel)]="ip_address" class="p-inputtext-sm"/>
+                <label for="ip_address" class="block font-bold">IP Address</label>
+            </span>
         </div>
 
-        <div class="col-12 lg:col-12 xl:col-12">
-            <p-floatLabel>
-                <p-calendar
-                    inputId="end_time"
-                    [(ngModel)]="end_time"
-                    [iconDisplay]="'input'"
-                    [showIcon]="true"
-                    [timeOnly]="true"
-                    class="p-inputtext-sm"
-                    inputId="templatedisplay">
-                        <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
-                            <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
-                        </ng-template>
-                </p-calendar>
-                <label for="end_time" class="block font-bold">Shift End</label>
-            </p-floatLabel>
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <p-dropdown
+                [options]="companies"
+                [(ngModel)]="selectedCompany"
+                optionLabel="name"
+                class="p-inputtext-sm"
+                placeholder="Select Database Type"
+                (onChange)="assignCompanyId(selectedCompany)"></p-dropdown>
+                <label for="diection" class="block font-bold">Company</label>
+            </span>
         </div>
 
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="tolerance_before_end_time"
-                    [showButtons]="true"
-                    inputId="tolerance_before_end_time"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="tolerance_before_end_time" class="block font-bold">Tolerance Before Shift End (in Min)</label>
-            </p-floatLabel>
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <p-dropdown
+                [options]="locations"
+                [(ngModel)]="selectedLocation"
+                optionLabel="name"
+                class="p-inputtext-sm"
+                placeholder="Select Database Type"
+                (onChange)="assignLocationId(selectedLocation)"></p-dropdown>
+                <label for="diection" class="block font-bold">Location</label>
+            </span>
         </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="tolerance_after_end_time"
-                    [showButtons]="true"
-                    inputId="tolerance_after_end_time"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="tolerance_after_end_time" class="block font-bold">Tolerance After Shift End (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="grace_start_time"
-                    [showButtons]="true"
-                    inputId="grace_start_time"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="grace_start_time" class="block font-bold">Grace Period at Shift Start (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="grace_end_time"
-                    [showButtons]="true"
-                    inputId="grace_end_time"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="grace_end_time" class="block font-bold">Grace Period at Shift End (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="overtime_threshold_before_start"
-                    [showButtons]="true"
-                    inputId="overtime_threshold_before_start"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="overtime_threshold_before_start" class="block font-bold">Overtime Threshold Before Shift Start (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="overtime_threshold_after_end"
-                    [showButtons]="true"
-                    inputId="overtime_threshold_after_end"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="overtime_threshold_after_end" class="block font-bold">Overtime Threshold After Shift End (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-calendar
-                    inputId="lunch_in_time"
-                    [(ngModel)]="lunch_in_time"
-                    [iconDisplay]="'input'"
-                    [showIcon]="true"
-                    [timeOnly]="true"
-                    class="p-inputtext-sm"
-                    inputId="templatedisplay">
-                        <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
-                            <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
-                        </ng-template>
-                </p-calendar>
-                <label for="lunch_in_time" class="block font-bold">Lunch Start</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <p-floatLabel>
-                <p-calendar
-                    inputId="lunch_out_time"
-                    [(ngModel)]="lunch_out_time"
-                    [iconDisplay]="'input'"
-                    [showIcon]="true"
-                    [timeOnly]="true"
-                    class="p-inputtext-sm"
-                    inputId="templatedisplay">
-                        <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
-                            <i class="pi pi-clock pointer-events-none" (click)="clickCallBack($event)"></i>
-                        </ng-template>
-                </p-calendar>
-                <label for="lunch_out_time" class="block font-bold">Lunch End</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-4 xl:col-4">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="absent_threshold"
-                    [showButtons]="true"
-                    inputId="absent_threshold"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="absent_threshold" class="block font-bold">Absent Threshold (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-4 xl:col-4">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="half_day_threshold"
-                    [showButtons]="true"
-                    inputId="half_day_threshold"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="half_day_threshold" class="block font-bold">Half Day Threshold (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-4 xl:col-4">
-            <p-floatLabel>
-                <p-inputNumber
-                    [(ngModel)]="full_day_threshold"
-                    [showButtons]="true"
-                    inputId="full_day_threshold"
-                    spinnerMode="horizontal"
-                    [step]="1"
-                    [iconDisplay]="'input'"
-                    class="p-inputtext-sm"
-                    [min]="0"
-                    [max]="1440"
-                    mode="decimal" />
-                <label for="full_day_threshold" class="block font-bold">Full Day Threshold (in Min)</label>
-            </p-floatLabel>
-        </div>
-
-        <div class="col-12 lg:col-12 xl:col-12">
-            <div class="flex align-items-center gap-2">
-                <p-inputSwitch [(ngModel)]="is_night_shift" class="p-inputswitch-sm"></p-inputSwitch>
-                <span class="block font-bold">Is this a night shift? (Turn on only if the shift spans across two dates)</span>
-            </div>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <div class="flex align-items-center gap-2">
-                <p-inputSwitch [(ngModel)]="consider_lunch_half_day" class="p-inputswitch-sm"></p-inputSwitch>
-                <span class="block font-bold">Consider Lunch for Half Day</span>
-            </div>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <div class="flex align-items-center gap-2">
-                <p-inputSwitch [(ngModel)]="consider_lunch_full_day" class="p-inputswitch-sm"></p-inputSwitch>
-                <span class="block font-bold">Consider Lunch for Full Day</span>
-            </div>
-        </div>
-
-
     </div>
   </ng-template>
   <ng-template pTemplate="footer">
       <div class="mt-2">
           <button pButton icon="fa-solid fa-x" (click)="display=false" label="Close" class="p-button-outlined"></button>
-          <button pButton icon="fa-solid fa-floppy-disk" *ngIf="id == null" (click)="addShift()" label="Save" class="p-button-success"></button>
-          <button pButton icon="fa-solid fa-pencil" *ngIf="id !== null" (click)="updateShift()" label="Update" class="p-button-info"></button>
+          <button pButton icon="fa-solid fa-floppy-disk" *ngIf="id == null" (click)="addDevice()" label="Save" class="p-button-success"></button>
+          <button pButton icon="fa-solid fa-pencil" *ngIf="id !== null" (click)="updateDevice()" label="Update" class="p-button-info"></button>
       </div>
   </ng-template>
 </p-dialog>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from 'src/app/shared.service';
 import { finalize } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
@@ -12,11 +12,19 @@ import { Table } from 'primeng/table';
 })
 export class DeviceConfigComponent implements OnInit {
 
+    @ViewChild('dt') dt: Table;
+
     // Static data for dropdown
     databases: any[] = [
         { name: 'PostgreSQL', value: 'POSTGRESQL' },
         { name: 'Microsoft SQL Server', value: 'MS_SQL' }
     ];
+
+    directions: any[] = [
+        { name: 'IN', value: 'IN' },
+        { name: 'OUT', value: 'OUT' },
+        { name: 'BOTH', value: 'BOTH' }
+    ]
 
     // Form data variables
     selectedDatabase: string = '';
@@ -42,32 +50,118 @@ export class DeviceConfigComponent implements OnInit {
 
     biometricsDevices: any;
     totalRecords: number = 0;
-    rows: number = 10;
+    rowsPerPageOptions: number[] = [10, 20, 30, 50];
+    rows: number = this.rowsPerPageOptions[0];
 
     rangeDates: Date[];
     ModalTitle: string = "";
     display: boolean = false;
+    searchQuery: string = '';
+
+    id: number | null = null;
+    device_no: string = '';
+    serial_number: string = '';
+    selectedDirection: string = '';
+    direction_of_use: string = '';
+    purpose_of_device: string = '';
+    ip_address: string = '';
+    company: number | null = null;
+    location: number | null = null;
+
+    selectedCompany: any = null;
+    selectedLocation: any = null;
+
+    companies: any[] = [];
+    locations: any[] = [];
 
     constructor(private service: SharedService, private messageService: MessageService) { }
 
     ngOnInit() {
         // databases is already initialized above, no need to repeat here
         this.loadDatabaseCredentials();
-        this.getBiometricsDevicesList();
+        this.getCompaniesList();
+        this.getLocationsList();
     }
 
-    getBiometricsDevicesList() {
-        this.loading = true;
+    getCompaniesList(): void {
 
-        console.log('LazyLoadEvent:', event); // Inspect the event object
+        const params: any = {
+            page: 1,
+            page_size: 1000,
+            sortField: '',
+            ordering: '',
+        };
 
-        this.service.getBiometricsDevicesList().pipe(
+        this.service.getCompanies(params).pipe(
             finalize(() => this.loading = false)
         ).subscribe(
-            (response: any) => { // Assuming API returns an object with results and total
-                if (response && Array.isArray(response.results) && response.totalRecords !== undefined) {
+            (response: any) => {
+                if (response && Array.isArray(response.results)) {
+                    this.companies = response.results; // Data for the current page
+                    console.log('Loaded', this.companies);
+                } else {
+                    console.warn('API response for companies list is not in expected format:', response);
+                    this.companies = [];
+                }
+            },
+            (error: any) => {
+                console.error('Error fetching companies list:', error);
+                this.companies = []; // Clear data on error
+            }
+        );
+    }
+
+    getLocationsList(): void {
+
+        const params: any = {
+            page: 1,
+            page_size: 1000,
+            sortField: '',
+            ordering: '',
+        };
+
+        this.service.getLocations(params).pipe(
+            finalize(() => this.loading = false)
+        ).subscribe(
+            (response: any) => {
+                if (response && Array.isArray(response.results)) {
+                    this.locations = response.results; // Data for the current page
+                    console.log(`Loaded ${this.locations.length} locations`);
+                } else {
+                    console.warn('API response for locations list is not in expected format:', response);
+                    this.locations = [];
+                }
+            },
+            (error: any) => {
+                console.error('Error fetching locations list:', error);
+                this.locations = []; // Clear data on error
+            }
+        );
+    }
+
+    onSearchChange(query: string): void {
+        this.searchQuery = query;
+        this.dt.filterGlobal(query, 'contains');
+    }
+
+    getBiometricsDevicesList(event: LazyLoadEvent) {
+        this.loading = true;
+
+        const params: any = {
+            page: ((event.first || 0) / (event.rows || 5) + 1).toString(),
+            page_size: (event.rows || 10).toString(),
+            sortField: 'id',
+            sortOrder: 1,
+            search: this.searchQuery || '',
+        };
+
+        this.service.getBiometricsDevicesList(params).pipe(
+            finalize(() => this.loading = false)
+        ).subscribe(
+            (response: any) => {
+                if (response && Array.isArray(response.results) && response.count !== undefined) {
                     this.biometricsDevices = response.results; // Data for the current page
-                    this.totalRecords = response.totalRecords; // Total count of ALL records
+                    this.totalRecords = response.count; // Total count of ALL records
                     console.log(`Loaded ${this.biometricsDevices.length} devices, Total: ${this.totalRecords}`);
                 } else {
                     console.warn('API response for devices list is not in expected format:', response);
@@ -95,7 +189,7 @@ export class DeviceConfigComponent implements OnInit {
                 const credential = (Array.isArray(data) && data.length > 0) ? data[0] : data;
 
                 if (credential && typeof credential === 'object') {
-                    console.log('Mapping credentials from data:', credential);
+                    // console.log('Mapping credentials from data:', credential);
 
                     this.credentialId = credential.id; // Store the ID
                     this.mapCredentialToForm(credential); // Use helper method
@@ -153,7 +247,6 @@ export class DeviceConfigComponent implements OnInit {
 
     // Method to test the database connection
     testDatabaseConnection() {
-        this.loading = true;
         this.testResult = null;
 
         console.log('Testing database connection with the following details:', {
@@ -267,6 +360,135 @@ export class DeviceConfigComponent implements OnInit {
                 console.error('Error saving configuration:', error);
                 this.testResult = 'Failed to save configuration: ' + (error.error?.message || error.message || 'An unexpected error occurred.');
                 this.messageService.add({severity: 'error', summary: 'Configuration Failed', detail: 'Configuration was not saved'});
+            }
+        );
+    }
+
+    addClick() {
+        this.ModalTitle = "Add Device Configuration";
+        this.display = true;
+        this.id = null;
+        this.device_no = '';
+        this.serial_number = '';
+        this.selectedDirection = '';
+        this.direction_of_use = '';
+        this.purpose_of_device = '';
+        this.ip_address = '';
+        this.selectedCompany = null;
+        this.selectedLocation = null;
+    }
+
+    editClick(item: any) {
+        this.ModalTitle = "Edit Device Configuration";
+        this.display = true;
+        console.log('Edit clicked for item:', item);
+        this.id = item.id;
+        this.device_no = item.device_no;
+        this.serial_number = item.serial_number;
+        this.selectedDirection = item.direction_of_use;
+        this.purpose_of_device = item.purpose_of_device;
+        this.ip_address = item.ip_address;
+        // Find and assign the full company and location objects
+        this.selectedCompany = this.companies.find(company => company.id === item.company) || null;
+        this.selectedLocation = this.locations.find(location => location.id === item.location) || null;
+
+        console.log('Edit form populated with:', {
+            selectedCompany: this.selectedCompany,
+            selectedLocation: this.selectedLocation
+        });
+    }
+
+    addDevice() {
+        const deviceData = {
+            device_no: this.device_no,
+            serial_number: this.serial_number,
+            direction_of_use: this.selectedDirection,
+            purpose_of_device: this.purpose_of_device,
+            ip_address: this.ip_address,
+            company: this.company,
+            location: this.location
+        };
+
+        console.log('Adding device with data:', deviceData);
+
+        this.service.addBiometricsDevice(deviceData).subscribe(
+            (response: any) => {
+                console.log('Add device response:', response);
+                if (response && response.success) {
+                    // this.messageService.add({severity: 'success', summary: 'Device Added', detail: 'Device was added successfully'});
+
+                } else {
+                    // this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to add device'});
+                }
+                this.messageService.add({severity: 'success', summary: 'Device Added', detail: 'Device was added successfully'});
+                this.getBiometricsDevicesList({ first: 0, rows: this.rows });
+                this.display = false;
+            },
+            (error: any) => {
+                console.error('Error adding device:', error);
+                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to add device'});
+            }
+        );
+    }
+
+    assignCompanyId(selectedCompany: any) {
+        this.company = selectedCompany ? selectedCompany.id : null;
+        console.log("Selected Company:", selectedCompany);
+        console.log("Selected Company ID:", this.company);
+    }
+
+    assignLocationId(selectedLocation: any) {
+        this.location = selectedLocation ? selectedLocation.id : null;
+    }
+
+    updateDevice() {
+        const deviceData = {
+            id: this.id,
+            device_no: this.device_no,
+            serial_number: this.serial_number,
+            direction_of_use: this.selectedDirection,
+            purpose_of_device: this.purpose_of_device,
+            ip_address: this.ip_address,
+            company: this.company,
+            location: this.location
+        };
+
+        console.log('Updating device with data:', deviceData);
+
+        this.service.updateBiometricsDevice(this.id, deviceData).subscribe(
+            (response: any) => {
+                console.log('Update device response:', response);
+                if (response && response.success) {
+                    this.messageService.add({severity: 'success', summary: 'Device Updated', detail: 'Device was updated successfully'});
+                    this.getBiometricsDevicesList({ first: 0, rows: this.rows });
+                    this.display = false;
+                } else {
+                    this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to update device'});
+                }
+            },
+            (error: any) => {
+                console.error('Error updating device:', error);
+                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to update device'});
+            }
+        );
+    }
+
+    deleteDevice(item: any) {
+        this.service.deleteBiometricsDevice(item.id).subscribe(
+            (response: any) => {
+                console.log('Delete device response:', response);
+                if (response && response.success) {
+                    // this.messageService.add({severity: 'success', summary: 'Device Deleted', detail: 'Device was deleted successfully'});
+                    // this.getBiometricsDevicesList({ first: 0, rows: this.rows });
+                } else {
+                    // this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to delete device'});
+                }
+                this.messageService.add({severity: 'success', summary: 'Device Deleted', detail: 'Device was deleted successfully'});
+                this.getBiometricsDevicesList({ first: 0, rows: this.rows });
+            },
+            (error: any) => {
+                console.error('Error deleting device:', error);
+                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to delete device'});
             }
         );
     }

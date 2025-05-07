@@ -7723,8 +7723,10 @@ class BiometricDeviceConfigurationListAPIView(generics.ListCreateAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = '__all__'
     ordering_fields = '__all__'
+    search_fields = ['device_no', 'serial_number', 'direction_of_use']
 
 
 class BiometricDeviceConfigurationUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = BiometricDeviceConfiguration.objects.all()
     serializer_class = serializers.BiometricDeviceConfigurationSerializer
+    lookup_field = "id"

@@ -623,8 +623,32 @@ export class SharedService {
         return this.http.post<any>(`${this.APIUrl}/test_connection/`, formData);
     }
 
-    getBiometricsDevicesList(): Observable<any> {
-        return this.http.get(`${this.APIUrl}/biometric_device_config/`);
+    // getBiometricsDevicesList(): Observable<any> {
+    //     return this.http.get(`${this.APIUrl}/biometric_device_config/`);
+    // }
+
+    getBiometricsDevicesList(params: any): Observable<any> {
+        let httpParams = new HttpParams();
+
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                httpParams = httpParams.append(key, params[key]);
+            }
+            }
+
+        return this.http.get(`${this.APIUrl}/biometric_device_config/`, { params: httpParams });
+    }
+
+    addBiometricsDevice(formData: any): Observable<any> {
+        return this.http.post<any>(`${this.APIUrl}/biometric_device_config/`, formData);
+    }
+
+    updateBiometricsDevice(id: number, formData: any): Observable<any> {
+        return this.http.put<any>(`${this.APIUrl}/biometric_device_config/${id}/`, formData);
+    }
+
+    deleteBiometricsDevice(id: number): Observable<any> {
+        return this.http.delete<any>(`${this.APIUrl}/biometric_device_config/${id}/`);
     }
 
 }
