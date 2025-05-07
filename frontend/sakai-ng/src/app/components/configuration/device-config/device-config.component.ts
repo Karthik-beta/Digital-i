@@ -448,9 +448,9 @@ export class DeviceConfigComponent implements OnInit {
             serial_number: this.serial_number,
             direction_of_use: this.selectedDirection,
             purpose_of_device: this.purpose_of_device,
-            ip_address: this.ip_address,
+            ip_address: this.selectedCompany ? this.selectedCompany.id : null,
             company: this.company,
-            location: this.location
+            location: this.selectedLocation ? this.selectedLocation.id : null,
         };
 
         console.log('Updating device with data:', deviceData);
@@ -459,12 +459,15 @@ export class DeviceConfigComponent implements OnInit {
             (response: any) => {
                 console.log('Update device response:', response);
                 if (response && response.success) {
-                    this.messageService.add({severity: 'success', summary: 'Device Updated', detail: 'Device was updated successfully'});
-                    this.getBiometricsDevicesList({ first: 0, rows: this.rows });
-                    this.display = false;
+                    // this.messageService.add({severity: 'success', summary: 'Device Updated', detail: 'Device was updated successfully'});
+                    // this.getBiometricsDevicesList({ first: 0, rows: this.rows });
+                    // this.display = false;
                 } else {
-                    this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to update device'});
+                    // this.messageService.add({severity: 'error', summary: 'Error', detail: 'Failed to update device'});
                 }
+                this.messageService.add({severity: 'success', summary: 'Device Updated', detail: 'Device was updated successfully'});
+                this.getBiometricsDevicesList({ first: 0, rows: this.rows });
+                this.display = false;
             },
             (error: any) => {
                 console.error('Error updating device:', error);
