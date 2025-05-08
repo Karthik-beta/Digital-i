@@ -39,17 +39,18 @@ export class AppMenuComponent implements OnInit {
                                         ]
                                     },
                                     { label: 'Onboarding', icon: 'fa-solid fa-user-plus', routerLink: ['/employee_master'] },
-                                    {
-                                        label: 'Resource Allocation', icon: 'fa-solid fa-sliders',
-                                        items: [
-                                            { label: 'Shift management', icon: 'fa-solid fa-list-check',  },
-                                            { label: 'Reserve Skill Matrix Employee', icon: 'fa-solid fa-people-roof',  },
-                                        ]
-                                    },
+                                    // {
+                                    //     label: 'Resource Allocation', icon: 'fa-solid fa-sliders',
+                                    //     items: [
+                                    //         { label: 'Shift management', icon: 'fa-solid fa-list-check',  },
+                                    //         { label: 'Reserve Skill Matrix Employee', icon: 'fa-solid fa-people-roof',  },
+                                    //     ]
+                                    // },
                                     {
                                         label: 'Attendance Regularization', icon: 'fa-solid fa-people-roof',
                                         items: [
                                             { label: 'Missed Punch Management', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch'] },
+                                            { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'Leave Management', icon: 'fa-solid fa-calendar-days' },
                                             // { label: 'Compensatory Off Management', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'On Duty Management', icon: 'fa-solid fa-calendar-minus' },
@@ -129,20 +130,21 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Attendance Management', icon: 'fa-solid fa-calendar-days',
                                 items: [
-                                    {
-                                        label: 'Daily Info', icon: 'fa-solid fa-calendar-days',
-                                        items: [
-                                            { label: 'Daily Status', icon: 'fa-solid fa-chart-line', routerLink: ['/daily_report'] },
-                                            { label: 'Mandays Report', icon: 'fa-solid fa-user-group', routerLink: ['/mandays_report'] },
-                                            { label: 'Present Report', icon: 'fa-solid fa-user-check', routerLink: ['/present_report'] },
-                                            { label: 'Absent Report', icon: 'fa-solid fa-user-times', routerLink: ['/absent_report'] },
-                                            { label: 'Late Entry Report', icon: 'fa-solid fa-clock', routerLink: ['/late_entry_report'] },
-                                            { label: 'Early Exit Report', icon: 'fa-solid fa-door-open', routerLink: ['/early_exit_report'] },
-                                            { label: 'Overtime Report', icon: 'fa-solid fa-hourglass-half', routerLink: ['/overtime_report'] },
-                                            { label: 'Missed Punch Report', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch_report'] },
-                                            { label: 'Insufficient Hours Report', icon: 'fa-solid fa-clock', routerLink: ['/insufficient_hours_report'] },
-                                        ]
-                                    },
+                                    // {
+                                    //     label: 'Daily Info', icon: 'fa-solid fa-calendar-days',
+                                    //     items: [
+                                    //         { label: 'Daily Status', icon: 'fa-solid fa-chart-line', routerLink: ['/daily_report'] },
+                                    //         { label: 'Mandays Report', icon: 'fa-solid fa-user-group', routerLink: ['/mandays_report'] },
+                                    //         { label: 'Present Report', icon: 'fa-solid fa-user-check', routerLink: ['/present_report'] },
+                                    //         { label: 'Absent Report', icon: 'fa-solid fa-user-times', routerLink: ['/absent_report'] },
+                                    //         { label: 'Late Entry Report', icon: 'fa-solid fa-clock', routerLink: ['/late_entry_report'] },
+                                    //         { label: 'Early Exit Report', icon: 'fa-solid fa-door-open', routerLink: ['/early_exit_report'] },
+                                    //         { label: 'Overtime Report', icon: 'fa-solid fa-hourglass-half', routerLink: ['/overtime_report'] },
+                                    //         { label: 'Missed Punch Report', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch_report'] },
+                                    //         { label: 'Insufficient Hours Report', icon: 'fa-solid fa-clock', routerLink: ['/insufficient_hours_report'] },
+                                    //     ]
+                                    // },
+                                    { label: 'Daily Info', icon: 'fa-solid fa-calendar-days', routerLink: ['/daily_report'] },
                                     { label: 'Monthly Info', icon: 'fa-solid fa-calendar', routerLink: ['/Monthly_In_Out'] },
                                     // {
                                     //     label: 'Monthly Info', icon: 'fa-solid fa-calendar',
