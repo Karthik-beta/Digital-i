@@ -4,6 +4,7 @@ import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/a
 import { SharedService } from 'src/app/shared.service';
 import { DataService } from 'src/app/service/dataservice/data.service';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { interval, Observable, Subscription, combineLatest, Subject } from 'rxjs';
 import { distinctUntilChanged, startWith, switchMap, combineLatestWith, map, debounceTime } from 'rxjs/operators';
@@ -52,7 +53,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     jobTypes: any[] = [];
     week_days: any[] = [];
 
-    selectedCountry: string | undefined;
+    selectedCountry: any;
     agencyDisabled = true;
     agency: any;
 
@@ -67,7 +68,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private datePipe: DatePipe,
         private dataService: DataService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     )
     { }
 
@@ -93,7 +95,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.subscribe(params => {
-            this.id = params['id'] ? +params['id'] : null; // Convert string to number if present
+            this.id = params['id'] ? + params['id'] : null; // Convert string to number if present
             this.isEditMode = this.id !== null && this.id !== 0; // id === 0 means "add" mode
         });
 
@@ -111,7 +113,6 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         // implement logic to fetch from service.fetchEmployee
         this.service.fetchEmployee(id).subscribe({
             next: (employee) => {
-            console.log("asdds",employee)
             // set employee data to form fields
             this.preview = employee.profile_pic;
             this.employee_id = employee.employee_id;
@@ -149,13 +150,18 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             this.marital_status = employee.marital_status;
             this.spouse_name = employee.spouse_name;
             this.blood_group = employee.blood_group;
-            this.date_of_birth = new Date(employee.date_of_birth);
+            this.date_of_birth = employee.date_of_birth ? new Date(employee.date_of_birth) : null;;
             this.country_name = employee.country_name;
             this.country_code = employee.country_code;
+            this.selectedCountry = employee.country_name && employee.country_code
+            ? { name: employee.country_name, code: employee.country_code }
+            : null;
+
             this.uid_no = employee.uid_no;
             this.pan_no = employee.pan_no;
             this.voter_id = employee.voter_id;
             this.driving_license = employee.driving_license;
+            this.gender = employee.gender;
 
             this.selectedShift1 = employee.first_weekly_off ? this.week_days.find(week_day => week_day.value === employee.first_weekly_off) : null;
             this.assignFirstWeeklyOff(this.selectedShift1);
@@ -336,6 +342,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     assignCountry(selectedCountry: any) {
         this.country_name = selectedCountry ? selectedCountry.name : null;
         this.country_code = selectedCountry ? selectedCountry.code : null;
+        console.log("Selected Country Type", )
     }
 
     assignFirstWeeklyOff(selectedShift1: any): void {
@@ -509,8 +516,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         // formData.append('shopfloor', Number(this.shopfloor).toString());
         formData.append('job_type', this.job_type);
         formData.append('job_status', this.jobStatus);
-        formData.append('date_of_joining', this.datePipe.transform(this.date_of_joining, 'yyyy-MM-dd') || '');
-        formData.append('date_of_leaving', this.datePipe.transform(this.date_of_leaving, 'yyyy-MM-dd') || '');
+        formData.append('date_of_joining', this.date_of_joining ? this.datePipe.transform(this.date_of_joining, 'yyyy-MM-dd') || '' : '');
+        formData.append('date_of_leaving', this.date_of_leaving ? this.datePipe.transform(this.date_of_leaving, 'yyyy-MM-dd') || '' : '');
         formData.append('reason_for_leaving', this.reason_for_leaving);
 
         formData.append('emergency_contact_name', this.emergency_contact_name);
@@ -518,7 +525,10 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         formData.append('marital_status', this.marital_status);
         formData.append('spouse_name', this.spouse_name);
         formData.append('blood_group', this.blood_group);
-        formData.append('date_of_birth', this.datePipe.transform(this.date_of_birth, 'yyyy-MM-dd') || '');
+        formData.append(
+            'date_of_birth',
+            this.date_of_birth ? this.datePipe.transform(this.date_of_birth, 'yyyy-MM-dd') || '' : ''
+        );
         formData.append('country_name', this.country_name);
         formData.append('country_code', this.country_code);
         formData.append('uid_no', this.uid_no);
@@ -549,7 +559,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         this.service.addEmployee(formData).subscribe({
             next: (data) => {
 
-                this.resetForm();
+                // this.resetForm();
+                this.router.navigate(['/employee_master']);
 
                 this.activeStepperNumber = 0;
 
@@ -592,16 +603,16 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
 
         // formData.append('company', Number(this.company).toString());
         // formData.append('location', Number(this.location).toString());
-        formData.append('category', this.category);
+        formData.append('category', this.selectedCategory.value || '');
         // formData.append('department', Number(this.department).toString());
         // formData.append('designation', Number(this.designation).toString());
         // formData.append('division', Number(this.division).toString());
         // formData.append('subdivision', Number(this.subdivision).toString());
         // formData.append('shopfloor', Number(this.shopfloor).toString());
-        formData.append('job_type', this.job_type);
+        formData.append('job_type', this.selectedJobType.value || '');
         formData.append('job_status', this.jobStatus);
-        formData.append('date_of_joining', this.datePipe.transform(this.date_of_joining, 'yyyy-MM-dd') || '');
-        formData.append('date_of_leaving', this.datePipe.transform(this.date_of_leaving, 'yyyy-MM-dd') || '');
+        formData.append('date_of_joining', this.date_of_joining ? this.datePipe.transform(this.date_of_joining, 'yyyy-MM-dd') || '' : '');
+        formData.append('date_of_leaving', this.date_of_leaving ? this.datePipe.transform(this.date_of_leaving, 'yyyy-MM-dd') || '' : '');
         formData.append('reason_for_leaving', this.reason_for_leaving);
 
         formData.append('emergency_contact_name', this.emergency_contact_name);
@@ -609,9 +620,12 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         formData.append('marital_status', this.marital_status || '');
         formData.append('spouse_name', this.spouse_name);
         formData.append('blood_group', this.blood_group);
-        formData.append('date_of_birth', this.datePipe.transform(this.date_of_birth, 'yyyy-MM-dd') || '');
-        formData.append('country_name', this.country_name || 'India');
-        formData.append('country_code', this.country_code || 'IN');
+        formData.append(
+            'date_of_birth',
+            this.date_of_birth ? this.datePipe.transform(this.date_of_birth, 'yyyy-MM-dd') || '' : ''
+        );
+        formData.append('country_name', this.selectedCountry ? this.selectedCountry.name : null);
+        formData.append('country_code', this.selectedCountry ? this.selectedCountry.code : null);
         formData.append('uid_no', this.uid_no);
         formData.append('pan_no', this.pan_no);
         formData.append('voter_id', this.voter_id);
@@ -640,7 +654,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         this.service.updateEmployee(this.id, formData).subscribe({
             next: (data) => {
 
-                this.resetForm();
+                // this.resetForm();
+                this.router.navigate(['/employee_master']);
 
                 this.activeStepperNumber = 0;
 

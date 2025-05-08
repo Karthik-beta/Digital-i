@@ -236,10 +236,23 @@
             </span>
         </div>
 
-        <div class="field col-12 lg:col-12 xl:col-12">
+        <!-- <div class="field col-12 lg:col-12 xl:col-12">
             <span class="p-float-label">
                 <input type="text" id="purpose_of_device" pInputText [(ngModel)]="purpose_of_device" class="p-inputtext-sm"/>
                 <label for="purpose_of_device" class="block font-bold">Purpose of Use</label>
+            </span>
+        </div> -->
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-12">
+            <span class="p-float-label">
+                <p-dropdown
+                [options]="purposes"
+                [(ngModel)]="selectedPurpose"
+                optionLabel="name"
+                class="p-inputtext-sm"
+                placeholder="Select Purpose"
+                (onChange)="assignPurposeValue(selectedPurpose)"></p-dropdown>
+                <label for="purpose" class="block font-bold">Purpose of Device</label>
             </span>
         </div>
 

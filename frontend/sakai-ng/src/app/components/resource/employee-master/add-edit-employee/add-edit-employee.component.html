@@ -228,7 +228,7 @@
                         <span class="p-float-label">
                             <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" placeholder="Select a Category"
                             optionLabel="display_name" class="p-inputtext-sm" inputId="category"
-                            (onChange)="assignCategoryValue($event.value)"></p-dropdown>
+                            (onChange)="assignCategoryValue(selectedCategory)"></p-dropdown>
                             <label for="category">Category <span class="text-red-500">*</span></label>
                         </span>
                     </div>
@@ -328,12 +328,12 @@
                             </div>
 
                             <div class="flex align-items-center">
-                                <p-radioButton name="jobStatus" value="Resigned" [(ngModel)]="jobStatus" inputId="jobStatus2" (ngModelChange)="jobstatus()"></p-radioButton>
+                                <p-radioButton name="jobStatus" value="Resigned" [(ngModel)]="jobStatus" inputId="jobStatus2"></p-radioButton>
                                 <label for="jobStatus2" class="ml-2">Resigned</label>
                             </div>
 
                             <div class="flex align-items-center">
-                                <p-radioButton name="jobStatus" value="Absconded" [(ngModel)]="jobStatus" inputId="jobStatus3" (ngModelChange)="jobstatus()"></p-radioButton>
+                                <p-radioButton name="jobStatus" value="Absconded" [(ngModel)]="jobStatus" inputId="jobStatus3"></p-radioButton>
                                 <label for="jobStatus3" class="ml-2">Absconded</label>
                             </div>
                         </div>
@@ -474,7 +474,7 @@
                 <div class="grid p-fluid mt-1">
 
                     <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
-                        <h6 class="block">Gender :</h6>
+                        <h6 class="block">Gender : <span class="text-red-500">*</span></h6>
                         <div class="flex flex-wrap gap-2">
                             <div class="flex align-items-center">
                                 <p-radioButton name="gender" value="Male" [(ngModel)]="gender" inputId="gender1"></p-radioButton>
@@ -653,7 +653,7 @@
                                     </div>
                                     <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="fixed_shift_select">
                                         <span class="p-float-label">
-                                            <p-dropdown [options]="shifts" [(ngModel)]="selectedFixedShift" (onChange)="assignFixedShift(selectedFixedShift)" placeholder="Select Shift" optionLabel="name" class="p-inputtext-sm" inputId="shift"></p-dropdown>
+                                            <p-dropdown [options]="shifts" [(ngModel)]="selectedFixedShift" [showClear]="true" (onChange)="assignFixedShift(selectedFixedShift)" placeholder="Select Shift" optionLabel="name" class="p-inputtext-sm" inputId="shift"></p-dropdown>
                                             <label for="shift">Assigned Shift</label>
                                         </span>
                                     </div>
@@ -665,7 +665,7 @@
 
                                     <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="first_weekoff_select">
                                         <span class="p-float-label">
-                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedFirstWeekoff" (onChange)="assignFirstWeekOff(selectedFirstWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1" (onChange)="assignFirstWeeklyOff(selectedShift1)"></p-dropdown>
+                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedFirstWeekoff"  [showClear]="true" (onChange)="assignFirstWeekOff(selectedFirstWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1" (onChange)="assignFirstWeeklyOff(selectedShift1)"></p-dropdown>
                                             <label for="shift_1" class="font-small">1st Week Off</label>
                                         </span>
                                     </div>
@@ -677,7 +677,7 @@
 
                                     <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="second_weekoff_select">
                                         <span class="p-float-label">
-                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedSecondWeekoff" (onChange)="assignSecondWeekOff(selectedSecondWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1"></p-dropdown>
+                                            <p-dropdown [options]="week_days" [(ngModel)]="selectedSecondWeekoff" [showClear]="true" (onChange)="assignSecondWeekOff(selectedSecondWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1"></p-dropdown>
                                             <label for="shift_1" class="font-small">2nd Week Off</label>
                                         </span>
                                     </div>
@@ -758,7 +758,7 @@
                             </p-fieldset>
                         </div>
 
-                        <div class="col-12">
+                        <!-- <div class="col-12">
                             <p-fieldset legend="Punch Out Settings If Single Punches"  [toggleable]="true" [(collapsed)]="punchCollapsed" (onBeforeToggle)="toggleTimeSetting()">
 
                                 <div class="grid p-fluid">
@@ -768,7 +768,7 @@
                                             <span class="block font-bold">Search next day punched if single/odd punched made</span>
                                         </div>
                                         <div class="p-fluid mt-2">
-                                            <!-- <h6 class="block">Gender :</h6> -->
+                                            <h6 class="block">Gender :</h6>
                                             <div class="flex flex-column">
                                                 <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium p-2">
                                                     <div class="flex flex-wrap gap-2">
@@ -790,7 +790,7 @@
                                 </div>
 
                             </p-fieldset>
-                        </div>
+                        </div> -->
 
                     </div>
 

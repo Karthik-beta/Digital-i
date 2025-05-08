@@ -26,6 +26,11 @@ export class DeviceConfigComponent implements OnInit {
         { name: 'BOTH', value: 'BOTH' }
     ]
 
+    purposes: any[] = [
+        { name: 'Attendance', value: 'Attendance' },
+        { name: 'Canteen', value: 'Canteen' },
+    ]
+
     // Form data variables
     selectedDatabase: string = '';
     database_name: string = '';
@@ -70,6 +75,7 @@ export class DeviceConfigComponent implements OnInit {
 
     selectedCompany: any = null;
     selectedLocation: any = null;
+    selectedPurpose: any = null;
 
     companies: any[] = [];
     locations: any[] = [];
@@ -372,7 +378,7 @@ export class DeviceConfigComponent implements OnInit {
         this.serial_number = '';
         this.selectedDirection = '';
         this.direction_of_use = '';
-        this.purpose_of_device = '';
+        this.selectedPurpose = null;
         this.ip_address = '';
         this.selectedCompany = null;
         this.selectedLocation = null;
@@ -386,9 +392,10 @@ export class DeviceConfigComponent implements OnInit {
         this.device_no = item.device_no;
         this.serial_number = item.serial_number;
         this.selectedDirection = item.direction_of_use;
-        this.purpose_of_device = item.purpose_of_device;
+        // this.purpose_of_device = item.purpose_of_device;
         this.ip_address = item.ip_address;
         // Find and assign the full company and location objects
+        this.selectedPurpose = this.purposes.find(purpose => purpose.value === item.purpose_of_device) || null;
         this.selectedCompany = this.companies.find(company => company.id === item.company) || null;
         this.selectedLocation = this.locations.find(location => location.id === item.location) || null;
 
@@ -433,12 +440,16 @@ export class DeviceConfigComponent implements OnInit {
 
     assignCompanyId(selectedCompany: any) {
         this.company = selectedCompany ? selectedCompany.id : null;
-        console.log("Selected Company:", selectedCompany);
-        console.log("Selected Company ID:", this.company);
     }
 
     assignLocationId(selectedLocation: any) {
         this.location = selectedLocation ? selectedLocation.id : null;
+    }
+
+    assignPurposeValue(selectedPurpose: any) {
+        this.purpose_of_device = selectedPurpose ? selectedPurpose.value : null;
+        console.log("Selected Purpose:", selectedPurpose);
+        console.log("Selected Purpose Value:", this.purpose_of_device);
     }
 
     updateDevice() {

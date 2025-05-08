@@ -50,7 +50,7 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Attendance Regularization', icon: 'fa-solid fa-people-roof',
                                         items: [
                                             { label: 'Missed Punch Management', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch'] },
-                                            { label: 'Leave Management', icon: 'fa-solid fa-calendar-days' },
+                                            // { label: 'Leave Management', icon: 'fa-solid fa-calendar-days' },
                                             // { label: 'Compensatory Off Management', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'On Duty Management', icon: 'fa-solid fa-calendar-minus' },
                                             // { label: 'Gate Pass Management', icon: 'fa-solid fa-address-card' },
@@ -143,22 +143,23 @@ export class AppMenuComponent implements OnInit {
                                             { label: 'Insufficient Hours Report', icon: 'fa-solid fa-clock', routerLink: ['/insufficient_hours_report'] },
                                         ]
                                     },
-                                    {
-                                        label: 'Monthly Info', icon: 'fa-solid fa-calendar',
-                                        items: [
-                                            // { label: 'Monthly In - Out', icon: 'fa-solid fa-clock',  },
-                                            { label: 'In – Out Register', icon: 'fa-solid fa-clock', routerLink: ['/Monthly_In_Out'] },
-                                            { label: 'Duty Hours Register', icon: 'fa-solid fa-calendar-check', routerLink: ['/Monthly_Duty_Hours'] },
-                                            { label: 'Muster Roll Register', icon: 'fa-solid fa-users' },
-                                            { label: 'Payroll Output Register', icon: 'fa-solid fa-money-check' },
-                                            { label: 'Shift Roaster Register', icon: 'fa-solid fa-users-cog' },
-                                            { label: 'Overtime Register', icon: 'fa-solid fa-clock' },
-                                            { label: 'Late Entry Register', icon: 'fa-solid fa-door-closed' },
-                                            { label: 'Early Exit Register', icon: 'fa-solid fa-door-open' },
-                                            { label: 'Absent Register', icon: 'fa-solid fa-times-circle' },
-                                            { label: 'Present Register', icon: 'fa-solid fa-check-circle' },
-                                        ]
-                                    },
+                                    { label: 'Monthly Info', icon: 'fa-solid fa-calendar', routerLink: ['/Monthly_In_Out'] },
+                                    // {
+                                    //     label: 'Monthly Info', icon: 'fa-solid fa-calendar',
+                                    //     items: [
+                                    //         // { label: 'Monthly In - Out', icon: 'fa-solid fa-clock',  },
+                                    //         { label: 'In – Out Register', icon: 'fa-solid fa-clock', routerLink: ['/Monthly_In_Out'] },
+                                    //         { label: 'Duty Hours Register', icon: 'fa-solid fa-calendar-check', routerLink: ['/Monthly_Duty_Hours'] },
+                                    //         { label: 'Muster Roll Register', icon: 'fa-solid fa-users' },
+                                    //         { label: 'Payroll Output Register', icon: 'fa-solid fa-money-check' },
+                                    //         { label: 'Shift Roaster Register', icon: 'fa-solid fa-users-cog' },
+                                    //         { label: 'Overtime Register', icon: 'fa-solid fa-clock' },
+                                    //         { label: 'Late Entry Register', icon: 'fa-solid fa-door-closed' },
+                                    //         { label: 'Early Exit Register', icon: 'fa-solid fa-door-open' },
+                                    //         { label: 'Absent Register', icon: 'fa-solid fa-times-circle' },
+                                    //         { label: 'Present Register', icon: 'fa-solid fa-check-circle' },
+                                    //     ]
+                                    // },
                                     { label: 'Device Logs', icon: 'fa-solid fa-fingerprint', routerLink: ['/logs'] },
                                 ]
                             },
