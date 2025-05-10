@@ -27,7 +27,7 @@ export class ResetReportComponent implements OnInit{
             acceptButtonStyleClass: "p-button-danger p-button-text",
             rejectButtonStyleClass: "p-button-text p-button-text",
             accept: () => {
-                ({
+                this.service.resetReports().subscribe({
                     next: (response) => {
                         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'The request have been successfully registered. Please check back after 5 minutes.' });
                     },
