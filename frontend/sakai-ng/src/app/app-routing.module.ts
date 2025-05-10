@@ -31,6 +31,7 @@ import { FoodCourtComponent } from './components/evacuation/food-court/food-cour
 import { OperatorWorkAllocationComponent } from './components/evacuation/operator-work-allocation/operator-work-allocation.component';
 import { DeviceConfigComponent } from './components/configuration/device-config/device-config.component';
 import { EmpStrengthComponent } from './components/evacuation/emp-strength/emp-strength.component';
+import { ResetReportComponent } from './components/resource/reset-report/reset-report.component';
 
 @NgModule({
     imports: [
@@ -85,6 +86,7 @@ import { EmpStrengthComponent } from './components/evacuation/emp-strength/emp-s
                     { path: 'operator_work_allocation', component: OperatorWorkAllocationComponent, canActivate: [authGuard] },
 
                     { path: 'device_config', component: DeviceConfigComponent, canActivate: [authGuard] },
+                    { path: 'reset_report', component: ResetReportComponent, canActivate: [authGuard] },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

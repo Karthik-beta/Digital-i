@@ -114,7 +114,8 @@ export class AppMenuComponent implements OnInit {
                                             //     ]
                                             // }
                                         ]
-                                    }
+                                    },
+                                    { label: 'Recalculate Reports', icon: 'fa-solid fa-rotate-left', routerLink: ['/reset_report'] },
                                 ]
                             },
                             // {

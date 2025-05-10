@@ -11,6 +11,7 @@ from datetime import datetime, timedelta, date
 from typing import Optional, Tuple, Any, List, Dict
 from django.core.exceptions import ValidationError
 import pytz
+from threading import Thread
 from dateutil import parser
 from django.utils import timezone
 from django.utils.timezone import make_aware, now, localtime, make_naive, is_aware
@@ -2728,7 +2729,7 @@ class ResetAttendanceView(generics.GenericAPIView):
             ManDaysAttendance.objects.all().delete()
             AWOWorkOffCorrection.objects.all().delete()
             LastLogIdMandays.objects.all().delete()
-            Logs.ojects.all().delete()
+            AllLogs.objects.all().delete()
 
             # Resetting the LastLogIdMandays to 0
             LastLogIdMandays.objects.create(last_log_id=0)
@@ -2738,7 +2739,7 @@ class ResetAttendanceView(generics.GenericAPIView):
             self.reset_identity('processed_logs')
             self.reset_identity('mandays_attendance')
             self.reset_identity('awo_work_off_corrections')
-            self.reset_identity('logs')
+            self.reset_identity('all_logs')
 
             logger.info("Old data cleaned up and primary keys reset.")
             return True
@@ -2758,45 +2759,52 @@ class ResetAttendanceView(generics.GenericAPIView):
         except Exception as e:
             logger.error(f"Error resetting identity for {table_name}: {str(e)}")
             return False
+        
+    def process_reset_attendance(self):
+        """
+        Perform the reset attendance process in a separate thread.
+        """
+        try:
+            # Step 1: Stop the scheduler
+            scheduler_stopped = self.handle_scheduler('stop')
+            if not scheduler_stopped:
+                logger.error("Failed to stop the scheduler.")
+                return
+
+            # Step 2: Clean up the old data
+            if not self.cleanup_old_data():
+                logger.error("Failed to clean up old data.")
+                return
+
+            # Step 3: Run management commands
+            call_command('absentees', days=400)
+            call_command('reset_sequences')
+
+            # Step 4: Restart the scheduler
+            if not self.handle_scheduler('start'):
+                logger.error("Failed to restart the scheduler.")
+        except Exception as e:
+            logger.error(f"Error occurred during reset attendance process: {str(e)}")
+            # Ensure the scheduler is restarted if it was stopped
+            self.handle_scheduler('start')
     
     def post(self, request, *args, **kwargs):
         """
         Handle POST request to reset attendance data and restart the scheduler.
         """
-        scheduler_stopped = False
         try:
-            # Step 1: Stop the scheduler
-            scheduler_stopped = self.handle_scheduler('stop')
-            if not scheduler_stopped:
-                raise Exception("Failed to stop the scheduler.")
+            # Start the reset process in a separate thread
+            Thread(target=self.process_reset_attendance).start()
 
-            # Step 2: Clean up the old data
-            if not self.cleanup_old_data():
-                raise Exception("Failed to clean up old data.")
-            
-            call_command('absentees', days=400)
-            call_command('reset_sequences')
-
-            # Step 3: Restart the scheduler
-            if not self.handle_scheduler('start'):
-                raise Exception("Failed to restart the scheduler.")
-
-            response_data = {
-                'message': 'Successfully reset attendance data and restarted processing.',
-                'scheduler_status': 'restarted'
-            }
-            return Response(response_data, status=status.HTTP_200_OK)
+            # Immediately return a success message
+            return Response({
+                'message': 'Attendance reset process has been initiated successfully. Processing will continue in the background.'
+            }, status=status.HTTP_202_ACCEPTED)
 
         except Exception as e:
-            # Ensure the scheduler is restarted if it was stopped
-            if scheduler_stopped:
-                self.handle_scheduler('start')
-
-            logger.error(f"Error occurred: {str(e)}")
             return Response({
-                'error': str(e),
-                'message': 'Failed to reset attendance data.',
-                'scheduler_status': 'restarted_after_error'
+                'message': 'Failed to initiate attendance reset process.',
+                'error': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ResetMandaysView(generics.GenericAPIView):

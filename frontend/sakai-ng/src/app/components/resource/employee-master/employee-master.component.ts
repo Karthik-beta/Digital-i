@@ -159,7 +159,7 @@ export class EmployeeMasterComponent implements OnInit, OnDestroy {
             reject: (type: any) => {
                 switch (type) {
                     case ConfirmEventType.REJECT:
-                        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Delete operation cancelled' });
+                        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Delete operation rejected' });
                         break;
                     case ConfirmEventType.CANCEL:
                         this.messageService.add({ severity: 'warn', summary: 'Warn', detail: 'Delete operation cancelled' });

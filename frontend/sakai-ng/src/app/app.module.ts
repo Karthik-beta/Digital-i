@@ -162,6 +162,7 @@ import { EmpStrengthComponent } from './components/evacuation/emp-strength/emp-s
 import { FoodCourtComponent } from './components/evacuation/food-court/food-court.component';
 import { OperatorWorkAllocationComponent } from './components/evacuation/operator-work-allocation/operator-work-allocation.component';
 import { DeviceConfigComponent } from './components/configuration/device-config/device-config.component';
+import { ResetReportComponent } from './components/resource/reset-report/reset-report.component';
 
 
 
@@ -192,7 +193,8 @@ import { DeviceConfigComponent } from './components/configuration/device-config/
         EmpStrengthComponent,
         FoodCourtComponent,
         OperatorWorkAllocationComponent,
-        DeviceConfigComponent
+        DeviceConfigComponent,
+        ResetReportComponent
     ],
     imports: [
         AppRoutingModule,

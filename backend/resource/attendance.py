@@ -494,12 +494,12 @@ class AttendanceProcessor:
 
                     # print(f"Auto Shift: {auto_shift}, Include Lunch Break in Half Day: {auto_shift.include_lunch_break_in_half_day}, Include Lunch Break in Full Day: {auto_shift.include_lunch_break_in_full_day}")
 
-                    if auto_shift.include_lunch_break_in_half_day:
+                    if auto_shift.include_lunch_break_in_half_day and total_time >= auto_shift.lunch_duration:
                         total_time -= auto_shift.lunch_duration
                         attendance.total_time = total_time
                         # print(f"Total Time after half day lunch deduction: {attendance.total_time}")
                     else:
-                        if auto_shift.include_lunch_break_in_full_day:
+                        if auto_shift.include_lunch_break_in_full_day and total_time >= auto_shift.lunch_duration:
                             total_time -= auto_shift.lunch_duration
                             attendance.total_time = total_time
                             # print(f"Total Time after full day lunch deduction: {attendance.total_time}")
@@ -753,11 +753,23 @@ class AttendanceProcessor:
                         total_time = out_datetime - in_datetime
 
                         # Deduct lunch break if applicable
-                        if shift.include_lunch_break_in_half_day or shift.include_lunch_break_in_full_day:
-                            if shift.lunch_duration:
-                                total_time -= shift.lunch_duration
+                        # if shift.include_lunch_break_in_half_day or shift.include_lunch_break_in_full_day:
+                        #     if shift.lunch_duration:
+                        #         total_time -= shift.lunch_duration
 
-                        existing_attendance.total_time = total_time
+                        if shift.include_lunch_break_in_half_day and total_time >= shift.lunch_duration:
+                            total_time -= shift.lunch_duration
+                            existing_attendance.total_time = total_time
+                            # print(f"Total Time after half day lunch deduction: {attendance.total_time}")
+                        else:
+                            if shift.include_lunch_break_in_full_day and total_time >= shift.lunch_duration:
+                                total_time -= shift.lunch_duration
+                                existing_attendance.total_time = total_time
+                                # print(f"Total Time after full day lunch deduction: {attendance.total_time}")
+                            else:
+                                existing_attendance.total_time = total_time
+
+                        # existing_attendance.total_time = total_time
 
                         # Calculate shift timing
                         shift_start = timezone.make_aware(
@@ -935,10 +947,22 @@ class AttendanceProcessor:
                                 total_time = out_datetime - in_datetime
 
                                 # Apply lunch deduction
-                                if auto_shift.include_lunch_break_in_half_day|auto_shift.include_lunch_break_in_full_day:
-                                    total_time -= auto_shift.lunch_duration or timedelta()
+                                # if auto_shift.include_lunch_break_in_half_day|auto_shift.include_lunch_break_in_full_day:
+                                #     total_time -= auto_shift.lunch_duration or timedelta()
 
-                                attendance.total_time = total_time
+                                if auto_shift.include_lunch_break_in_half_day and total_time >= auto_shift.lunch_duration:
+                                    total_time -= auto_shift.lunch_duration
+                                    attendance.total_time = total_time
+                                    # print(f"Total Time after half day lunch deduction: {attendance.total_time}")
+                                else:
+                                    if auto_shift.include_lunch_break_in_full_day and total_time >= auto_shift.lunch_duration:
+                                        total_time -= auto_shift.lunch_duration
+                                        attendance.total_time = total_time
+                                        # print(f"Total Time after full day lunch deduction: {attendance.total_time}")
+                                    else:
+                                        attendance.total_time = total_time
+
+                                # attendance.total_time = total_time
 
                                 # Late entry/early exit
                                 shift_start = timezone.make_aware(

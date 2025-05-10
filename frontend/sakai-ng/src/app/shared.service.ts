@@ -651,4 +651,8 @@ export class SharedService {
         return this.http.delete<any>(`${this.APIUrl}/biometric_device_config/${id}/`);
     }
 
+    resetReports(): Observable<any> {
+        return this.http.post<any>(`${this.APIUrl}/attendance/reset/`, {});
+    }
+
 }

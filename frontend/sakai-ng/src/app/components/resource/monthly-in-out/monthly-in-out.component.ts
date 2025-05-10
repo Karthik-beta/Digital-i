@@ -156,7 +156,7 @@ export class MonthlyInOutComponent implements OnInit {
 
         this.items = [
             { label: 'Import', icon: 'fas fa-file-import' },
-            { label: 'Export', icon: 'fas fa-download', command: () => this.openExportModal() },
+            { label: 'Export', icon: 'fas fa-download', command: () => this.onExportClick() },
         ];
 
         this.criteria = [
