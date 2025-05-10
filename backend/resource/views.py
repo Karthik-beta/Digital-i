@@ -7383,7 +7383,7 @@ class UpdateAttendanceView(APIView):
             # Insert "Out Device" log directly into the database or update if it already exists
             ManualLogs.objects.update_or_create(
                 employeeid=employeeid,
-                log_datetime=time_in_datetime,
+                log_datetime=time_out_datetime,
                 defaults={'direction': 'Out'}
             )
 
@@ -7396,8 +7396,8 @@ class UpdateAttendanceView(APIView):
 
         return Response({
             "message": "Attendance record updated successfully.",
-            "time_in": formatted_time_in if time_in else None,
-            "time_out": formatted_time_out if time_out else None
+            "time_in": time_in if time_in else None,
+            "time_out": time_out if time_out else None
         }, status=status.HTTP_200_OK)
     
 class HolidayListCreate(generics.ListCreateAPIView):

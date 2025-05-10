@@ -6,5 +6,5 @@ export const environment = {
     // APIUrl: 'http://125.18.226.250:8000' // Maso
     // APIUrl: 'http://192.168.2.149:9000' // L&T
     // APIUrl: 'http://172.16.4.250:8000' // United
-    APIUrl: 'http://192.168.1.101:8000' // CASA
+    APIUrl: 'http://192.168.1.100:8000' // CASA
 };

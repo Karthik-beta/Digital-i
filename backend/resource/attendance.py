@@ -75,7 +75,7 @@ class AttendanceProcessor:
                     for log in current_batch:
                         try:
                             with transaction.atomic():  # Atomic per log
-                                if log.source.lower() == 'Manual':
+                                if log.source.lower() == 'manual':
                                     self.process_single_log(log, is_manual=True)
                                     # print(f"Processing manual log: {log.id}, Employee ID: {log.employeeid}, Log DateTime: {log.log_datetime}, Direction: {log.direction}, Shortname: {log.shortname}, Serialno: {log.serialno}, source: {log.source}")
                                     processed_batch.append(log)
@@ -382,13 +382,21 @@ class AttendanceProcessor:
 
             # print(f"Attendance found: {attendance}")
 
-            if not attendance:
+            if attendance and attendance.first_logtime > log_datetime:
                 prev_date = log_date - timedelta(days=1)
                 attendance = Attendance.objects.filter(
                     employeeid=employee,
                     logdate=prev_date,
                     first_logtime__isnull=False,
                     # last_logtime__isnull=True  # Must not have an OUT punch already
+                ).first()
+
+            if not attendance:
+                prev_date = log_date - timedelta(days=1)
+                attendance = Attendance.objects.filter(
+                    employeeid=employee,
+                    logdate=prev_date,
+                    first_logtime__isnull=False,
                 ).first()
 
             if not attendance:

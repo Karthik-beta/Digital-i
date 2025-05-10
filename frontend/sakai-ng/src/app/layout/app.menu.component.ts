@@ -57,6 +57,63 @@ export class AppMenuComponent implements OnInit {
                                             // { label: 'Gate Pass Management', icon: 'fa-solid fa-address-card' },
                                             { label: 'Holiday Management', icon: 'fa-solid fa-calendar-check', routerLink: ['/holiday_list'] },
                                         ]
+                                    },
+                                    {
+                                        label: 'Reports', icon: 'fa-solid fa-file',
+                                        items: [
+                                            { label: 'Daily Info', icon: 'fa-solid fa-calendar-days', routerLink: ['/daily_report'] },
+                                            { label: 'Monthly Info', icon: 'fa-solid fa-calendar', routerLink: ['/Monthly_In_Out'] },
+                                            { label: 'Device Logs', icon: 'fa-solid fa-fingerprint', routerLink: ['/logs'] },
+
+                                            // {
+                                            //     label: 'Payroll Management', icon: 'fa-solid fa-money-check-dollar',
+                                            //     items: [
+                                            //         { label: 'New Joining Register', icon: 'fa-solid fa-user-plus' },
+                                            //         { label: 'Adult Register', icon: 'fa-solid fa-user-tie' },
+                                            //         { label: 'Holiday Register', icon: 'fa-solid fa-umbrella-beach' },
+                                            //         { label: 'Man-days Register', icon: 'fa-solid fa-user-group' },
+                                            //         { label: 'Attendance', icon: 'fa-solid fa-calendar-check' },
+                                            //         { label: 'Salary Statement', icon: 'fa-solid fa-file-invoice-dollar' },
+                                            //         { label: 'Salary Abstract', icon: 'fa-solid fa-file-contract' },
+                                            //         { label: 'Bank Statement', icon: 'fa-solid fa-building-columns' },
+                                            //         { label: 'PF Statement', icon: 'fa-solid fa-piggy-bank' },
+                                            //         { label: 'ESI Statement', icon: 'fa-solid fa-hospital' },
+                                            //         { label: 'PT Statement', icon: 'fa-solid fa-receipt' },
+                                            //         { label: 'Payslip', icon: 'fa-solid fa-file-invoice' },
+                                            //     ]
+                                            // },
+                                            // {
+                                            //     label: 'Canteen Management', icon: 'fa-solid fa-utensils',
+                                            //     items: [
+                                            //         { label: 'Food Order Report', icon: 'fa-solid fa-cash-register' },
+                                            //         { label: 'Food Wallet Report', icon: 'fa-solid fa-wallet' },
+                                            //         { label: 'Food Waste Report', icon: 'fa-solid fa-trash' },
+                                            //     ]
+                                            // },
+                                            // {
+                                            //     label: 'Feedback Management', icon: 'fa-solid fa-comment-alt',
+                                            //     items: [
+                                            //         { label: 'Feedback Report', icon: 'fa-solid fa-comment-alt' },
+                                            //         { label: 'Feedback Analysis Report', icon: 'fa-solid fa-chart-line' },
+                                            //     ]
+                                            // },
+                                            // {
+                                            //     label: 'Gate Office Management', icon: 'fa-solid fa-building-lock',
+                                            //     items: [
+                                            //         { label: 'Visitor Management Report', icon: 'fa-solid fa-user-check' },
+                                            //         { label: 'Material Management Report', icon: 'fa-solid fa-box' },
+                                            //         { label: 'Work Order Management Report', icon: 'fa-solid fa-clipboard-list' },
+                                            //         { label: 'Evacuation Management Report', icon: 'fa-solid fa-right-from-bracket' },
+                                            //         { label: 'Shift Strength Management Report', icon: 'fa-solid fa-users' },
+                                            //     ]
+                                            // },
+                                            // {
+                                            //     label: 'EHS Management', icon: 'fa-solid fa-shield-alt',
+                                            //     items: [
+                                            //         { label: 'EHS Report', icon: 'fa-solid fa-shield-alt' },
+                                            //     ]
+                                            // }
+                                        ]
                                     }
                                 ]
                             },
@@ -121,102 +178,102 @@ export class AppMenuComponent implements OnInit {
             //         }
             //     ]
             // },
-            {
-                label: 'Reports',
-                items: [
-                    {
-                        label: 'Reports', icon: 'fa-solid fa-file',
-                        items: [
-                            {
-                                label: 'Attendance Management', icon: 'fa-solid fa-calendar-days',
-                                items: [
-                                    // {
-                                    //     label: 'Daily Info', icon: 'fa-solid fa-calendar-days',
-                                    //     items: [
-                                    //         { label: 'Daily Status', icon: 'fa-solid fa-chart-line', routerLink: ['/daily_report'] },
-                                    //         { label: 'Mandays Report', icon: 'fa-solid fa-user-group', routerLink: ['/mandays_report'] },
-                                    //         { label: 'Present Report', icon: 'fa-solid fa-user-check', routerLink: ['/present_report'] },
-                                    //         { label: 'Absent Report', icon: 'fa-solid fa-user-times', routerLink: ['/absent_report'] },
-                                    //         { label: 'Late Entry Report', icon: 'fa-solid fa-clock', routerLink: ['/late_entry_report'] },
-                                    //         { label: 'Early Exit Report', icon: 'fa-solid fa-door-open', routerLink: ['/early_exit_report'] },
-                                    //         { label: 'Overtime Report', icon: 'fa-solid fa-hourglass-half', routerLink: ['/overtime_report'] },
-                                    //         { label: 'Missed Punch Report', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch_report'] },
-                                    //         { label: 'Insufficient Hours Report', icon: 'fa-solid fa-clock', routerLink: ['/insufficient_hours_report'] },
-                                    //     ]
-                                    // },
-                                    { label: 'Daily Info', icon: 'fa-solid fa-calendar-days', routerLink: ['/daily_report'] },
-                                    { label: 'Monthly Info', icon: 'fa-solid fa-calendar', routerLink: ['/Monthly_In_Out'] },
-                                    // {
-                                    //     label: 'Monthly Info', icon: 'fa-solid fa-calendar',
-                                    //     items: [
-                                    //         // { label: 'Monthly In - Out', icon: 'fa-solid fa-clock',  },
-                                    //         { label: 'In – Out Register', icon: 'fa-solid fa-clock', routerLink: ['/Monthly_In_Out'] },
-                                    //         { label: 'Duty Hours Register', icon: 'fa-solid fa-calendar-check', routerLink: ['/Monthly_Duty_Hours'] },
-                                    //         { label: 'Muster Roll Register', icon: 'fa-solid fa-users' },
-                                    //         { label: 'Payroll Output Register', icon: 'fa-solid fa-money-check' },
-                                    //         { label: 'Shift Roaster Register', icon: 'fa-solid fa-users-cog' },
-                                    //         { label: 'Overtime Register', icon: 'fa-solid fa-clock' },
-                                    //         { label: 'Late Entry Register', icon: 'fa-solid fa-door-closed' },
-                                    //         { label: 'Early Exit Register', icon: 'fa-solid fa-door-open' },
-                                    //         { label: 'Absent Register', icon: 'fa-solid fa-times-circle' },
-                                    //         { label: 'Present Register', icon: 'fa-solid fa-check-circle' },
-                                    //     ]
-                                    // },
-                                    { label: 'Device Logs', icon: 'fa-solid fa-fingerprint', routerLink: ['/logs'] },
-                                ]
-                            },
-                            // {
-                            //     label: 'Payroll Management', icon: 'fa-solid fa-money-check-dollar',
-                            //     items: [
-                            //         { label: 'New Joining Register', icon: 'fa-solid fa-user-plus' },
-                            //         { label: 'Adult Register', icon: 'fa-solid fa-user-tie' },
-                            //         { label: 'Holiday Register', icon: 'fa-solid fa-umbrella-beach' },
-                            //         { label: 'Man-days Register', icon: 'fa-solid fa-user-group' },
-                            //         { label: 'Attendance', icon: 'fa-solid fa-calendar-check' },
-                            //         { label: 'Salary Statement', icon: 'fa-solid fa-file-invoice-dollar' },
-                            //         { label: 'Salary Abstract', icon: 'fa-solid fa-file-contract' },
-                            //         { label: 'Bank Statement', icon: 'fa-solid fa-building-columns' },
-                            //         { label: 'PF Statement', icon: 'fa-solid fa-piggy-bank' },
-                            //         { label: 'ESI Statement', icon: 'fa-solid fa-hospital' },
-                            //         { label: 'PT Statement', icon: 'fa-solid fa-receipt' },
-                            //         { label: 'Payslip', icon: 'fa-solid fa-file-invoice' },
-                            //     ]
-                            // },
-                            // {
-                            //     label: 'Canteen Management', icon: 'fa-solid fa-utensils',
-                            //     items: [
-                            //         { label: 'Food Order Report', icon: 'fa-solid fa-cash-register' },
-                            //         { label: 'Food Wallet Report', icon: 'fa-solid fa-wallet' },
-                            //         { label: 'Food Waste Report', icon: 'fa-solid fa-trash' },
-                            //     ]
-                            // },
-                            // {
-                            //     label: 'Feedback Management', icon: 'fa-solid fa-comment-alt',
-                            //     items: [
-                            //         { label: 'Feedback Report', icon: 'fa-solid fa-comment-alt' },
-                            //         { label: 'Feedback Analysis Report', icon: 'fa-solid fa-chart-line' },
-                            //     ]
-                            // },
-                            // {
-                            //     label: 'Gate Office Management', icon: 'fa-solid fa-building-lock',
-                            //     items: [
-                            //         { label: 'Visitor Management Report', icon: 'fa-solid fa-user-check' },
-                            //         { label: 'Material Management Report', icon: 'fa-solid fa-box' },
-                            //         { label: 'Work Order Management Report', icon: 'fa-solid fa-clipboard-list' },
-                            //         { label: 'Evacuation Management Report', icon: 'fa-solid fa-right-from-bracket' },
-                            //         { label: 'Shift Strength Management Report', icon: 'fa-solid fa-users' },
-                            //     ]
-                            // },
-                            // {
-                            //     label: 'EHS Management', icon: 'fa-solid fa-shield-alt',
-                            //     items: [
-                            //         { label: 'EHS Report', icon: 'fa-solid fa-shield-alt' },
-                            //     ]
-                            // }
-                        ]
-                    }
-                ]
-            },
+            // {
+            //     label: 'Reports',
+            //     items: [
+            //         {
+            //             label: 'Reports', icon: 'fa-solid fa-file',
+            //             items: [
+            //                 {
+            //                     label: 'Attendance Management', icon: 'fa-solid fa-calendar-days',
+            //                     items: [
+            //                         // {
+            //                         //     label: 'Daily Info', icon: 'fa-solid fa-calendar-days',
+            //                         //     items: [
+            //                         //         { label: 'Daily Status', icon: 'fa-solid fa-chart-line', routerLink: ['/daily_report'] },
+            //                         //         { label: 'Mandays Report', icon: 'fa-solid fa-user-group', routerLink: ['/mandays_report'] },
+            //                         //         { label: 'Present Report', icon: 'fa-solid fa-user-check', routerLink: ['/present_report'] },
+            //                         //         { label: 'Absent Report', icon: 'fa-solid fa-user-times', routerLink: ['/absent_report'] },
+            //                         //         { label: 'Late Entry Report', icon: 'fa-solid fa-clock', routerLink: ['/late_entry_report'] },
+            //                         //         { label: 'Early Exit Report', icon: 'fa-solid fa-door-open', routerLink: ['/early_exit_report'] },
+            //                         //         { label: 'Overtime Report', icon: 'fa-solid fa-hourglass-half', routerLink: ['/overtime_report'] },
+            //                         //         { label: 'Missed Punch Report', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch_report'] },
+            //                         //         { label: 'Insufficient Hours Report', icon: 'fa-solid fa-clock', routerLink: ['/insufficient_hours_report'] },
+            //                         //     ]
+            //                         // },
+            //                         { label: 'Daily Info', icon: 'fa-solid fa-calendar-days', routerLink: ['/daily_report'] },
+            //                         { label: 'Monthly Info', icon: 'fa-solid fa-calendar', routerLink: ['/Monthly_In_Out'] },
+            //                         // {
+            //                         //     label: 'Monthly Info', icon: 'fa-solid fa-calendar',
+            //                         //     items: [
+            //                         //         // { label: 'Monthly In - Out', icon: 'fa-solid fa-clock',  },
+            //                         //         { label: 'In – Out Register', icon: 'fa-solid fa-clock', routerLink: ['/Monthly_In_Out'] },
+            //                         //         { label: 'Duty Hours Register', icon: 'fa-solid fa-calendar-check', routerLink: ['/Monthly_Duty_Hours'] },
+            //                         //         { label: 'Muster Roll Register', icon: 'fa-solid fa-users' },
+            //                         //         { label: 'Payroll Output Register', icon: 'fa-solid fa-money-check' },
+            //                         //         { label: 'Shift Roaster Register', icon: 'fa-solid fa-users-cog' },
+            //                         //         { label: 'Overtime Register', icon: 'fa-solid fa-clock' },
+            //                         //         { label: 'Late Entry Register', icon: 'fa-solid fa-door-closed' },
+            //                         //         { label: 'Early Exit Register', icon: 'fa-solid fa-door-open' },
+            //                         //         { label: 'Absent Register', icon: 'fa-solid fa-times-circle' },
+            //                         //         { label: 'Present Register', icon: 'fa-solid fa-check-circle' },
+            //                         //     ]
+            //                         // },
+            //                         { label: 'Device Logs', icon: 'fa-solid fa-fingerprint', routerLink: ['/logs'] },
+            //                     ]
+            //                 },
+            //                 // {
+            //                 //     label: 'Payroll Management', icon: 'fa-solid fa-money-check-dollar',
+            //                 //     items: [
+            //                 //         { label: 'New Joining Register', icon: 'fa-solid fa-user-plus' },
+            //                 //         { label: 'Adult Register', icon: 'fa-solid fa-user-tie' },
+            //                 //         { label: 'Holiday Register', icon: 'fa-solid fa-umbrella-beach' },
+            //                 //         { label: 'Man-days Register', icon: 'fa-solid fa-user-group' },
+            //                 //         { label: 'Attendance', icon: 'fa-solid fa-calendar-check' },
+            //                 //         { label: 'Salary Statement', icon: 'fa-solid fa-file-invoice-dollar' },
+            //                 //         { label: 'Salary Abstract', icon: 'fa-solid fa-file-contract' },
+            //                 //         { label: 'Bank Statement', icon: 'fa-solid fa-building-columns' },
+            //                 //         { label: 'PF Statement', icon: 'fa-solid fa-piggy-bank' },
+            //                 //         { label: 'ESI Statement', icon: 'fa-solid fa-hospital' },
+            //                 //         { label: 'PT Statement', icon: 'fa-solid fa-receipt' },
+            //                 //         { label: 'Payslip', icon: 'fa-solid fa-file-invoice' },
+            //                 //     ]
+            //                 // },
+            //                 // {
+            //                 //     label: 'Canteen Management', icon: 'fa-solid fa-utensils',
+            //                 //     items: [
+            //                 //         { label: 'Food Order Report', icon: 'fa-solid fa-cash-register' },
+            //                 //         { label: 'Food Wallet Report', icon: 'fa-solid fa-wallet' },
+            //                 //         { label: 'Food Waste Report', icon: 'fa-solid fa-trash' },
+            //                 //     ]
+            //                 // },
+            //                 // {
+            //                 //     label: 'Feedback Management', icon: 'fa-solid fa-comment-alt',
+            //                 //     items: [
+            //                 //         { label: 'Feedback Report', icon: 'fa-solid fa-comment-alt' },
+            //                 //         { label: 'Feedback Analysis Report', icon: 'fa-solid fa-chart-line' },
+            //                 //     ]
+            //                 // },
+            //                 // {
+            //                 //     label: 'Gate Office Management', icon: 'fa-solid fa-building-lock',
+            //                 //     items: [
+            //                 //         { label: 'Visitor Management Report', icon: 'fa-solid fa-user-check' },
+            //                 //         { label: 'Material Management Report', icon: 'fa-solid fa-box' },
+            //                 //         { label: 'Work Order Management Report', icon: 'fa-solid fa-clipboard-list' },
+            //                 //         { label: 'Evacuation Management Report', icon: 'fa-solid fa-right-from-bracket' },
+            //                 //         { label: 'Shift Strength Management Report', icon: 'fa-solid fa-users' },
+            //                 //     ]
+            //                 // },
+            //                 // {
+            //                 //     label: 'EHS Management', icon: 'fa-solid fa-shield-alt',
+            //                 //     items: [
+            //                 //         { label: 'EHS Report', icon: 'fa-solid fa-shield-alt' },
+            //                 //     ]
+            //                 // }
+            //             ]
+            //         }
+            //     ]
+            // },
 
             {
                 label: 'Settings',
