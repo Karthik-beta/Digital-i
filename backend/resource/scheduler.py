@@ -6,6 +6,8 @@ from apscheduler.triggers.interval import IntervalTrigger
 from django.core.management import call_command
 import logging
 from django.conf import settings
+import os
+import tempfile
 
 logger = logging.getLogger(__name__)
 
@@ -47,13 +49,33 @@ def get_scheduler():
 def run_my_command():
     """Execute management commands with better error handling"""
     commands = ['sync_logs', 'sync_all_logs', 'absentees', 'task', 'mandays', 'correct_a_wo_a_pattern', 'revert_awo_corrections']
+
+    lock_file = os.path.join(tempfile.gettempdir(), "digitali_commands.lock")
+
+    # Try to create the lock file - this is atomic at the OS level
+    try:
+        lock_fd = os.open(lock_file, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        logger.info("Skipping command execution - another process is already running")
+        return
     
-    for command in commands:
+    try:
+        # Write the current PID to the lock file for debugging
+        os.write(lock_fd, str(os.getpid()).encode())
+        os.close(lock_fd)
+        
+        for command in commands:
+            try:
+                call_command(command)
+                logger.info(f"Successfully executed command: {command}")
+            except Exception as e:
+                logger.error(f"Error executing command {command}: {str(e)}")
+    finally:
+        # Always clean up the lock file, even if an exception occurs
         try:
-            call_command(command)
-            logger.info(f"Successfully executed command: {command}")
+            os.unlink(lock_file)
         except Exception as e:
-            logger.error(f"Error executing command {command}: {str(e)}")
+            logger.error(f"Failed to remove lock file: {str(e)}")
 
 def start():
     scheduler = BackgroundScheduler()

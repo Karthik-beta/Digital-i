@@ -303,11 +303,12 @@ class AttendanceProcessor:
         """Handle incoming attendance log."""
         try:
             log_datetime = log.log_datetime 
+            base_date = log_datetime.date() - timedelta(days=1) if time(0, 0) <= log_datetime.time() <= time(1, 30) else log_datetime.date()
 
             # Find the matching shift for this IN punch
             for auto_shift in self.auto_shifts:
                 try:
-                    shift_window = self._calculate_autoshift_window(auto_shift, log_datetime, log_datetime.date())
+                    shift_window = self._calculate_autoshift_window(auto_shift, log_datetime, base_date)
 
                     if shift_window.start_window <= log_datetime <= shift_window.end_window:
                         with transaction.atomic():  # Use a nested atomic block
@@ -606,7 +607,10 @@ class AttendanceProcessor:
                     base_date = base_date
 
             # Create timezone-aware start and end times
-            start_time = datetime.combine(base_date, auto_shift.start_time).replace(tzinfo=tzinfo)
+            start_time = datetime.combine(
+                base_date,
+                auto_shift.start_time
+            ).replace(tzinfo=tzinfo)
             end_time = datetime.combine(
                 base_date + timedelta(days=1) if auto_shift.is_night_shift() and auto_shift.end_time < auto_shift.start_time else base_date,
                 auto_shift.end_time
