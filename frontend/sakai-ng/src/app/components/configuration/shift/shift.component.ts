@@ -30,18 +30,18 @@ export class ShiftComponent implements OnInit, OnDestroy {
     end_time: Date = new Date();
     overtime_threshold: string;
 
-    tolerance_before_start_time: Number | undefined;
-    tolerance_after_start_time: Number | undefined;
-    tolerance_before_end_time: Number | undefined;
-    tolerance_after_end_time: Number | undefined;
+    tolerance_before_start_time: number | undefined;
+    tolerance_after_start_time: number | undefined;
+    tolerance_before_end_time: number | undefined;
+    tolerance_after_end_time: number | undefined;
 
-    grace_start_time: Number | undefined;
-    grace_end_time: Number | undefined;
-    overtime_threshold_before_start: Number | undefined;
-    overtime_threshold_after_end: Number | undefined;
-    absent_threshold: Number | undefined;
-    half_day_threshold: Number | undefined;
-    full_day_threshold: Number | undefined;
+    grace_start_time: number | undefined;
+    grace_end_time: number | undefined;
+    overtime_threshold_before_start: number | undefined;
+    overtime_threshold_after_end: number | undefined;
+    absent_threshold: number | undefined;
+    half_day_threshold: number | undefined;
+    full_day_threshold: number | undefined;
     lunch_in_time: Date = new Date();
     lunch_out_time: Date = new Date();
 
@@ -83,7 +83,7 @@ export class ShiftComponent implements OnInit, OnDestroy {
           // Add any other query parameters here
         };
 
-        this.ShiftListSubscription = this.service.getAutoShifts(params).subscribe({
+        this.ShiftListSubscription = this.service.getShifts(params).subscribe({
             next: (response) => {
                 this.shifts = response.results;
                 this.totalRecords = response.count;
@@ -174,7 +174,7 @@ export class ShiftComponent implements OnInit, OnDestroy {
         console.log(shift);
         this.loading = true;
 
-        this.service.addAutoShift(shift).subscribe({
+        this.service.addShift(shift).subscribe({
             next: (response) => {
                 this.dt.reset();
 
@@ -261,7 +261,7 @@ export class ShiftComponent implements OnInit, OnDestroy {
         this.loading = true;
         console.log(shift);
 
-        this.service.updateAutoShift(shift).subscribe({
+        this.service.updateShift(shift).subscribe({
             next: (response) => {
                 this.dt.reset();
                 this.eventEmitterService.invokeGetUpdatedAtList.emit();
@@ -334,6 +334,85 @@ export class ShiftComponent implements OnInit, OnDestroy {
         });
     }
 
+    getEarliestStartTime(): string {
+        if (!this.start_time) return '--:--';
+
+        const startTime = new Date(this.start_time);
+        const earliestTime = new Date(startTime);
+        earliestTime.setMinutes(startTime.getMinutes() - (this.tolerance_before_start_time || 0));
+
+        return this.formatTime(earliestTime);
+    }
+
+    getLatestStartTime(): string {
+        if (!this.start_time) return '--:--';
+
+        const startTime = new Date(this.start_time);
+        const latestTime = new Date(startTime);
+        latestTime.setMinutes(startTime.getMinutes() + (this.tolerance_after_start_time || 0));
+
+        return this.formatTime(latestTime);
+    }
+
+    private formatTime(date: Date): string {
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
+    getEarliestEndTime(): string {
+        if (!this.end_time) return '--:--';
+
+        const endTime = new Date(this.end_time);
+        const earliestTime = new Date(endTime);
+        earliestTime.setMinutes(endTime.getMinutes() - (this.tolerance_before_end_time || 0));
+
+        return this.formatTime(earliestTime);
+    }
+
+    getLatestEndTime(): string {
+        if (!this.end_time) return '--:--';
+
+        const endTime = new Date(this.end_time);
+        const latestTime = new Date(endTime);
+        latestTime.setMinutes(endTime.getMinutes() + (this.tolerance_after_end_time || 0));
+
+        return this.formatTime(latestTime);
+    }
+
+    getStartTimeWithGracePeriod(): string {
+        if (!this.start_time) return '--:--';
+
+        const startTime = new Date(this.start_time);
+        const startTimeWithGrace = new Date(startTime);
+        startTimeWithGrace.setMinutes(startTime.getMinutes() + (this.grace_start_time || 0));
+        return this.formatTime(startTimeWithGrace);
+    }
+
+    getEndTimeWithGracePeriod(): string {
+        if (!this.end_time) return '--:--';
+
+        const endTime = new Date(this.end_time);
+        const endTimeWithGrace = new Date(endTime);
+        endTimeWithGrace.setMinutes(endTime.getMinutes() - (this.grace_end_time || 0));
+        return this.formatTime(endTimeWithGrace);
+    }
+
+    getStartTimeWithOvertimeThreshold(): string {
+        if (!this.start_time) return '--:--';
+
+        const startTime = new Date(this.start_time);
+        const startTimeWithOvertime = new Date(startTime);
+        startTimeWithOvertime.setMinutes(startTime.getMinutes() - (this.overtime_threshold_before_start || 0));
+        return this.formatTime(startTimeWithOvertime);
+    }
+
+    getEndTimeWithOvertimeThreshold(): string {
+        if (!this.end_time) return '--:--';
+
+        const endTime = new Date(this.end_time);
+        const endTimeWithOvertime = new Date(endTime);
+        endTimeWithOvertime.setMinutes(endTime.getMinutes() + (this.overtime_threshold_after_end || 0));
+        return this.formatTime(endTimeWithOvertime);
+    }
     ngOnDestroy() {
 
         // Unsubscribe from the interval observable
