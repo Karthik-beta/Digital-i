@@ -33,7 +33,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     message = '';
     preview = '';
 
-    activeStepperNumber: number | undefined = 0;
+    activeStepperNumber: number | undefined = 2;
 
     image_file_post: File | null = null;
     employee_id_error: boolean = false;
@@ -879,6 +879,100 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             ).subscribe((data: any) => {
             this.shopfloors = data.results;
         });
+    }
+
+    // Add this method to your component class
+    validateOnboardingFields() {
+        // Apply ng-invalid ng-dirty classes to empty required fields
+        if (!this.employee_id) {
+            document.getElementById('employee_id').classList.add('ng-invalid', 'ng-dirty');
+        }
+        if (!this.enroll_id) {
+            document.getElementById('enroll_id').classList.add('ng-invalid', 'ng-dirty');
+        }
+        if (!this.employee_name) {
+            document.getElementById('employee_name').classList.add('ng-invalid', 'ng-dirty');
+        }
+    }
+
+    isOfficialFieldsValid = false;
+    dateFieldsValid = false;
+
+    validateOfficialFields() {
+        this.isOfficialFieldsValid = true; // Assume all fields are valid initially
+        this.dateFieldsValid = true;
+        // Safe way to apply classes to elements that might not exist yet
+        this.applyValidationClass('company', !this.selectedCompany);
+        this.applyValidationClass('location', !this.selectedLocation);
+        this.applyValidationClass('category', !this.selectedCategory);
+        this.applyValidationClass('department', !this.selectedDepartment);
+        this.applyValidationClass('designation', !this.selectedDesignation);
+        this.applyValidationClass('division', !this.selectedDivision);
+        this.applyValidationClass('job_type', !this.selectedJobType);
+        this.applyValidationClass('date_of_joining', !this.date_of_joining);
+
+        // For radio buttons, we need a different approach as they don't have a single ID
+        if (!this.jobStatus) {
+            const radioGroup = document.querySelector('.field div.flex.flex-wrap.gap-2');
+            if (radioGroup) {
+            radioGroup.classList.add('ng-invalid', 'ng-dirty');
+            }
+        }
+    }
+
+    // Helper method to safely apply validation classes
+    applyValidationClass(elementId: string, shouldApply: boolean) {
+        if (!shouldApply) return; // Skip if validation passes
+
+        // Use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+            const element = document.getElementById(elementId);
+            if (element) {
+            element.classList.add('ng-invalid', 'ng-dirty');
+            } else {
+            // Find the input inside a container with the specified ID attribute
+            const container = document.querySelector(`[inputId="${elementId}"]`);
+            if (container) {
+                // For PrimeNG components, the actual input might be inside
+                const input = container.querySelector('input') || container;
+                input.classList.add('ng-invalid', 'ng-dirty');
+            }
+            }
+        }, 0);
+    }
+
+    clearDateValidation() {
+        if (this.date_of_joining) {
+            // Reset validation flag to remove all validation styling
+            this.dateFieldsValid = false;
+
+            // For more specific targeting if needed
+            setTimeout(() => {
+                // Target the calendar AND its input
+                const calendar = document.querySelector('p-calendar[inputId="date_of_joining"]');
+                const calendarInput = document.querySelector('p-calendar[inputId="date_of_joining"] input');
+
+                if (calendar) {
+                    calendar.classList.remove('ng-invalid', 'ng-dirty');
+                }
+                if (calendarInput) {
+                    calendarInput.classList.remove('ng-invalid', 'ng-dirty');
+                }
+            });
+        }
+    }
+
+    isPersonalFieldsValid = false;
+
+    validatePersonalFields() {
+        this.isPersonalFieldsValid = true; // Assume all fields are valid initially
+        // For radio buttons, we need a different approach as they don't have a single ID
+        if (!this.gender) {
+            const radioGroup = document.querySelector('.field div.flex.flex-wrap.gap-2');
+            if (radioGroup) {
+            radioGroup.classList.add('ng-invalid', 'ng-dirty');
+            }
+        }
     }
 
     ngOnDestroy() {

@@ -1,5 +1,5 @@
 <div class="card">
-    <p-stepper [(activeStep)]="activeStepperNumber">
+    <p-stepper [(activeStep)]="activeStepperNumber" [linear]="true">
 
 
 
@@ -15,7 +15,7 @@
 
                             <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
                                 <span class="p-float-label">
-                                    <input type="text" id="employee_id" pInputText [(ngModel)]="employee_id" class="p-inputtext-sm"/>
+                                    <input type="text" id="employee_id" pInputText [(ngModel)]="employee_id" class="p-inputtext-sm" (input)="employee_id ? $event.target.classList.remove('ng-invalid', 'ng-dirty') : null"/>
                                     <label for="employee_id">Employee ID <span class="text-red-500">*</span></label>
                                     <small *ngIf="employee_id_error">Employee Id Already Exists</small>
                                 </span>
@@ -23,14 +23,14 @@
 
                             <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
                                 <span class="p-float-label">
-                                    <input type="text" id="enroll_id" pInputText [(ngModel)]="enroll_id" class="p-inputtext-sm"/>
+                                    <input type="text" id="enroll_id" pInputText [(ngModel)]="enroll_id" class="p-inputtext-sm" (input)="enroll_id ? $event.target.classList.remove('ng-invalid', 'ng-dirty') : null"/>
                                     <label for="enroll_id">Device Enroll ID <span class="text-red-500">*</span></label>
                                 </span>
                             </div>
 
                             <div class="field col-12 md:col-6 lg:col-6 xl:col-4">
                                 <span class="p-float-label">
-                                    <input type="text" id="employee_name" pInputText [(ngModel)]="employee_name" class="p-inputtext-sm"/>
+                                    <input type="text" id="employee_name" pInputText [(ngModel)]="employee_name" class="p-inputtext-sm" (input)="employee_name ? $event.target.classList.remove('ng-invalid', 'ng-dirty') : null"/>
                                     <label for="employee_name">Employee Name <span class="text-red-500">*</span></label>
                                 </span>
                             </div>
@@ -189,7 +189,9 @@
                 </p-fieldset>
 
                 <div class="flex pt-4 justify-content-end">
-                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="(employee_id && enroll_id && employee_name) ?
+                        nextCallback.emit() :
+                        validateOnboardingFields()" /></div
             ></ng-template>
         </p-stepperPanel>
 
@@ -209,8 +211,8 @@
                         <span class="p-float-label">
                             <p-dropdown
                             [options]="companies" [(ngModel)]="selectedCompany" placeholder="Select a Company"
-                            [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm"
-                            inputId="company" (onChange)="assignCompanyId(selectedCompany)"></p-dropdown>
+                            [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedCompany}"
+                            inputId="company" (onChange)="selectedCompany ? $event.target.classList.remove('ng-invalid', 'ng-dirty') : assignCompanyId(selectedCompany)"></p-dropdown>
                             <label for="company">Company <span class="text-red-500">*</span></label>
                         </span>
                     </div>
@@ -219,7 +221,8 @@
                         <span class="p-float-label">
                             <p-dropdown
                             [options]="locations" [(ngModel)]="selectedLocation" placeholder="Select a Location"
-                            optionLabel="name" class="p-inputtext-sm" inputId="location" (onChange)="assignLocationId(selectedLocation)"></p-dropdown>
+                            optionLabel="name" class="p-inputtext-sm" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedLocation}"
+                            inputId="location" (onChange)="assignLocationId(selectedLocation)"></p-dropdown>
                             <label for="location">Location <span class="text-red-500">*</span></label>
                         </span>
                     </div>
@@ -227,7 +230,7 @@
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
                             <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" placeholder="Select a Category"
-                            optionLabel="display_name" class="p-inputtext-sm" inputId="category"
+                            optionLabel="display_name" class="p-inputtext-sm" inputId="category" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedCategory}"
                             (onChange)="assignCategoryValue(selectedCategory)"></p-dropdown>
                             <label for="category">Category <span class="text-red-500">*</span></label>
                         </span>
@@ -235,7 +238,8 @@
 
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
-                            <p-dropdown [options]="cities" [(ngModel)]="agency" [disabled]="agencyDisabled" placeholder="Select a Agency" optionLabel="name" class="p-inputtext-sm" inputId="agency"></p-dropdown>
+                            <p-dropdown [options]="cities" [(ngModel)]="agency" [disabled]="agencyDisabled"
+                            placeholder="Select a Agency" optionLabel="name" class="p-inputtext-sm" inputId="agency"></p-dropdown>
                             <label for="agency">Agency</label>
                         </span>
                     </div>
@@ -243,7 +247,7 @@
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
                             <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
-                            placeholder="Select a Department" optionLabel="name"
+                            placeholder="Select a Department" optionLabel="name" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedDepartment}"
                             class="p-inputtext-sm" inputId="department" (onChange)="assignDepartmentId(selectedDepartment)"></p-dropdown>
                             <label for="department">Department <span class="text-red-500">*</span></label>
                         </span>
@@ -252,7 +256,7 @@
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
                             <p-dropdown [options]="designations" [(ngModel)]="selectedDesignation"
-                            placeholder="Select a Designation" optionLabel="name"
+                            placeholder="Select a Designation" optionLabel="name" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedDesignation}"
                             class="p-inputtext-sm" inputId="designation" (onChange)="assignDesignationId(selectedDesignation)"></p-dropdown>
                             <label for="designation">Designation <span class="text-red-500">*</span></label>
                         </span>
@@ -261,7 +265,7 @@
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
                             <p-dropdown [options]="divisions" [(ngModel)]="selectedDivision"
-                            placeholder="Select a Division" optionLabel="name"
+                            placeholder="Select a Division" optionLabel="name" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedDivision}"
                             class="p-inputtext-sm" inputId="division" (onChange)="assignDivisionId(selectedDivision)"></p-dropdown>
                             <label for="division">Division <span class="text-red-500">*</span></label>
                         </span>
@@ -295,7 +299,7 @@
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
                             <p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType"
-                            placeholder="Select a Job Type" optionLabel="display_name"
+                            placeholder="Select a Job Type" optionLabel="display_name" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedJobType}"
                             class="p-inputtext-sm" inputId="job_type" (onChange)="assignJobValue(selectedJobType)"></p-dropdown>
                             <label for="job_type">Job Type <span class="text-red-500">*</span></label>
                         </span>
@@ -303,16 +307,16 @@
 
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
-                            <p-calendar [(ngModel)]="date_of_joining" inputId="doj"
-                            [iconDisplay]="'input'" [showIcon]="true"
-                            class="p-inputtext-sm" dateFormat="dd/mm/yy"></p-calendar>
+                            <p-calendar [(ngModel)]="date_of_joining" inputId="date_of_joining"
+                            [iconDisplay]="'input'" [showIcon]="true" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !date_of_joining && !dateFieldsValid}"
+                            class="p-inputtext-sm" dateFormat="dd/mm/yy" (onSelect)="clearDateValidation()"></p-calendar>
                             <label for="doj">Date of Joining <span class="text-red-500">*</span></label>
                         </span>
                     </div>
 
                     <div class="field col-12 md:col-4 lg:col-4 xl:col-3">
                         <span class="p-float-label">
-                            <p-calendar [(ngModel)]="date_of_leaving" inputId="dol"
+                            <p-calendar [(ngModel)]="date_of_leaving" inputId="date_of_leaving"
                             [iconDisplay]="'input'" [showIcon]="true"
                             class="p-inputtext-sm" dateFormat="dd/mm/yy"></p-calendar>
                             <label for="dol">Date of Leaving</label>
@@ -323,17 +327,17 @@
                         <h6 class="block">Job Status : <span class="text-red-500">*</span></h6>
                         <div class="flex flex-wrap gap-2">
                             <div class="flex align-items-center">
-                                <p-radioButton name="jobStatus" value="Active" [(ngModel)]="jobStatus" inputId="jobStatus1"></p-radioButton>
+                                <p-radioButton name="jobStatus" value="Active" [(ngModel)]="jobStatus" inputId="jobStatus1" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !jobStatus}"></p-radioButton>
                                 <label for="jobStatus1" class="ml-2">Active</label>
                             </div>
 
                             <div class="flex align-items-center">
-                                <p-radioButton name="jobStatus" value="Resigned" [(ngModel)]="jobStatus" inputId="jobStatus2"></p-radioButton>
+                                <p-radioButton name="jobStatus" value="Resigned" [(ngModel)]="jobStatus" inputId="jobStatus2" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !jobStatus}"></p-radioButton>
                                 <label for="jobStatus2" class="ml-2">Resigned</label>
                             </div>
 
                             <div class="flex align-items-center">
-                                <p-radioButton name="jobStatus" value="Absconded" [(ngModel)]="jobStatus" inputId="jobStatus3"></p-radioButton>
+                                <p-radioButton name="jobStatus" value="Absconded" [(ngModel)]="jobStatus" inputId="jobStatus3" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !jobStatus}"></p-radioButton>
                                 <label for="jobStatus3" class="ml-2">Absconded</label>
                             </div>
                         </div>
@@ -363,8 +367,10 @@
                 </div>
                 <div class="flex pt-4 justify-content-between">
                     <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="prevCallback.emit()" />
-                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
-            ></ng-template>
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="(selectedCompany && selectedLocation && selectedCategory && selectedDepartment && selectedDesignation && selectedDivision && selectedJobType && date_of_joining && jobStatus) ?
+                        nextCallback.emit() :
+                        validateOfficialFields()" /></div>
+            </ng-template>
         </p-stepperPanel>
 
 
@@ -477,17 +483,17 @@
                         <h6 class="block">Gender : <span class="text-red-500">*</span></h6>
                         <div class="flex flex-wrap gap-2">
                             <div class="flex align-items-center">
-                                <p-radioButton name="gender" value="Male" [(ngModel)]="gender" inputId="gender1"></p-radioButton>
+                                <p-radioButton name="gender" value="Male" [(ngModel)]="gender" inputId="gender1"  [ngClass]="{'ng-invalid ng-dirty': isPersonalFieldsValid && !gender}"></p-radioButton>
                                 <label for="gender1" class="ml-2">Male</label>
                             </div>
 
                             <div class="flex align-items-center">
-                                <p-radioButton name="gender" value="Female" [(ngModel)]="gender" inputId="gender2"></p-radioButton>
+                                <p-radioButton name="gender" value="Female" [(ngModel)]="gender" inputId="gender2" [ngClass]="{'ng-invalid ng-dirty': isPersonalFieldsValid && !gender}"></p-radioButton>
                                 <label for="gender2" class="ml-2">Female</label>
                             </div>
 
                             <div class="flex align-items-center">
-                                <p-radioButton name="gender" value="Other" [(ngModel)]="gender" inputId="gender3"></p-radioButton>
+                                <p-radioButton name="gender" value="Other" [(ngModel)]="gender" inputId="gender3" [ngClass]="{'ng-invalid ng-dirty': isPersonalFieldsValid && !gender}"></p-radioButton>
                                 <label for="gender3" class="ml-2">Other</label>
                             </div>
                         </div>
@@ -510,7 +516,9 @@
                 </div>
                 <div class="flex pt-4 justify-content-between">
                     <p-button label="Back" icon="pi pi-arrow-left" severity="secondary" (onClick)="prevCallback.emit()" />
-                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" /></div
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="gender ?
+                    nextCallback.emit() :
+                    validatePersonalFields()" /></div
             ></ng-template>
         </p-stepperPanel>
 
