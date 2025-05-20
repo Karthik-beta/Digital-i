@@ -212,7 +212,7 @@
                             <p-dropdown
                             [options]="companies" [(ngModel)]="selectedCompany" placeholder="Select a Company"
                             [autoDisplayFirst]="true" optionLabel="name" class="p-inputtext-sm" [ngClass]="{'ng-invalid ng-dirty': isOfficialFieldsValid && !selectedCompany}"
-                            inputId="company" (onChange)="selectedCompany ? $event.target.classList.remove('ng-invalid', 'ng-dirty') : assignCompanyId(selectedCompany)"></p-dropdown>
+                            inputId="company" (onChange)="assignCompanyId(selectedCompany)"></p-dropdown>
                             <label for="company">Company <span class="text-red-500">*</span></label>
                         </span>
                     </div>
