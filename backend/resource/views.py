@@ -157,6 +157,17 @@ class EmployeeListCreate(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except IntegrityError as e:
+            if "duplicate key value violates unique constraint" in str(e) and "employee_pkey" in str(e):
+                # Reset the sequence and try again
+                reset_sequence(Employee)
+                return super().create(request, *args, **kwargs)
+            # If it's a different IntegrityError, re-raise it
+            raise
 
 
 class EmployeeRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):

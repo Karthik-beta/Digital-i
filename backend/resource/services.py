@@ -1,5 +1,5 @@
 from random import randint
-from django.db import IntegrityError
+from django.db import IntegrityError, connection
 from .models import Employee
 from django.db.models import Max
 
@@ -41,3 +41,16 @@ def check_employee_id(employee_id):
     except Employee.DoesNotExist:
         return False
     
+
+def reset_sequence(model):
+    """
+    Reset the ID sequence for a given model to prevent primary key conflicts.
+    """
+    table_name = model._meta.db_table
+    sequence_name = f"{table_name}_id_seq"
+    
+    with connection.cursor() as cursor:
+        cursor.execute(
+            f"SELECT setval(pg_get_serial_sequence('{table_name}', 'id'), "
+            f"COALESCE((SELECT MAX(id)+1 FROM {table_name}), 1), false)"
+        )
