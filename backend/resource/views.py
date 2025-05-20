@@ -10,6 +10,7 @@ from django.dispatch import receiver
 from datetime import datetime, timedelta, date
 from typing import Optional, Tuple, Any, List, Dict
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 import pytz
 from threading import Thread
 from dateutil import parser
@@ -159,6 +160,7 @@ class EmployeeListCreate(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def create(self, request, *args, **kwargs):
+        from services import reset_sequence
         try:
             return super().create(request, *args, **kwargs)
         except IntegrityError as e:
