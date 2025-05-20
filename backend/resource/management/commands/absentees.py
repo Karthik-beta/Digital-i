@@ -47,6 +47,7 @@ class Command(BaseCommand):
             join_date = employee.date_of_joining or dates[-1]
             leave_date = employee.date_of_leaving or dates[0]
             first_weekoff = employee.first_weekly_off
+            consider_first_weekly_off = employee.consider_first_weekly_off
             if isinstance(first_weekoff, str):
                 try:
                     first_weekoff = int(first_weekoff)
@@ -56,8 +57,8 @@ class Command(BaseCommand):
                 except Exception as e:
                     self.stdout.write(self.style.WARNING(f"Employee {employee.id} has error parsing first_weekly_off {employee.first_weekoff}: {e}. Skipping week-off logic."))
                     first_weekoff = None
-            
             second_weekoff = employee.second_weekly_off
+            consider_second_weekly_off = employee.consider_second_weekly_off
             if isinstance(second_weekoff, str):
                 try:
                     second_weekoff = int(second_weekoff)
@@ -73,10 +74,10 @@ class Command(BaseCommand):
                     continue
 
                 # is_week_off = process_date.weekday() in WEEK_OFF_CONFIG['DEFAULT_WEEK_OFF']
-                if first_weekoff is not None or second_weekoff is not None:
-                    if first_weekoff is not None and process_date.weekday() == first_weekoff:
+                if (first_weekoff is not None and consider_first_weekly_off) or (second_weekoff is not None and consider_second_weekly_off):
+                    if first_weekoff is not None and consider_first_weekly_off and process_date.weekday() == first_weekoff:
                         is_week_off = True
-                    elif second_weekoff is not None and process_date.weekday() == second_weekoff:
+                    elif second_weekoff is not None and consider_second_weekly_off and process_date.weekday() == second_weekoff:
                         is_week_off = True
                     else:
                         is_week_off = False

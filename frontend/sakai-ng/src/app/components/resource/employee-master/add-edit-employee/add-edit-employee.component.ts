@@ -169,6 +169,10 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             this.selectedFirstWeekoff = employee.first_weekly_off ? this.week_days.find(week_day => week_day.value === employee.first_weekly_off) : null;
             this.selectedSecondWeekoff = employee.second_weekly_off ? this.week_days.find(week_day => week_day.value === employee.second_weekly_off) : null;
 
+            this.consider_fixed_shift = employee.consider_fixed_shift;
+            this.consider_first_weekly_off = employee.consider_first_weekly_off;
+            this.consider_second_weekly_off = employee.consider_second_weekly_off;
+
         }
     });
     }
@@ -260,21 +264,21 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     first_weekoff_select: boolean = false;
     second_weekoff_select: boolean = false;
 
-    setFixedShiftSelect(): void {
-        this.fixed_shift_select = true;
+    setFixedShiftSelect(consider_fixed_shift: boolean): void {
+        this.fixed_shift_select = consider_fixed_shift;
     }
 
     setFirstWeekoffSelect(): void {
-        this.first_weekoff_select = true;
+        this.first_weekoff_select = this.consider_first_weekly_off;
     }
 
     setSecondWeekoffSelect(): void {
-        this.second_weekoff_select = true;
+        this.second_weekoff_select = this.consider_second_weekly_off;
     }
 
     assignShiftId(selectedShift: any) {
         this.shift = selectedShift ? selectedShift.id : null;
-        console.log("Selected Shift ID:", this.shift);
+        // console.log("Selected Shift ID:", this.shift);
     }
 
     // Method to assign the selected company's ID to the 'selectedCompanyId' variable
@@ -429,7 +433,9 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     first_weekly_off!: number;
     second_weekly_off!: number;
 
-
+    consider_fixed_shift: boolean = false;
+    consider_first_weekly_off: boolean = false;
+    consider_second_weekly_off: boolean = false;
 
     resetForm() {
 
@@ -478,6 +484,10 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         this.permanent_address = '';
         this.shift_1 = undefined;
         this.fixed_shift = undefined;
+
+        this.consider_fixed_shift = false;
+        this.consider_first_weekly_off = false;
+        this.consider_second_weekly_off = false;
     }
 
     PostEmployee(): void {
@@ -550,6 +560,10 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         formData.append('consider_late_entry_on_holiday', this.consider_late_entry_on_holiday ? '1' : '0');
         formData.append('consider_early_exit_on_holiday', this.consider_early_exit_on_holiday ? '1' : '0');
         formData.append('consider_extra_hours_worked_on_holiday', this.consider_extra_hours_worked_on_holiday ? '1' : '0');
+
+        formData.append('consider_fixed_shift', this.consider_fixed_shift ? '1' : '0');
+        formData.append('consider_first_weekly_off', this.consider_first_weekly_off ? '1' : '0');
+        formData.append('consider_second_weekly_off', this.consider_second_weekly_off ? '1' : '0');
 
         formData.append('search_next_day', this.search_next_day ? '1' : '0');
 
@@ -646,6 +660,10 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         formData.append('consider_early_exit_on_holiday', this.consider_early_exit_on_holiday ? '1' : '0');
         formData.append('consider_extra_hours_worked_on_holiday', this.consider_extra_hours_worked_on_holiday ? '1' : '0');
 
+        formData.append('consider_fixed_shift', this.consider_fixed_shift ? '1' : '0');
+        formData.append('consider_first_weekly_off', this.consider_first_weekly_off ? '1' : '0');
+        formData.append('consider_second_weekly_off', this.consider_second_weekly_off ? '1' : '0');
+
         formData.append('search_next_day', this.search_next_day ? '1' : '0');
 
 
@@ -696,7 +714,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
                 this.marital_statuses = data.actions.POST.marital_status.choices;
                 this.jobTypes = data.actions.POST.job_type.choices;
                 this.week_days = data.actions.POST.first_weekly_off.choices;
-                console.log("week_days:", this.week_days);
+                // console.log("week_days:", this.week_days);
         });
     }
 
@@ -712,7 +730,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             // Use startWith to trigger an initial HTTP request
             this.service.getShifts(params).subscribe((data: any) => {
                 this.shifts = data.results;
-                console.log("Shifts:", this.shifts);
+                // console.log("Shifts:", this.shifts);
             });
     }
 

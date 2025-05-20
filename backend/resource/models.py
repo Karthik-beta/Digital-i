@@ -158,6 +158,10 @@ class Employee(models.Model):
     consider_early_exit_on_holiday = models.BooleanField(default=False)
     consider_extra_hours_worked_on_holiday = models.BooleanField(default=False)
 
+    consider_fixed_shift = models.BooleanField(default=False)
+    consider_first_weekly_off = models.BooleanField(default=False)
+    consider_second_weekly_off = models.BooleanField(default=False)
+
     # Punch Out Setting
     search_next_day = models.BooleanField(default=False)
 

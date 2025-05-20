@@ -157,13 +157,13 @@ class AttendanceProcessor:
                 return False
 
             else:
-                if employee.shift:
+                if employee.shift and employee.consider_fixed_shift:
                     # Handle case when employee is assigned to a fixed shift  
                     if is_manual:
                         if direction == 'both':
                             return self._handle_inout_log(employee, log, is_manual=True)
                         elif direction == 'in':
-                            # print("Passed through fixed shift In Device Manual")
+                            print("Passed through fixed shift In Device Manual")
                             attendance = Attendance.objects.filter(
                                 employeeid=employee,
                                 logdate=log.log_datetime.date()
@@ -463,6 +463,7 @@ class AttendanceProcessor:
             # print(f"Shift: {shift.name}, Start: {shift.start_time}, End: {shift.end_time}, Log Date: {attendance.logdate}")
 
             first_weekoff = employee.first_weekly_off
+            consider_first_weekoff = employee.consider_first_weekly_off
             if isinstance(first_weekoff, str):
                 try:
                     first_weekoff = int(first_weekoff)
@@ -470,6 +471,7 @@ class AttendanceProcessor:
                     raise ValueError
                 
             second_weekoff = employee.second_weekly_off
+            consider_second_weekoff = employee.consider_second_weekly_off
             if isinstance(second_weekoff, str):
                 try:
                     second_weekoff = int(second_weekoff)
@@ -541,10 +543,10 @@ class AttendanceProcessor:
                     # weekoff_days = [is_weekoff] if is_weekoff is not None else WEEK_OFF_CONFIG.get('DEFAULT_WEEK_OFF', [])
                     weekoff_days = []
 
-                    if first_weekoff is not None:
+                    if first_weekoff is not None and consider_first_weekoff:
                         weekoff_days.append(first_weekoff)
 
-                    if second_weekoff is not None:
+                    if second_weekoff is not None and consider_second_weekoff:
                         weekoff_days.append(second_weekoff)
                     
                     # If no week off days were found, fall back to the default week off configuration
@@ -646,7 +648,7 @@ class AttendanceProcessor:
             log_datetime = log.log_datetime
 
             # Get the employee's fixed shift
-            shift = self.shifts.get(employee.shift.id)
+            shift = self.shifts.get(employee.shift.name)
             if not shift:
                 # self.logger.error(f"Shift not found for employee {employee.employee_id}")
                 return False
@@ -713,7 +715,7 @@ class AttendanceProcessor:
             log_date = log_datetime.date()
 
             # Get the employee's fixed shift
-            shift = self.shifts.get(employee.shift.id)
+            shift = self.shifts.get(employee.shift.name)
             if not shift:
                 # self.logger.error(f"Shift not found for employee {employee.employee_id}")
                 return False
@@ -801,6 +803,7 @@ class AttendanceProcessor:
 
                         # Shift status determination
                         first_weekoff = employee.first_weekly_off
+                        consider_first_weekoff = employee.consider_first_weekly_off
                         if isinstance(first_weekoff, str):
                             try:
                                 first_weekoff = int(first_weekoff)
@@ -808,6 +811,7 @@ class AttendanceProcessor:
                                 raise ValueError
                             
                         second_weekoff = employee.second_weekly_off
+                        consider_second_weekoff = employee.consider_second_weekly_off
                         if isinstance(second_weekoff, str):
                             try:
                                 second_weekoff = int(second_weekoff)
@@ -817,10 +821,10 @@ class AttendanceProcessor:
 
                         weekoff_days = []
 
-                        if first_weekoff is not None:
+                        if first_weekoff is not None and consider_first_weekoff:
                             weekoff_days.append(first_weekoff)
 
-                        if second_weekoff is not None:
+                        if second_weekoff is not None and consider_second_weekoff:
                             weekoff_days.append(second_weekoff)
                         
                         # If no week off days were found, fall back to the default week off configuration
@@ -1001,6 +1005,7 @@ class AttendanceProcessor:
                                 ) if out_datetime > (shift_end + auto_shift.overtime_threshold_after_end) else timedelta()
 
                                 first_weekoff = employee.first_weekly_off
+                                consider_first_weekoff = employee.consider_first_weekly_off
                                 if isinstance(first_weekoff, str):
                                     try:
                                         first_weekoff = int(first_weekoff)
@@ -1008,6 +1013,7 @@ class AttendanceProcessor:
                                         raise ValueError
                                     
                                 second_weekoff = employee.second_weekly_off
+                                consider_second_weekoff = employee.consider_second_weekly_off
                                 if isinstance(second_weekoff, str):
                                     try:
                                         second_weekoff = int(second_weekoff)
@@ -1017,10 +1023,10 @@ class AttendanceProcessor:
 
                                 weekoff_days = []
 
-                                if first_weekoff is not None:
+                                if first_weekoff is not None and consider_first_weekoff:
                                     weekoff_days.append(first_weekoff)
 
-                                if second_weekoff is not None:
+                                if second_weekoff is not None and consider_second_weekoff:
                                     weekoff_days.append(second_weekoff)
                                 
                                 # If no week off days were found, fall back to the default week off configuration

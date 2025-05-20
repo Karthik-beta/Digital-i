@@ -648,10 +648,10 @@
                                         </div>
                                     </div> -->
                                     <div class="flex col-12 md:col-12 lg:col-12 xl:col-12 align-items-center gap-1">
-                                        <p-inputSwitch [(ngModel)]="fixed_shift_select" (onClick)="setFixedShiftSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                        <p-inputSwitch [(ngModel)]="consider_fixed_shift" class="p-inputswitch-sm"></p-inputSwitch>
                                         <span class="block font-bold">Fixed Shift</span>
                                     </div>
-                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="fixed_shift_select">
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="consider_fixed_shift">
                                         <span class="p-float-label">
                                             <p-dropdown [options]="shifts" [(ngModel)]="selectedFixedShift" [showClear]="true" (onChange)="assignFixedShift(selectedFixedShift)" placeholder="Select Shift" optionLabel="name" class="p-inputtext-sm" inputId="shift"></p-dropdown>
                                             <label for="shift">Assigned Shift</label>
@@ -659,11 +659,11 @@
                                     </div>
 
                                     <div class="flex col-12 md:col-12 lg:col-12 xl:col-12 align-items-center gap-1">
-                                        <p-inputSwitch [(ngModel)]="first_weekoff_select" (onClick)="setFirstWeekoffSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                        <p-inputSwitch [(ngModel)]="consider_first_weekly_off" class="p-inputswitch-sm"></p-inputSwitch>
                                         <span class="block font-bold">First Weekly Off</span>
                                     </div>
 
-                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="first_weekoff_select">
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="consider_first_weekly_off">
                                         <span class="p-float-label">
                                             <p-dropdown [options]="week_days" [(ngModel)]="selectedFirstWeekoff"  [showClear]="true" (onChange)="assignFirstWeekOff(selectedFirstWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1" (onChange)="assignFirstWeeklyOff(selectedShift1)"></p-dropdown>
                                             <label for="shift_1" class="font-small">1st Week Off</label>
@@ -671,11 +671,11 @@
                                     </div>
 
                                     <div class="flex col-12 md:col-12 lg:col-12 xl:col-12 align-items-center gap-1">
-                                        <p-inputSwitch [(ngModel)]="second_weekoff_select" (onClick)="setSecondWeekoffSelect()" class="p-inputswitch-sm"></p-inputSwitch>
+                                        <p-inputSwitch [(ngModel)]="consider_second_weekly_off" class="p-inputswitch-sm"></p-inputSwitch>
                                         <span class="block font-bold">Second Weekly Off</span>
                                     </div>
 
-                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="second_weekoff_select">
+                                    <div class="field col-12 md:col-12 lg:col-12 xl:col-12" *ngIf="consider_second_weekly_off">
                                         <span class="p-float-label">
                                             <p-dropdown [options]="week_days" [(ngModel)]="selectedSecondWeekoff" [showClear]="true" (onChange)="assignSecondWeekOff(selectedSecondWeekoff)" placeholder="Select Day" optionLabel="display_name" class="p-inputtext-sm" inputId="shift_1"></p-dropdown>
                                             <label for="shift_1" class="font-small">2nd Week Off</label>
