@@ -617,13 +617,13 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
 
         // formData.append('company', Number(this.company).toString());
         // formData.append('location', Number(this.location).toString());
-        formData.append('category', this.selectedCategory.value || '');
+        formData.append('category', this.selectedCategory?.value || '');
         // formData.append('department', Number(this.department).toString());
         // formData.append('designation', Number(this.designation).toString());
         // formData.append('division', Number(this.division).toString());
         // formData.append('subdivision', Number(this.subdivision).toString());
         // formData.append('shopfloor', Number(this.shopfloor).toString());
-        formData.append('job_type', this.selectedJobType.value || '');
+        formData.append('job_type', this.selectedJobType?.value || '');
         formData.append('job_status', this.jobStatus);
         formData.append('date_of_joining', this.date_of_joining ? this.datePipe.transform(this.date_of_joining, 'yyyy-MM-dd') || '' : '');
         formData.append('date_of_leaving', this.date_of_leaving ? this.datePipe.transform(this.date_of_leaving, 'yyyy-MM-dd') || '' : '');
