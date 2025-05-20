@@ -33,7 +33,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     message = '';
     preview = '';
 
-    activeStepperNumber: number | undefined = 2;
+    activeStepperNumber: number | undefined = 0;
 
     image_file_post: File | null = null;
     employee_id_error: boolean = false;
