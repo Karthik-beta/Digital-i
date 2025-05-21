@@ -46,6 +46,7 @@ from resource.scheduler import get_scheduler
 from . import serializers
 from .services import generate_unique_ids, check_employee_id
 from .utils import test_connection
+from resource.attendance import AttendanceProcessor
 
 from config.models import Company, Location
 
@@ -7269,13 +7270,10 @@ class MonthlyAttendanceView(APIView):
 
         # Return paginated response (includes count, next, previous links)
         return paginator.get_paginated_response(response_data)
-    
+
+# Old Version takes time to process
 # class UpdateAttendanceView(APIView):
 #     def patch(self, request, attendance_id):
-#         from resource.attendance import AttendanceProcessor
-#         print("UpdateAttendanceView PATCH method called!")  # Debugging statement
-
-#         processor = AttendanceProcessor()  # Create instance once
 #         data = request.data
 #         time_in = data.get("time_in")
 #         time_out = data.get("time_out")
@@ -7285,61 +7283,48 @@ class MonthlyAttendanceView(APIView):
 
 #         attendance = get_object_or_404(Attendance, id=attendance_id)
 #         employeeid = attendance.employeeid.employee_id
-#         log_date = attendance.logdate
-#         log_entries = []
-#         logs_to_reprocess = []
-
-#         # Convert times to HH:MM format
-#         formatted_time_in = None
-#         formatted_time_out = None
 
 #         if time_in:
-#             time_in = parser.parse(time_in).time()
-#             formatted_time_in = time_in.strftime("%H:%M")
-#             log_datetime_in = make_aware(datetime.combine(log_date, time_in))
+#             time_in_datetime = parse_datetime(time_in)  # Convert string to datetime object
+#             if time_in_datetime is None:
+#                 return Response({"error": "Invalid time_in format."}, status=400)
 
-#             # Log "In Device"
-#             log_entry_in = ManualLogs(employeeid=employeeid, log_datetime=log_datetime_in, direction="In Device")
-#             log_entries.append(log_entry_in)
-#             logs_to_reprocess.append(log_entry_in)
+#             # Ensure timezone awareness
+#             if time_in_datetime.tzinfo is None:
+#                 time_in_datetime = timezone.make_aware(time_in_datetime, timezone.get_current_timezone())
 
-#             # If last_logtime is NOT null, reprocess "Out Device" log
-#             if attendance.last_logtime:
-#                 log_datetime_out = make_aware(datetime.combine(log_date, attendance.last_logtime))
-#                 log_entry_out = ManualLogs(employeeid=employeeid, log_datetime=log_datetime_out, direction="Out Device")
-
-#                 log_entries.append(log_entry_out)
-#                 logs_to_reprocess.append(log_entry_out)  # Ensure reprocessing
+#             ManualLogs.objects.update_or_create(
+#                 employeeid=employeeid,
+#                 log_datetime=time_in_datetime,
+#                 defaults={'direction': 'In'}
+#             )
 
 #         if time_out:
-#             time_out = parser.parse(time_out).time()
-#             formatted_time_out = time_out.strftime("%H:%M")
-#             log_datetime_out = make_aware(datetime.combine(log_date, time_out))
+#             time_out_datetime = parse_datetime(time_out)  # Convert string to datetime object
+#             if time_out_datetime is None:
+#                 return Response({"error": "Invalid time_out format."}, status=400)
 
-#             # Log "Out Device"
-#             log_entry_out = ManualLogs(employeeid=employeeid, log_datetime=log_datetime_out, direction="Out Device")
-#             log_entries.append(log_entry_out)
-#             logs_to_reprocess.append(log_entry_out)  # Ensure reprocessing
+#             # Ensure timezone awareness
+#             if time_out_datetime.tzinfo is None:
+#                 time_out_datetime = timezone.make_aware(time_out_datetime, timezone.get_current_timezone())
 
-#         # Save logs
-#         ManualLogs.objects.bulk_create(log_entries)
-
-#         # Ensure **reprocessing** of all relevant logs
-#         for log in logs_to_reprocess:
-#             print(f"Reprocessing log for {log.employeeid} at {log.log_datetime}")
-#             processor.process_single_log(log, is_manual=True)
+#             ManualLogs.objects.update_or_create(
+#                 employeeid=employeeid,
+#                 log_datetime=time_out_datetime,
+#                 defaults={'direction': 'Out'}
+#             )
 
 #         return Response({
 #             "message": "Attendance record updated successfully.",
-#             "time_in": formatted_time_in if time_in else None,
-#             "time_out": formatted_time_out if time_out else None
+#             "time_in": time_in if time_in else None,
+#             "time_out": time_out if time_out else None
 #         }, status=status.HTTP_200_OK)
 
+# Least Version that utilizes idempotency concept to process log
 class UpdateAttendanceView(APIView):
+    @transaction.atomic
     def patch(self, request, attendance_id):
-        # from resource.attendance import AttendanceProcessor
-
-        # processor = AttendanceProcessor()
+        processor = AttendanceProcessor()
         data = request.data
         time_in = data.get("time_in")
         time_out = data.get("time_out")
@@ -7347,79 +7332,104 @@ class UpdateAttendanceView(APIView):
         if not time_in and not time_out:
             return Response({"error": "Either time_in or time_out must be provided."}, status=status.HTTP_400_BAD_REQUEST)
 
-        attendance = get_object_or_404(Attendance, id=attendance_id)
-        employeeid = attendance.employeeid.employee_id
-        # log_date = attendance.logdate
-        log_entries = []
+        try:
+            # Use select_related to optimize fetching employee details
+            attendance_record = get_object_or_404(Attendance.objects.select_related('employeeid'), id=attendance_id)
+        except Attendance.DoesNotExist: # Should be caught by get_object_or_404, but good practice
+            return Response({"error": "Attendance record not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        formatted_time_in = None
-        formatted_time_out = None
+        if not attendance_record.employeeid:
+            return Response({"error": "Employee not found for this attendance record."}, status=status.HTTP_400_BAD_REQUEST)
+        employeeid = attendance_record.employeeid.employee_id
 
-        last_logtime = attendance.last_logtime if attendance.last_logtime else None
-        first_logtime = attendance.first_logtime if attendance.first_logtime else None
+        processed_time_in_for_response = None
+        processed_time_out_for_response = None
 
         if time_in:
-            time_in_time = parser.parse(time_in).time()  # Convert string to datetime.time
-            log_date = attendance.logdate
-
-            time_in_datetime = parse_datetime(time_in)  # Convert string to datetime object
+            time_in_datetime = parse_datetime(time_in)
             if time_in_datetime is None:
-                return Response({"error": "Invalid time_in format."}, status=400)
-
-            # Ensure timezone awareness
+                return Response({"error": f"Invalid time_in format: '{time_in}'. Expected format like 'YYYY-MM-DD HH:MM' or 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
+            
             if time_in_datetime.tzinfo is None:
                 time_in_datetime = timezone.make_aware(time_in_datetime, timezone.get_current_timezone())
 
-            # Convert to UTC for consistent storage
-            # formatted_time_in = time_in_datetime.astimezone(timezone.utc)
-
-            # Log "In Device"
-            # log_entry_in = ManualLogs(employeeid=employeeid, log_datetime=time_in_datetime, direction='In')
-            # log_entries.append(log_entry_in)
-            # Insert "In Device" log directly into the database or update if it already exists
-            ManualLogs.objects.update_or_create(
+            manual_log_in, _ = ManualLogs.objects.update_or_create(
                 employeeid=employeeid,
                 log_datetime=time_in_datetime,
                 defaults={'direction': 'In'}
             )
 
+            logger.info(f"Processing manual IN log for {employeeid} at {time_in_datetime}")
+            success_in = processor.process_single_log(manual_log_in, is_manual=True)
+            if success_in:
+                processed_time_in_for_response = time_in_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                logger.info(f"Direct processing of IN log for {employeeid} successful.")
+            else:
+                logger.warning(f"Direct processing of IN log for {employeeid} at {time_in_datetime} indicated an issue or no change.")
+
         if time_out:
-            time_out_time = parser.parse(time_out).time()  # Convert string to datetime.time
-            log_date = attendance.logdate
-
-            time_out_datetime = parse_datetime(time_out)  # Convert string to datetime object
+            time_out_datetime = parse_datetime(time_out)
             if time_out_datetime is None:
-                return Response({"error": "Invalid time_out format."}, status=400)
-
-            # Ensure timezone awareness
+                return Response({"error": f"Invalid time_out format: '{time_out}'. Expected format like 'YYYY-MM-DD HH:MM' or 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
+            
             if time_out_datetime.tzinfo is None:
                 time_out_datetime = timezone.make_aware(time_out_datetime, timezone.get_current_timezone())
 
-            # Convert to UTC for consistent storage
-            # formatted_time_out = time_out_datetime.astimezone(timezone.utc)
-
-            # Log "Out Device"
-            # log_entry_out = ManualLogs(employeeid=employeeid, log_datetime=time_out_datetime, direction='Out')
-            # log_entries.append(log_entry_out)
-            # Insert "Out Device" log directly into the database or update if it already exists
-            ManualLogs.objects.update_or_create(
+            manual_log_out, _ = ManualLogs.objects.update_or_create(
                 employeeid=employeeid,
                 log_datetime=time_out_datetime,
                 defaults={'direction': 'Out'}
             )
 
-        # Save logs (bulk create is efficient, even if sometimes list is short)
-        # ManualLogs.objects.bulk_create(log_entries)
-        # for log in log_entries:
-        #         # print(f"Log in list: {log.employeeid}, {log.log_datetime}, {log.direction}")
-        #         processor.process_single_log(log, is_manual=True)
+            logger.info(f"Processing manual OUT log for {employeeid} at {time_out_datetime}")
+            success_out = processor.process_single_log(manual_log_out, is_manual=True)
+            if success_out:
+                processed_time_out_for_response = time_out_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                logger.info(f"Direct processing of OUT log for {employeeid} successful.")
+            else:
+                logger.warning(f"Direct processing of OUT log for {employeeid} at {time_out_datetime} indicated an issue or no change.")
 
+            # Determine the final message and status based on the processing results
+        if time_in and time_out:
+            # Both time_in and time_out were provided
+            if processed_time_in_for_response and processed_time_out_for_response:
+                message = "Both time-in and time-out logs processed successfully."
+                response_status = status.HTTP_200_OK
+            elif processed_time_in_for_response:
+                message = "Only time-in log processed successfully. Time-out processing failed."
+                response_status = status.HTTP_207_MULTI_STATUS
+            elif processed_time_out_for_response:
+                message = "Only time-out log processed successfully. Time-in processing failed."
+                response_status = status.HTTP_207_MULTI_STATUS
+            else:
+                message = "Failed to process both time-in and time-out logs."
+                response_status = status.HTTP_400_BAD_REQUEST
+        elif time_in:
+            # Only time_in was provided
+            if processed_time_in_for_response:
+                message = "Time-in log processed successfully."
+                response_status = status.HTTP_200_OK
+            else:
+                message = "Failed to process time-in log."
+                response_status = status.HTTP_400_BAD_REQUEST
+        elif time_out:
+            # Only time_out was provided
+            if processed_time_out_for_response:
+                message = "Time-out log processed successfully."
+                response_status = status.HTTP_200_OK
+            else:
+                message = "Failed to process time-out log."
+                response_status = status.HTTP_400_BAD_REQUEST
+        else:
+            # This shouldn't happen due to earlier validation
+            message = "No time data was provided."
+            response_status = status.HTTP_400_BAD_REQUEST
 
         return Response({
-            "message": "Attendance record updated successfully.",
-            "time_in": time_in if time_in else None,
-            "time_out": time_out if time_out else None
-        }, status=status.HTTP_200_OK)
+            "message": message,
+            "time_in_processed": processed_time_in_for_response,
+            "time_out_processed": processed_time_out_for_response
+        }, status=response_status)
     
 class HolidayListCreate(generics.ListCreateAPIView):
     """

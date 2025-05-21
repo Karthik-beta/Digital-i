@@ -163,7 +163,7 @@ class AttendanceProcessor:
                         if direction == 'both':
                             return self._handle_inout_log(employee, log, is_manual=True)
                         elif direction == 'in':
-                            print("Passed through fixed shift In Device Manual")
+                            # print("Passed through fixed shift In Device Manual")
                             attendance = Attendance.objects.filter(
                                 employeeid=employee,
                                 logdate=log.log_datetime.date()

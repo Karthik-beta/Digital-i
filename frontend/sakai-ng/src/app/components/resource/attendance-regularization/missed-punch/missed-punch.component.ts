@@ -342,18 +342,17 @@ export class MissedPunchComponent implements OnInit {
 
         this.service.updateMissedPunch(id, formData).subscribe({
             next: (response) => {
-                this.getAttendanceOverview({});
                 this.visible = false;
-
-                this.getAttendanceOverview({
-                    first: (this.currentPage - 1) * this.rows,
-                    rows: this.rows,
-                });
 
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Success',
                     detail: 'Successfully Updated Attendance Details'
+                });
+
+                this.getAttendanceOverview({
+                    first: (this.currentPage - 1) * this.rows,
+                    rows: this.rows,
                 });
 
                 // Reset change tracking
