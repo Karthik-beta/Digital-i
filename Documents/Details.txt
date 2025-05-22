@@ -45,7 +45,7 @@ sudo docker run -d -p 8000:8000 --name backend --restart always karth1k/backend_
 Consolidated Update Command :
 docker compose pull && docker compose down && docker compose up -d
  
-
+ 
 Database : 
 sudo docker run -d \
     --name database_digital \

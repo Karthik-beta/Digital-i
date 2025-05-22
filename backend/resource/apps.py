@@ -37,7 +37,10 @@ class ResourceConfig(AppConfig):
                     # Ensure post_migrate tasks are complete before starting the scheduler
                     print("Waiting for post_migrate tasks to complete...")
                     
-                    scheduler.start()
-                    print("Scheduler started successfully.")
+                    try:
+                        scheduler.start_scheduler()
+                        print("Scheduler started successfully.")
+                    except Exception as e:
+                        print(f"Detailed scheduler start error: {str(e)}")
             except Exception as e:
                 print(f"Scheduler failed to start: {e}")

@@ -40,9 +40,10 @@ from calendar import monthrange
 from django.utils.dateparse import parse_datetime
 from django.db import connection
 import logging
+from django_apscheduler.jobstores import register_events
 
 from resource.models import Employee, Attendance, Logs, LastLogId,ManDaysAttendance, ManDaysMissedPunchAttendance, LastLogIdMandays, OvertimeRoundoffRules, ManualLogs, HolidayList, ExternalDatabaseCredential, BiometricDeviceConfiguration, ProcessedLogs, AWOWorkOffCorrection, AllLogs
-from resource.scheduler import get_scheduler
+from resource.scheduler import get_scheduler, shutdown_scheduler, cleanup_scheduler_jobs, start_scheduler
 from . import serializers
 from .services import generate_unique_ids, check_employee_id
 from .utils import test_connection
@@ -2715,17 +2716,29 @@ class ResetAttendanceView(generics.GenericAPIView):
         Returns True if the operation was successful, otherwise False.
         """
         try:
-            scheduler = get_scheduler()
             if action == 'stop':
-                if scheduler and scheduler.running:
-                    scheduler.shutdown(wait=True)
-                logger.info("Scheduler stopped successfully.")
-                return True
+                # Use the dedicated shutdown function from scheduler.py
+                result = shutdown_scheduler()
+                logger.info("Scheduler stopped successfully." if result else "Scheduler was not running.")
+                return result
+            
             elif action == 'start':
+                # Get a fresh scheduler instance
+                scheduler = get_scheduler()
+                
                 if scheduler and not scheduler.running:
-                    scheduler.start()
-                logger.info("Scheduler started successfully.")
-                return True
+                    # Start the scheduler - this will use the jobs already configured in get_scheduler()
+                    start_scheduler()
+                    register_events(scheduler)
+                    logger.info("Scheduler started successfully.")
+                    return True
+                elif scheduler and scheduler.running:
+                    logger.info("Scheduler was already running.")
+                    return True
+                else:
+                    logger.error("Failed to get a valid scheduler instance.")
+                    return False
+            
             return False
         except Exception as e:
             logger.error(f"Error during scheduler {action}: {str(e)}")
@@ -2789,6 +2802,8 @@ class ResetAttendanceView(generics.GenericAPIView):
             if not self.cleanup_old_data():
                 logger.error("Failed to clean up old data.")
                 return
+
+            cleanup_scheduler_jobs()
 
             # Step 3: Run management commands
             call_command('absentees', days=400)

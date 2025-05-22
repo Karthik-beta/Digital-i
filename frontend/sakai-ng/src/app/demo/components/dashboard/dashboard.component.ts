@@ -100,8 +100,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         };
 
         this.chartOptions = {
-            // maintainAspectRatio: false,
-            // aspectRatio: 1.5,
+            maintainAspectRatio: false,
+            aspectRatio: 1.5,
             plugins: {
                 legend: {
                     labels: {

@@ -77,7 +77,7 @@ def run_my_command():
         except Exception as e:
             logger.error(f"Failed to remove lock file: {str(e)}")
 
-def start():
+def start_scheduler():
     scheduler = BackgroundScheduler()
     scheduler.add_jobstore(DjangoJobStore(), "default")
 
@@ -139,15 +139,59 @@ def resume_scheduler():
     return False
 
 def shutdown_scheduler():
-    """Safely shutdown the scheduler"""
+    """
+    Safely shutdown the scheduler with comprehensive error handling.
+    Returns True if successful or no action needed, False if shutdown failed.
+    """
     global _scheduler
+    
+    if _scheduler is None:
+        logger.info("No scheduler instance to shut down")
+        return True
+        
     try:
-        if _scheduler and _scheduler.running:
-            _scheduler.shutdown(wait=True)
+        # Check if scheduler exists and attempt to clean up jobs first
+        if _scheduler:
+            logger.info("Attempting to clean up jobs before shutdown")
+            try:
+                _scheduler.remove_all_jobs()
+                logger.info("All scheduler jobs removed successfully")
+            except Exception as job_error:
+                logger.warning(f"Could not remove all jobs: {str(job_error)}")
+            
+            # Check running state and attempt shutdown
+            try:
+                running = getattr(_scheduler, 'running', False)
+                if running:
+                    logger.info("Shutting down running scheduler")
+                    _scheduler.shutdown(wait=True)
+                    logger.info("Scheduler shutdown completed")
+                else:
+                    logger.info("Scheduler was not in running state")
+            except Exception as shutdown_error:
+                logger.error(f"Error during scheduler shutdown: {str(shutdown_error)}")
+                return False
+                
+            # Reset the scheduler instance
             _scheduler = None
-            logger.info("Scheduler shutdown successfully")
+            logger.info("Scheduler reference cleared")
             return True
-        return False
+        return True
+        
     except Exception as e:
-        logger.error(f"Scheduler shutdown failed: {str(e)}")
+        logger.error(f"Critical error in scheduler shutdown: {str(e)}", exc_info=True)
+        # Attempt force cleanup even after error
+        _scheduler = None
         return False
+    
+def cleanup_scheduler_jobs():
+    """
+    Remove all jobs from the scheduler before restarting.
+    """
+    try:
+        scheduler = get_scheduler()
+        if scheduler:
+            scheduler.remove_all_jobs()
+            logger.info("All jobs cleared from the scheduler.")
+    except Exception as e:
+        logger.error(f"Error clearing scheduler jobs: {str(e)}")
