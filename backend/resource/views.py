@@ -45,7 +45,7 @@ from django_apscheduler.jobstores import register_events
 from resource.models import Employee, Attendance, Logs, LastLogId,ManDaysAttendance, ManDaysMissedPunchAttendance, LastLogIdMandays, OvertimeRoundoffRules, ManualLogs, HolidayList, ExternalDatabaseCredential, BiometricDeviceConfiguration, ProcessedLogs, AWOWorkOffCorrection, AllLogs
 from resource.scheduler import get_scheduler, shutdown_scheduler, cleanup_scheduler_jobs, start_scheduler
 from . import serializers
-from .services import generate_unique_ids, check_employee_id
+from resource.services import generate_unique_ids, check_employee_id
 from .utils import test_connection
 from resource.attendance import AttendanceProcessor
 
@@ -162,7 +162,7 @@ class EmployeeListCreate(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def create(self, request, *args, **kwargs):
-        from services import reset_sequence
+        from resource.services import reset_sequence
         try:
             return super().create(request, *args, **kwargs)
         except IntegrityError as e:
@@ -170,7 +170,6 @@ class EmployeeListCreate(generics.ListCreateAPIView):
                 # Reset the sequence and try again
                 reset_sequence(Employee)
                 return super().create(request, *args, **kwargs)
-            # If it's a different IntegrityError, re-raise it
             raise
 
 
@@ -7335,10 +7334,11 @@ class MonthlyAttendanceView(APIView):
 #             "time_out": time_out if time_out else None
 #         }, status=status.HTTP_200_OK)
 
-# Least Version that utilizes idempotency concept to process log
+# Latest Version that utilizes idempotency concept to process log
 class UpdateAttendanceView(APIView):
     @transaction.atomic
-    def patch(self, request, attendance_id):
+    def patch(self, request, attendance_id):        
+        from resource.services import reset_sequence
         processor = AttendanceProcessor()
         data = request.data
         time_in = data.get("time_in")
@@ -7360,49 +7360,75 @@ class UpdateAttendanceView(APIView):
         processed_time_in_for_response = None
         processed_time_out_for_response = None
 
-        if time_in:
-            time_in_datetime = parse_datetime(time_in)
-            if time_in_datetime is None:
-                return Response({"error": f"Invalid time_in format: '{time_in}'. Expected format like 'YYYY-MM-DD HH:MM' or 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
-            
-            if time_in_datetime.tzinfo is None:
-                time_in_datetime = timezone.make_aware(time_in_datetime, timezone.get_current_timezone())
+        try:
+            if time_in:
+                time_in_datetime = parse_datetime(time_in)
+                if time_in_datetime is None:
+                    return Response({"error": f"Invalid time_in format: '{time_in}'. Expected format like 'YYYY-MM-DD HH:MM' or 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                if time_in_datetime.tzinfo is None:
+                    time_in_datetime = timezone.make_aware(time_in_datetime, timezone.get_current_timezone())
 
-            manual_log_in, _ = ManualLogs.objects.update_or_create(
-                employeeid=employeeid,
-                log_datetime=time_in_datetime,
-                defaults={'direction': 'In'}
-            )
+                try:
+                    manual_log_in, _ = ManualLogs.objects.update_or_create(
+                        employeeid=employeeid,
+                        log_datetime=time_in_datetime,
+                        defaults={'direction': 'In'}
+                    )
+                except IntegrityError as e:
+                    if "duplicate key value violates unique constraint" in str(e):
+                        reset_sequence(ManualLogs)
+                        manual_log_in = ManualLogs.objects.create(
+                            employeeid=employeeid,
+                            log_datetime=time_in_datetime,
+                            direction='In'
+                        )
+                    else:
+                        raise 
 
-            logger.info(f"Processing manual IN log for {employeeid} at {time_in_datetime}")
-            success_in = processor.process_single_log(manual_log_in, is_manual=True)
-            if success_in:
-                processed_time_in_for_response = time_in_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                logger.info(f"Direct processing of IN log for {employeeid} successful.")
-            else:
-                logger.warning(f"Direct processing of IN log for {employeeid} at {time_in_datetime} indicated an issue or no change.")
+                logger.info(f"Processing manual IN log for {employeeid} at {time_in_datetime}")
+                success_in = processor.process_single_log(manual_log_in, is_manual=True)
+                if success_in:
+                    processed_time_in_for_response = time_in_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                    logger.info(f"Direct processing of IN log for {employeeid} successful.")
+                else:
+                    logger.warning(f"Direct processing of IN log for {employeeid} at {time_in_datetime} indicated an issue or no change.")
 
-        if time_out:
-            time_out_datetime = parse_datetime(time_out)
-            if time_out_datetime is None:
-                return Response({"error": f"Invalid time_out format: '{time_out}'. Expected format like 'YYYY-MM-DD HH:MM' or 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
-            
-            if time_out_datetime.tzinfo is None:
-                time_out_datetime = timezone.make_aware(time_out_datetime, timezone.get_current_timezone())
+            if time_out:
+                time_out_datetime = parse_datetime(time_out)
+                if time_out_datetime is None:
+                    return Response({"error": f"Invalid time_out format: '{time_out}'. Expected format like 'YYYY-MM-DD HH:MM' or 'HH:MM'."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                if time_out_datetime.tzinfo is None:
+                    time_out_datetime = timezone.make_aware(time_out_datetime, timezone.get_current_timezone())
 
-            manual_log_out, _ = ManualLogs.objects.update_or_create(
-                employeeid=employeeid,
-                log_datetime=time_out_datetime,
-                defaults={'direction': 'Out'}
-            )
+                try:
+                    manual_log_out, _ = ManualLogs.objects.update_or_create(
+                        employeeid=employeeid,
+                        log_datetime=time_out_datetime,
+                        defaults={'direction': 'Out'}
+                    )
+                except IntegrityError as e:
+                    if "duplicate key value violates unique constraint" in str(e):
+                        self.reset_sequence(ManualLogs)
+                        manual_log_out = ManualLogs.objects.create(
+                            employeeid=employeeid,
+                            log_datetime=time_out_datetime,
+                            direction='Out'
+                        )
+                    else:
+                        raise
 
-            logger.info(f"Processing manual OUT log for {employeeid} at {time_out_datetime}")
-            success_out = processor.process_single_log(manual_log_out, is_manual=True)
-            if success_out:
-                processed_time_out_for_response = time_out_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                logger.info(f"Direct processing of OUT log for {employeeid} successful.")
-            else:
-                logger.warning(f"Direct processing of OUT log for {employeeid} at {time_out_datetime} indicated an issue or no change.")
+                logger.info(f"Processing manual OUT log for {employeeid} at {time_out_datetime}")
+                success_out = processor.process_single_log(manual_log_out, is_manual=True)
+                if success_out:
+                    processed_time_out_for_response = time_out_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                    logger.info(f"Direct processing of OUT log for {employeeid} successful.")
+                else:
+                    logger.warning(f"Direct processing of OUT log for {employeeid} at {time_out_datetime} indicated an issue or no change.")
+
+        except IntegrityError as e:
+            return Response({"error": f"Database error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             # Determine the final message and status based on the processing results
         if time_in and time_out:

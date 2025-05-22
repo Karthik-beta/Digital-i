@@ -74,7 +74,20 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     { }
 
     ngOnInit(): void {
+        // Initialize data loading status tracking
+        this.dataLoadStatus = {
+            shifts: false,
+            companies: false,
+            locations: false,
+            departments: false,
+            designations: false,
+            divisions: false,
+            subDivisions: false,
+            shopfloors: false,
+            options: false
+        };
 
+        // Call existing functions without changing their implementation
         this.getShiftslist();
         this.getCompaniesList();
         this.getLocationsList();
@@ -83,30 +96,47 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         this.getDivisionsList();
         this.getSubDivisionsList();
         this.getShopfloorsList();
-
         this.getAllOptions();
-
-
-
- //   this.imageInfos = this.uploadService.getFiles();
 
         this.countryService.getCountries().then(countries => {
             this.countries = countries;
         });
 
         this.route.params.subscribe(params => {
-            this.id = params['id'] ? + params['id'] : null; // Convert string to number if present
-            this.isEditMode = this.id !== null && this.id !== 0; // id === 0 means "add" mode
+            this.id = params['id'] ? + params['id'] : null;
+            this.isEditMode = this.id !== null && this.id !== 0;
+
+            // Instead of immediately fetching, we check if data is ready or set up a watcher
+            if (this.isEditMode) {
+                this.checkAndFetchEmployeeData();
+            }
         });
-
-        // If in edit mode, fetch employee data based on the id
-        if (this.isEditMode) {
-          this.fetchEmployeeData(this.id);
-        }
-
     }
 
+    // Add this property to track loading status
+    dataLoadStatus: {
+        shifts: boolean;
+        companies: boolean;
+        locations: boolean;
+        departments: boolean;
+        designations: boolean;
+        divisions: boolean;
+        subDivisions: boolean;
+        shopfloors: boolean;
+        options: boolean;
+    };
 
+    // Add this method to check if all data is loaded and fetch employee if needed
+    checkAndFetchEmployeeData(): void {
+        const allDataLoaded = Object.values(this.dataLoadStatus).every(status => status === true);
+
+        if (allDataLoaded && this.isEditMode && this.id) {
+            console.log('All reference data loaded, now fetching employee data');
+            this.fetchEmployeeData(this.id);
+        } else if (this.isEditMode) {
+            console.log('Waiting for all reference data to load before fetching employee');
+        }
+    }
 
     // fetch employee data with the id
     fetchEmployeeData(id: number) {
@@ -172,7 +202,6 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             this.consider_fixed_shift = employee.consider_fixed_shift;
             this.consider_first_weekly_off = employee.consider_first_weekly_off;
             this.consider_second_weekly_off = employee.consider_second_weekly_off;
-
         }
     });
     }
@@ -247,15 +276,15 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     selectedAccountType: any;
     selectedCategory: any;
     selectedJobType: any;
-    selectedCompany: number | null;
-    selectedLocation: number | null;
-    selectedDepartment: number | null;
-    selectedDesignation: number | null;
+    selectedCompany: any;
+    selectedLocation: any;
+    selectedDepartment: any;
+    selectedDesignation: any;
     selectedDivision: any;
     selectedSubDivision: any;
     selectedShopfloor: any;
     selectedShift: any;
-    selectedShift1: number | null;
+    selectedShift1: any | null;
     selectedFixedShift: any | null;
     selectedFirstWeekoff: any | null;
     selectedSecondWeekoff: any | null;
@@ -615,14 +644,14 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
         formData.append('bank_account_type', this.account_type || '');  // Ensure this is a valid choice
         formData.append('ifsc_code', this.ifsc_code || '');
 
-        // formData.append('company', Number(this.company).toString());
-        // formData.append('location', Number(this.location).toString());
+        formData.append('company', this.selectedCompany ? Number(this.selectedCompany.id).toString() : '');
+        formData.append('location', this.selectedLocation ? Number(this.selectedLocation.id).toString() : '');
         formData.append('category', this.selectedCategory?.value || '');
-        // formData.append('department', Number(this.department).toString());
-        // formData.append('designation', Number(this.designation).toString());
-        // formData.append('division', Number(this.division).toString());
-        // formData.append('subdivision', Number(this.subdivision).toString());
-        // formData.append('shopfloor', Number(this.shopfloor).toString());
+        formData.append('department', this.selectedDepartment ? Number(this.selectedDepartment.id).toString() : '');
+        formData.append('designation', this.selectedDesignation ? Number(this.selectedDesignation.id).toString() : '');
+        formData.append('division', this.selectedDivision ? Number(this.selectedDivision.id).toString() : '');
+        formData.append('subdivision', this.selectedSubDivision ? Number(this.selectedSubDivision.id).toString() : '');
+        formData.append('shopfloor', this.selectedShopfloor ? Number(this.selectedShopfloor.id).toString() : '');
         formData.append('job_type', this.selectedJobType?.value || '');
         formData.append('job_status', this.jobStatus);
         formData.append('date_of_joining', this.date_of_joining ? this.datePipe.transform(this.date_of_joining, 'yyyy-MM-dd') || '' : '');
@@ -650,8 +679,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
 
         formData.append('shift', this.selectedFixedShift !== null ? this.selectedFixedShift.id.toString() : '');
         formData.append('auto_shift', this.auto_shift ? '1' : '0');
-        formData.append('first_weekly_off', this.selectedFirstWeekoff !== null ? this.selectedFirstWeekoff.value.toString() : '');
-        formData.append('second_weekly_off', this.selectedSecondWeekoff !== null ? this.selectedSecondWeekoff.value.toString() : '');
+        formData.append('first_weekly_off', this.selectedFirstWeekoff?.value?.toString() || '');
+        formData.append('second_weekly_off', this.selectedSecondWeekoff?.value?.toString() || '');
         formData.append('flexi_time', this.flexi_time ? '1' : '0');
         formData.append('consider_late_entry', this.consider_late_entry ? '1' : '0');
         formData.append('consider_early_exit', this.consider_early_exit ? '1' : '0');
@@ -714,6 +743,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
                 this.marital_statuses = data.actions.POST.marital_status.choices;
                 this.jobTypes = data.actions.POST.job_type.choices;
                 this.week_days = data.actions.POST.first_weekly_off.choices;
+                this.dataLoadStatus.options = true;
+                this.checkAndFetchEmployeeData();
                 // console.log("week_days:", this.week_days);
         });
     }
@@ -730,7 +761,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             // Use startWith to trigger an initial HTTP request
             this.service.getShifts(params).subscribe((data: any) => {
                 this.shifts = data.results;
-                // console.log("Shifts:", this.shifts);
+                this.dataLoadStatus.shifts = true;
+                this.checkAndFetchEmployeeData();
             });
     }
 
@@ -752,6 +784,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.companies = data.results;
+            this.dataLoadStatus.companies = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 
@@ -773,6 +807,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.locations = data.results;
+            this.dataLoadStatus.locations = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 
@@ -794,6 +830,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.departments = data.results;
+            this.dataLoadStatus.departments = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 
@@ -815,6 +853,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.designations = data.results;
+            this.dataLoadStatus.designations = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 
@@ -836,6 +876,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.divisions = data.results;
+            this.dataLoadStatus.divisions = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 
@@ -857,6 +899,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.subDivisions = data.results;
+            this.dataLoadStatus.subDivisions = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 
@@ -878,6 +922,8 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
             ).subscribe((data: any) => {
             this.shopfloors = data.results;
+            this.dataLoadStatus.shopfloors = true;
+            this.checkAndFetchEmployeeData();
         });
     }
 

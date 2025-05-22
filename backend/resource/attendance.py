@@ -250,6 +250,8 @@ class AttendanceProcessor:
                 # Store the existing last_logtime temporarily
                 temp_last_logdate = attendance.logdate
                 temp_last_logtime = attendance.last_logtime
+                temp_out_direction = attendance.out_direction
+                temp_out_shortname = attendance.out_shortname
 
                 # Process the current IN log first
                 if employee.shift is not None:
@@ -265,6 +267,8 @@ class AttendanceProcessor:
 
                 # Reset related fields before reprocessing OUT
                 attendance.last_logtime = None
+                attendance.out_direction = None
+                attendance.out_shortname = None
                 attendance.total_time = None
                 attendance.early_exit = None
                 attendance.overtime = None
@@ -275,8 +279,15 @@ class AttendanceProcessor:
                 temp_out_log = AllLogs(
                     employeeid=employee.employee_id,
                     log_datetime=temp_last_logtime,
+                    out_direction=temp_out_direction,
+                    out_shortname=temp_out_shortname,
                     direction='out'
                 )
+
+                if temp_out_direction.lower() == 'manual':
+                    is_manual = True
+                else:
+                    is_manual = False
 
                 # print(f"Temp Out Log: {temp_out_log}")
 
