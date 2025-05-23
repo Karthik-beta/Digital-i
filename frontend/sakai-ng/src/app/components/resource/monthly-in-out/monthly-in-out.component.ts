@@ -57,6 +57,8 @@ export class MonthlyInOutComponent implements OnInit {
 
     metricsAbsent = [];
 
+    metricsWeekOff = [];
+
     metricsLateEntry = [];
 
     metricsEarlyExit = [];
@@ -201,6 +203,12 @@ export class MonthlyInOutComponent implements OnInit {
                     backgroundColor: documentStyle.getPropertyValue('--red-500'),
                     borderColor: documentStyle.getPropertyValue('--red-500'),
                     data: this.metricsAbsent
+                },
+                {
+                    label: 'Week Off',
+                    backgroundColor: documentStyle.getPropertyValue('--blue-500'),
+                    borderColor: documentStyle.getPropertyValue('--blue-500'),
+                    data: this.metricsWeekOff
                 },
                 {
                     label: 'Late Entry',
@@ -415,6 +423,7 @@ export class MonthlyInOutComponent implements OnInit {
             this.metricsDate = data.daily_metrics.map((item: any) => item.date);
             this.metricsPresent = data.daily_metrics.map((item: any) => item.present);
             this.metricsAbsent = data.daily_metrics.map((item: any) => item.absent);
+            this.metricsWeekOff = data.daily_metrics.map((item: any) => item.week_off);
             this.metricsLateEntry = data.daily_metrics.map((item: any) => item.late_entry);
             this.metricsEarlyExit = data.daily_metrics.map((item: any) => item.early_exit);
             this.metricsOvertime = data.daily_metrics.map((item: any) => item.overtime);

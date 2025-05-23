@@ -669,6 +669,7 @@ class AttendanceMonthlyMetricsAPIView(APIView):
                     'date': logdate_str,
                     'present': 0,
                     'absent': 0,
+                    'week_off': 0,
                     'late_entry': 0,
                     'early_exit': 0,
                     'overtime': 0
@@ -676,6 +677,8 @@ class AttendanceMonthlyMetricsAPIView(APIView):
 
             if attendance.shift_status == 'A':
                 metrics_dict[logdate_str]['absent'] += 1
+            elif attendance.shift_status == 'WO' or attendance.shift_status == 'PW' or attendance.shift_status == 'FW':
+                metrics_dict[logdate_str]['week_off'] += 1
             else:
                 metrics_dict[logdate_str]['present'] += 1
 
@@ -7539,7 +7542,7 @@ class AttendanceStatsView(APIView):
         new_present_last_hour = today_attendance.filter(
             shift_status='P',
             logdate=today,
-            first_logtime__gte=one_hour_ago.time()  # Assuming first_logtime indicates entry
+            first_logtime__gte=one_hour_ago  # Assuming first_logtime indicates entry
         ).count()
 
         total_absent_today = today_attendance.filter(shift_status='A').count()
