@@ -677,8 +677,10 @@ class AttendanceMonthlyMetricsAPIView(APIView):
 
             if attendance.shift_status == 'A':
                 metrics_dict[logdate_str]['absent'] += 1
-            elif attendance.shift_status == 'WO' or attendance.shift_status == 'PW' or attendance.shift_status == 'FW':
+            elif attendance.shift_status == 'WO' or attendance.shift_status == 'PH' or attendance.shift_status == 'FH':
                 metrics_dict[logdate_str]['week_off'] += 1
+            elif attendance.shift_status == 'WW' or attendance.shift_status == 'PW' or attendance.shift_status == 'FW':
+                metrics_dict[logdate_str]['present'] += 1
             else:
                 metrics_dict[logdate_str]['present'] += 1
 
