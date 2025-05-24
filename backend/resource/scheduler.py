@@ -78,33 +78,30 @@ def run_my_command():
             logger.error(f"Failed to remove lock file: {str(e)}")
 
 def start_scheduler():
-    scheduler = BackgroundScheduler()
-    scheduler.add_jobstore(DjangoJobStore(), "default")
-
-    # Schedule the job with max_instances and misfire_grace_time
+    """Start the scheduler using the global instance"""
+    global _scheduler
+    
     try:
-        scheduler.add_job(
-            run_my_command,
-            trigger=IntervalTrigger(minutes=1),
-            id="my_job",
-            replace_existing=True,
-            max_instances=1,  # Prevent overlap
-            misfire_grace_time=30  # Allow a grace period of 30 seconds
-        )
-    except JobLookupError:
-        print("Job 'my_job' not found. Adding it again.")
-        scheduler.add_job(
-            run_my_command,
-            trigger=IntervalTrigger(minutes=1),
-            id="my_job",
-            max_instances=1,
-            misfire_grace_time=30
-        )
-
-    # Register the job and events
-    register_events(scheduler)
-    scheduler.start()
-    print("Scheduler started.")
+        # Use the global scheduler instance
+        scheduler = get_scheduler()
+        if scheduler is None:
+            logger.error("Failed to get scheduler instance")
+            return False
+            
+        # Only start if not already running
+        if not scheduler.running:
+            register_events(scheduler)
+            scheduler.start()
+            logger.info("Scheduler started successfully")
+            print("Scheduler started.")
+            return True
+        else:
+            logger.info("Scheduler is already running")
+            return True
+            
+    except Exception as e:
+        logger.error(f"Failed to start scheduler: {str(e)}")
+        return False
 
 def pause_scheduler():
     """Pause all jobs without stopping the scheduler"""

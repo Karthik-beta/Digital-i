@@ -2801,17 +2801,20 @@ class ResetAttendanceView(generics.GenericAPIView):
             if not scheduler_stopped:
                 logger.error("Failed to stop the scheduler.")
                 return
+        
+            else:
+                logger.info("Scheduler stopped successfully.")
 
-            # Step 2: Clean up the old data
-            if not self.cleanup_old_data():
-                logger.error("Failed to clean up old data.")
-                return
+                # Step 2: Clean up the old data
+                if not self.cleanup_old_data():
+                    logger.error("Failed to clean up old data.")
+                    return
 
-            cleanup_scheduler_jobs()
+                cleanup_scheduler_jobs()
 
-            # Step 3: Run management commands
-            call_command('absentees', days=400)
-            call_command('reset_sequences')
+                # Step 3: Run management commands
+                call_command('absentees', days=400)
+                call_command('reset_sequences')
 
             # Step 4: Restart the scheduler
             if not self.handle_scheduler('start'):
