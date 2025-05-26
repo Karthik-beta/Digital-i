@@ -55,7 +55,7 @@ export class AppMenuComponent implements OnInit {
                                             // { label: 'Compensatory Off Management', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'On Duty Management', icon: 'fa-solid fa-calendar-minus' },
                                             // { label: 'Gate Pass Management', icon: 'fa-solid fa-address-card' },
-                                            { label: 'Employee Attendance', icon: 'fa-solid fa-calendar-check', routerLink: ['/emp_attendance'] },
+                                            { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-check', routerLink: ['/emp_attendance'] },
                                             { label: 'Machine Allocation', icon: 'fa-solid fa-cogs', routerLink: ['/machine_allocation'] },
                                             { label: 'Holiday Management', icon: 'fa-solid fa-calendar-check', routerLink: ['/holiday_list'] },
                                         ]
