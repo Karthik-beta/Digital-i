@@ -197,6 +197,7 @@ import { MachineAllocationComponent } from './components/resource/attendance-reg
         OperatorWorkAllocationComponent,
         DeviceConfigComponent,
         ResetReportComponent,
+        EmpAtendenceComponent
     ],
     imports: [
         AppRoutingModule,
@@ -306,7 +307,6 @@ import { MachineAllocationComponent } from './components/resource/attendance-reg
         RippleModule,
         AutoFocusModule,
 
-        EmpAtendenceComponent,
         MachineAllocationComponent,
         ServiceWorkerModule.register('ngsw-worker.js', {
           enabled: !isDevMode(),

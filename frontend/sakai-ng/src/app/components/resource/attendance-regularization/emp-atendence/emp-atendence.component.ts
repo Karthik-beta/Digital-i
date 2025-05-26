@@ -12,12 +12,34 @@ import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-emp-atendence',
-  standalone: true,
-  imports : [CommonModule,FormsModule, CalendarModule, TableModule, DropdownModule, SplitButtonModule],
   templateUrl: './emp-atendence.component.html',
   styleUrl: './emp-atendence.component.scss'
 })
 export class EmpAtendenceComponent {
+    allSelected: boolean = false;
+    indeterminate: boolean = false;
+    shift: boolean = false;
+    WO: boolean = false;
+
+    test = [
+        { employee_id: 'A10195', employee_name: 'John Doe', selected: false },
+        { employee_id: 'A10291', employee_name: 'Jane Smith', selected: false }
+    ];
+
+    toggleAllSelection() {
+        // Toggle all rows based on the header checkbox state
+        this.test.forEach(item => (item.selected = this.allSelected));
+        this.indeterminate = false; // Reset indeterminate state
+    }
+
+    checkIfAllSelected() {
+        const selectedCount = this.test.filter(item => item.selected).length;
+
+        // Update the `allSelected` and `indeterminate` states
+        this.allSelected = selectedCount === this.test.length;
+        this.indeterminate = selectedCount > 0 && selectedCount < this.test.length;
+    }
+
   dateRange: [Date, Date] | null = [
     new Date(),
     new Date(new Date().setDate(new Date().getDate() + 7)) // Default 7-day range
@@ -69,7 +91,7 @@ export class EmpAtendenceComponent {
       this.filteredEmployees = [...this.employees];
       return;
     }
-    this.filteredEmployees = this.employees.filter(emp => 
+    this.filteredEmployees = this.employees.filter(emp =>
       emp.id.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
@@ -114,7 +136,7 @@ export class EmpAtendenceComponent {
   generateDays() {
     // Clear previous days
     this.daysInRange = [];
-    
+
     // Check if date range is valid
     if (!this.dateRange || !this.dateRange[0] || !this.dateRange[1]) {
         return;
@@ -140,7 +162,7 @@ export class EmpAtendenceComponent {
     const dateStr = this.formatDate(day);
     return this.scheduleData[employeeId]?.[dateStr] || '-';
   }
-  
+
   onShiftChange(employeeId: string, day: Date, value: string) {
     const dateStr = this.formatDate(day);
     if (!this.scheduleData[employeeId]) {
@@ -173,11 +195,11 @@ export class EmpAtendenceComponent {
 
     // Create worksheet
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
-    
+
     // Create workbook
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Employee Attendance');
-    
+
     // Set column widths
     const wscols = [
       {wch: 15}, // Employee ID
@@ -185,7 +207,7 @@ export class EmpAtendenceComponent {
       ...this.daysInRange.map(() => ({wch: 10})) // Each date column
     ];
     worksheet['!cols'] = wscols;
-    
+
     // Generate Excel file with timestamp
     const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '');
     XLSX.writeFile(workbook, `Employee_Attendance_${timestamp}.xlsx`);
@@ -215,7 +237,7 @@ export class EmpAtendenceComponent {
 
       // Prepare headers
       const headers = [
-        ['Employee ID', 'Employee Name', 
+        ['Employee ID', 'Employee Name',
          ...this.daysInRange.map(day => this.changeDate(day, 'dd-MMM'))
         ]
       ];
