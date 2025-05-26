@@ -91,6 +91,22 @@
                 </div>
             </div>
 
+            <div class="mb-1 mt-3">
+                <span class="p-float-label">
+                    <p-calendar
+                        [(ngModel)]="dateRange"
+                        selectionMode="range"
+                        dateFormat="dd/mm/yy"
+                        (onSelect)="onDateRangeChange()"
+                        [showIcon]="true"
+                        [showButtonBar]="true"
+                        inputId="dateRange"
+                        [readonlyInput]="true"
+                        placeholder="Select date range"/>
+                    <label for="dateRange">Select Date Range</label>
+                </span>
+            </div>
+
             <div class="mb-1 mt-3 flex items-center gap-2">
                 <p-inputSwitch [(ngModel)]="shift" />
                 <span class="block font-bold mt-1">Assign Shift</span>
