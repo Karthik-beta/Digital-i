@@ -163,6 +163,8 @@ import { FoodCourtComponent } from './components/evacuation/food-court/food-cour
 import { OperatorWorkAllocationComponent } from './components/evacuation/operator-work-allocation/operator-work-allocation.component';
 import { DeviceConfigComponent } from './components/configuration/device-config/device-config.component';
 import { ResetReportComponent } from './components/resource/reset-report/reset-report.component';
+import { EmpAtendenceComponent } from './components/resource/attendance-regularization/emp-atendence/emp-atendence.component';
+import { MachineAllocationComponent } from './components/resource/attendance-regularization/machine-allocation/machine-allocation.component';
 
 
 
@@ -194,7 +196,7 @@ import { ResetReportComponent } from './components/resource/reset-report/reset-r
         FoodCourtComponent,
         OperatorWorkAllocationComponent,
         DeviceConfigComponent,
-        ResetReportComponent
+        ResetReportComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -303,6 +305,9 @@ import { ResetReportComponent } from './components/resource/reset-report/reset-r
         ProgressSpinnerModule,
         RippleModule,
         AutoFocusModule,
+
+        EmpAtendenceComponent,
+        MachineAllocationComponent,
         ServiceWorkerModule.register('ngsw-worker.js', {
           enabled: !isDevMode(),
           // Register the ServiceWorker as soon as the application is stable

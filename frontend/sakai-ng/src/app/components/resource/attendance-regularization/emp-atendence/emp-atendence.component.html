@@ -1,0 +1,71 @@
+<div class="card p-1">
+    <div class="flex justify-content mb-1">
+        <div class="p-mb-3 flex flex-column gap-2">
+            <label for="dateRange">Select Date Range</label>
+            <p-calendar 
+              [(ngModel)]="dateRange" 
+              selectionMode="range" 
+              dateFormat="dd/mm/yy"
+              (onSelect)="onDateRangeChange()" 
+              [showIcon]="true"
+              [showButtonBar]="true"
+              inputId="dateRange"
+              [readonlyInput]="true"
+              placeholder="Select date range">
+            </p-calendar>
+        </div>
+        
+        <p-splitButton 
+            [label]="selectedLabel"
+            [icon]="selectedIcon" 
+            [model]="items"
+            styleClass="p-button-primary"
+            appendTo="body">
+        </p-splitButton>
+        
+        <div class="search-container p-mb-4">
+            <span class="p-input-icon-left search-wrapper">
+              <i class="pi pi-search search-icon"></i>
+              <input 
+                type="text" 
+                pInputText 
+                [(ngModel)]="searchTerm"
+                (input)="filterEmployees()" 
+                placeholder="Search by Employee ID "
+                class="search-input"
+                aria-label="Search employees"
+              />
+            </span>
+          </div>
+    </div>
+
+    <p-table [value]="filteredEmployees" [scrollable]="true" scrollHeight="500px" [scrollDirection]="'both'" [autoLayout]="true" styleClass="dropdown-fix-table">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="min-width: 50px">#</th>
+                <th style="min-width: 100px">Employee ID</th>
+                <th style="min-width: 150px">Employee Name</th>
+                <th *ngFor="let day of daysInRange" style="min-width: 120px">
+                {{ day | date: 'dd EEE' }}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-employee let-rowIndex="rowIndex">
+            <tr>
+                <td>{{ rowIndex + 1 }}</td>
+                <td>{{ employee.id }}</td>
+                <td>{{ employee.name }}</td>
+                <td *ngFor="let day of daysInRange">
+                    <p-dropdown 
+                        [options]="shiftOptions"
+                        [ngModel]="getShiftValue(employee.id, day)"
+                        (ngModelChange)="onShiftChange(employee.id, day, $event)"
+                        styleClass="p-inputtext-sm fixed-dropdown"
+                        placeholder="GS"
+                        [appendTo]="'body'">
+                    </p-dropdown>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

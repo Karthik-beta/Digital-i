@@ -32,6 +32,8 @@ import { OperatorWorkAllocationComponent } from './components/evacuation/operato
 import { DeviceConfigComponent } from './components/configuration/device-config/device-config.component';
 import { EmpStrengthComponent } from './components/evacuation/emp-strength/emp-strength.component';
 import { ResetReportComponent } from './components/resource/reset-report/reset-report.component';
+import { EmpAtendenceComponent } from './components/resource/attendance-regularization/emp-atendence/emp-atendence.component';
+import { MachineAllocationComponent } from './components/resource/attendance-regularization/machine-allocation/machine-allocation.component';
 
 @NgModule({
     imports: [
@@ -87,6 +89,9 @@ import { ResetReportComponent } from './components/resource/reset-report/reset-r
 
                     { path: 'device_config', component: DeviceConfigComponent, canActivate: [authGuard] },
                     { path: 'reset_report', component: ResetReportComponent, canActivate: [authGuard] },
+
+                    { path: 'emp_attendance', component: EmpAtendenceComponent, canActivate: [authGuard] },
+                    { path: 'machine_allocation', component: MachineAllocationComponent, canActivate: [authGuard] }
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

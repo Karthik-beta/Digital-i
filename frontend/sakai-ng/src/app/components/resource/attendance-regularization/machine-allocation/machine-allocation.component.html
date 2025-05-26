@@ -1,0 +1,231 @@
+<div class="card p-1">
+    <div class="flex g-1 mb-1">
+        <button 
+            pButton 
+            type="button" 
+            label="Machines" 
+            [class]="!showTransactions ? 'p-button-primary' : 'p-button-secondary'"
+            (click)="showTransactions = false">
+        </button>
+        <button 
+            pButton 
+            type="button" 
+            label="Transactions" 
+            [class]="showTransactions ? 'p-button-primary' : 'p-button-secondary'"
+            (click)="onTransactionsClick()">
+        </button>
+    </div>
+
+    <div *ngIf="!showTransactions">
+        
+        <div class="flex justify-content c-width  mb-1">
+            <div class="flex justify-content g-1">
+                <div class="p-mb-3 flex flex-column gap-2">
+    
+                    <!-- <label for="dateRange">Select Date Range</label> -->
+                    <p-calendar 
+                      [(ngModel)]="dateRange" 
+                      selectionMode="range" 
+                      dateFormat="dd/mm/yy"
+                      (onSelect)="onDateRangeChange()" 
+                      [showIcon]="true"
+                      [showButtonBar]="true"
+                      inputId="dateRange"
+                      [readonlyInput]="true"
+                      placeholder="Select date">
+                    </p-calendar>
+                </div>
+                <div class="search-container p-mb-4">
+                    <span class="p-input-icon-left search-wrapper">
+                      <i class="pi pi-search search-icon"></i>
+                      <input 
+                        type="text" 
+                        pInputText 
+                        [(ngModel)]="searchTerm"
+                        (input)="filterMachines()" 
+                        placeholder="Search by Mahcine Name "
+                        class="search-input"
+                        aria-label="Search machines"
+                      />
+                    </span>
+                </div>
+                <p-dropdown 
+                    [options]="shiftOptions"
+                    styleClass="p-inputtext-sm fixed-dropdown"
+                    placeholder="Select Shift"
+                    (onChange)="applyShiftToSelectedMachines($event.value)"
+                    optionLabel="sname"
+                    optionValue="sname"
+                    [appendTo]="'body'">
+                </p-dropdown>
+            </div>
+            <div class="flex justify-content g-1">
+                <p-splitButton 
+                    [label]="selectedImportLabel"
+                    [icon]="selectedImportIcon" 
+                    [model]="importItems"
+                    styleClass="p-button-primary"
+                    appendTo="body">
+                </p-splitButton>
+        
+        
+                <p-splitButton 
+                    [label]="selectedExportLabel"
+                    [icon]="selectedExportIcon" 
+                    [model]="items"
+                    styleClass="p-button-primary"
+                    appendTo="body">
+                </p-splitButton>
+                
+                <button 
+                    pButton 
+                    type="button" 
+                    label="Save" 
+                    class="p-button-primary"
+                    (click)="saveTransactions()">
+                </button>
+            </div> 
+        </div>
+    
+        <div *ngIf="loading" class="loading-indicator">
+            <p-progressSpinner></p-progressSpinner>
+            <p>Loading machine data...</p>
+        </div> 
+    
+        <p-table [value]="MachinesWithDates" [scrollable]="true" scrollHeight="500px" 
+             [scrollDirection]="'both'" [autoLayout]="true" styleClass="dropdown-fix-table">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 50px; text-align: center">
+                        <p-checkbox [(ngModel)]="selectAll" 
+                                    binary="true"
+                                    (onChange)="toggleSelectAll()"
+                                    [styleClass]="'select-all-checkbox'"></p-checkbox>
+                    </th>
+                    <th style="min-width: 50px">S.N</th>
+                    <th style="min-width: 100px">Shopfloor</th>
+                    <th style="min-width: 150px">Machine Name</th>
+                    <th style="min-width: 150px">Date</th>
+                    <th style="min-width: 150px">Shift</th>
+                    <th style="min-width: 150px">Skill</th>
+                    <th *ngFor="let operator of operatorList" style="min-width: 120px">
+                        {{ operator.name }}
+                    </th>   
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-machine let-rowIndex="rowIndex">
+                <tr [class.row-selected]="selectedMachines[machine.id]">
+                    <td>
+                        <p-checkbox [(ngModel)]="selectedMachines[machine.id]"
+                                    binary="true"
+                                    (onChange)="onMachineSelect(machine.id)"></p-checkbox>
+                    </td>
+                    <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ getShopfloorName(machine.shopfloor) }}</td>
+                    <td>{{ machine.machine_name }}</td>
+                    <td>{{ machine.displayDate || '-' }}</td>
+                    <td>{{ machine.shift || '-' }}</td>
+                    <td>
+                        <p-dropdown 
+                            [options]="skillMatrices"
+                            [(ngModel)]="machine.skill"
+                            optionLabel="name"
+                            optionValue="id"
+                            styleClass="p-inputtext-sm fixed-dropdown"
+                            placeholder="Select Skill"
+                            [appendTo]="'body'">
+                            <ng-template let-skill pTemplate="item">
+                                <div class="skill-option">
+                                    <span class="skill-name">{{skill.name}}</span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </td>
+                    <td *ngFor="let operator of operatorList">
+                        <p-dropdown 
+                            [options]="employees"
+                            [ngModel]="getEmpValue(machine.id, operator.id)"
+                            (ngModelChange)="onEmpChange(machine.id, operator.id, $event)"
+                            optionLabel="name"
+                            styleClass="p-inputtext-sm fixed-dropdown"
+                            placeholder="Select emp"
+                            [appendTo]="'body'">
+                            <ng-template let-employee pTemplate="item">
+                                <div class="employee-option">
+                                    <span class="employee-name">{{employee.name}}</span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </td>
+                </tr>
+            </ng-template>
+    
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td [attr.colspan]="7 + operatorList.length" class="empty-message">
+                        <div class="flex justify-content-center align-items-center p-4">
+                            <i class="pi pi-info-circle mr-2"></i>
+                            No Records found.
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    
+    <div *ngIf="showTransactions">
+        <p-table [value]="transactionsList" [scrollable]="true" scrollHeight="500px" 
+             [scrollDirection]="'both'" [autoLayout]="true" styleClass="dropdown-fix-table">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 50px; text-align: center">
+                        <p-checkbox [(ngModel)]="selectAll" 
+                                    binary="true"
+                                    (onChange)="toggleSelectAll()"
+                                    [styleClass]="'select-all-checkbox'"></p-checkbox>
+                    </th>
+                    <th style="min-width: 50px">T-ID</th>
+                    <th style="min-width: 100px">Shopfloor</th>
+                    <th style="min-width: 150px">Machine Name</th>
+                    <th style="min-width: 150px">Date</th>
+                    <th style="min-width: 150px">Shift</th>
+                    <th style="min-width: 150px">Skill</th>
+                    <th *ngFor="let operator of operatorList" style="min-width: 120px">
+                        {{ operator.name }}
+                    </th>   
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-machine let-rowIndex="rowIndex">
+                <tr [class.row-selected]="selectedMachines[machine.id]">
+                    <td>
+                        <p-checkbox [(ngModel)]="selectedMachines[machine.id]"
+                                    binary="true"
+                                    (onChange)="onMachineSelect(machine.id)"></p-checkbox>
+                    </td>
+                    <td>{{ machine.transaction_id ||'-' }}</td>
+                    <td>{{ getShopfloorName(machine.shopfloor) || '-'}}</td>
+                    <td>{{ getMachineName(machine.machine) }}</td>
+                    <td>{{ machine.date || '-' }}</td>
+                    <td>{{ getShiftShortName(machine.shift_timing) || '-' }}</td>
+                    <td>{{ machine.skill_matrix  || '-' }}</td>
+                    <td>{{ machine.operator_1 || '-' }}</td>
+                    <td>{{ machine.operator_2 || '-' }}</td>
+                    <td>{{ machine.operator_3 || '-' }}</td>
+                    <td>{{ machine.operator_4 || '-' }}</td>
+                    <td>{{ machine.operator_5 || '-' }}</td>
+                </tr>
+            </ng-template>
+    
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td [attr.colspan]="7 + operatorList.length" class="empty-message">
+                        <div class="flex justify-content-center align-items-center p-4">
+                            <i class="pi pi-info-circle mr-2"></i>
+                            No Records found.
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

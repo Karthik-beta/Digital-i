@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     categoryWiseData: any = [];
 
-    constructor(public layoutService: LayoutService, private service:SharedService,) {
+    constructor(public layoutService: LayoutService, private service:SharedService) {
         this.subscription = this.layoutService.configUpdate$
         .pipe(debounceTime(25))
         .subscribe((config) => {
@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private AttendanceMetricSubscription: Subscription;
 
     getAttendanceMetrics() {
-        this.AttendanceMetricSubscription = interval(10000).pipe(
+        this.AttendanceMetricSubscription = interval(30000).pipe(
             startWith(0), // emit 0 immediately
             // Use switchMap to switch to a new observable (HTTP request) each time the interval emits
             switchMap(() => this.service.getAttendanceStats()),

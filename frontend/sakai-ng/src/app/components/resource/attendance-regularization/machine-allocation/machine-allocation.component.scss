@@ -1,0 +1,201 @@
+.p-1{
+    padding: 1rem !important;
+}
+.flex{
+    display: flex;
+}
+.flex-column{
+    flex-direction: column;
+}
+.justify-content{
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.g-1{
+    gap: 0.5rem;
+}
+.c-width{
+    width: 100%;
+}
+.mb-1{
+    margin-bottom: 1rem;
+}
+td, th {
+    text-align: center;
+    white-space: nowrap;
+  }
+td{
+    padding: 0.2rem;
+}
+th{
+    padding: 0.5rem;
+    margin: 0;
+}
+::ng-deep .custom-column .ng-star-inserted{
+    padding: 0.2rem;
+}
+  p-dropdown {
+    width: 60px;
+  }
+
+/* Add to your component's SCSS file */
+.compact-table {
+    .p-datatable-thead > tr > th,
+    .p-datatable-tbody > tr > td {
+      padding: 0.3rem 0.5rem !important;  /* Reduced padding */
+    }
+  
+    /* Specific column adjustments */
+    .p-datatable-thead > tr > th:first-child,
+    .p-datatable-tbody > tr > td:first-child {
+      padding-left: 0.5rem !important;
+    }
+  
+    /* Dropdown styling */
+    .compact-dropdown {
+      width: 100%;
+      min-width: 60px;  /* Reduced minimum width */
+      
+      .p-dropdown-label {
+        padding: 0.25rem 0.5rem !important;
+      }
+    }
+  
+    /* Remove extra spacing between columns */
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  /* Optional: Add horizontal scroll indicator */
+  .p-datatable-wrapper {
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+  }
+  
+  /* Fix dropdown visibility */
+.dropdown-fix-table {
+    position: relative;
+    z-index: 1;
+    
+    .p-dropdown {
+      width: 100%;
+    }
+  }
+  
+  /* For the dropdown panel */
+  .p-dropdown-panel {
+    z-index: 1000 !important;
+  }
+  
+  /* Alternative if the above doesn't work */
+  .fixed-dropdown {
+    .p-dropdown-items-wrapper {
+      z-index: 1100 !important;
+      position: fixed !important;
+    }
+  }
+  
+/* Add to your component's SCSS file or global styles */
+.search-container {
+    width: 100%;
+    max-width: 15rem; /* Optimal width for search */
+    // margin: 0 auto 1.5rem; /* Center with bottom margin */
+    
+    .search-wrapper {
+      width: 100%;
+      display: block;
+      position: relative;
+      
+      .search-icon {
+        color: var(--primary-color);
+        left: 1rem;
+        top: 60%;
+        transform: translateY(-40%);
+        font-size: 1rem;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem; /* Extra left padding for icon */
+        border-radius: 8px;
+        border: 1px solid var(--surface-d);
+        background-color: var(--surface-a);
+        color: var(--text-color);
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        
+        &:hover {
+          border-color: var(--primary-color);
+        }
+        
+        &:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+        }
+        
+        &::placeholder {
+          color: var(--text-color-secondary);
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+  
+  /* Dark mode support */
+  .p-dark .search-input,
+  .body--dark .search-input {
+    background-color: var(--surface-b);
+    border-color: var(--surface-d);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .search-container {
+      max-width: 100%;
+      margin-bottom: 1rem;
+      
+      .search-input {
+        padding: 0.65rem 1rem 0.65rem 2.25rem;
+      }
+    }
+  }
+
+  /* Checkbox styling */
+::ng-deep .p-checkbox .p-checkbox-box {
+    border: 2px solid #ced4da;
+    width: 18px;
+    height: 18px;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+    background: #3B82F6;
+    border-color: #3B82F6;
+}
+
+/* Row highlighting */
+.row-selected {
+    background-color: #f0f7ff !important;
+}
+
+/* Checkbox focus state */
+::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+    border-color: #3B82F6;
+}
+
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  
+  p {
+    margin-top: 1rem;
+  }
+}
+.mb-1{
+  margin-bottom: 0.5rem}
