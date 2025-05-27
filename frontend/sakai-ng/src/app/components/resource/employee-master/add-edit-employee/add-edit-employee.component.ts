@@ -613,7 +613,27 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 console.log("Error:", error);
-                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error adding employee'});
+                // Extract the error details from the API response
+                if (error?.error) {
+                    const errorDetails = error.error;
+
+                    // Check if there are field-specific errors
+                    if (typeof errorDetails === 'object') {
+                        const fieldErrors = Object.entries(errorDetails)
+                            .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
+                            .join('; ');
+
+                        this.messageService.add({severity: 'error', summary: 'Validation Error', detail: fieldErrors});
+                    } else {
+                        // Fallback for non-field-specific errors
+                        const errorMessage = errorDetails.message || 'An unexpected error occurred';
+                        this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
+                    }
+                } else {
+                    // Generic fallback for unexpected errors
+                    const errorMessage = error?.message || 'An unexpected error occurred';
+                    this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
+                }
             }
         });
 
@@ -712,7 +732,27 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
                 console.log("Error:", error);
-                this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error Updating employee'});
+                // Extract the error details from the API response
+                if (error?.error) {
+                    const errorDetails = error.error;
+
+                    // Check if there are field-specific errors
+                    if (typeof errorDetails === 'object') {
+                        const fieldErrors = Object.entries(errorDetails)
+                            .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
+                            .join('; ');
+
+                        this.messageService.add({severity: 'error', summary: 'Validation Error', detail: fieldErrors});
+                    } else {
+                        // Fallback for non-field-specific errors
+                        const errorMessage = errorDetails.message || 'An unexpected error occurred';
+                        this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
+                    }
+                } else {
+                    // Generic fallback for unexpected errors
+                    const errorMessage = error?.message || 'An unexpected error occurred';
+                    this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
+                }
             }
         });
     }

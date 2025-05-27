@@ -50,13 +50,13 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Attendance Regularization', icon: 'fa-solid fa-people-roof',
                                         items: [
                                             { label: 'Missed Punch Management', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch'] },
-                                            // { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-plus' },
+                                            { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'Leave Management', icon: 'fa-solid fa-calendar-days' },
                                             // { label: 'Compensatory Off Management', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'On Duty Management', icon: 'fa-solid fa-calendar-minus' },
                                             // { label: 'Gate Pass Management', icon: 'fa-solid fa-address-card' },
-                                            { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-check', routerLink: ['/emp_attendance'] },
-                                            { label: 'Machine Allocation', icon: 'fa-solid fa-cogs', routerLink: ['/machine_allocation'] },
+                                            // { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-check', routerLink: ['/emp_attendance'] },
+                                            // { label: 'Machine Allocation', icon: 'fa-solid fa-cogs', routerLink: ['/machine_allocation'] },
                                             { label: 'Holiday Management', icon: 'fa-solid fa-calendar-check', routerLink: ['/holiday_list'] },
                                         ]
                                     },

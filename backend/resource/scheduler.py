@@ -22,24 +22,12 @@ def get_scheduler():
             _scheduler = BackgroundScheduler(
                 timezone=settings.TIME_ZONE,
                 job_defaults={
-                    'misfire_grace_time': 60 * 2,  # 5 minutes grace time
+                    'misfire_grace_time': 60 * 2,  # 2 minutes grace time
                     'coalesce': True,  # Combine multiple missed runs
-                    'max_instances': 1
+                    'max_instances': 1  # Prevent overlapping job instances
                 }
             )
             _scheduler.add_jobstore(DjangoJobStore(), "default")
-            
-            # Add jobs with better configuration
-            _scheduler.add_job(
-                run_my_command,
-                trigger=IntervalTrigger(
-                    minutes=1,
-                    timezone=settings.TIME_ZONE
-                ),
-                id="my_job",
-                replace_existing=True
-            )
-            
             logger.info("Created new scheduler instance")
         return _scheduler
     except Exception as e:
@@ -78,27 +66,60 @@ def run_my_command():
             logger.error(f"Failed to remove lock file: {str(e)}")
 
 def start_scheduler():
-    """Start the scheduler using the global instance"""
+    """Start the scheduler using the global instance and re-add jobs."""
     global _scheduler
-    
+
     try:
         # Use the global scheduler instance
         scheduler = get_scheduler()
         if scheduler is None:
             logger.error("Failed to get scheduler instance")
             return False
-            
+
         # Only start if not already running
         if not scheduler.running:
             register_events(scheduler)
             scheduler.start()
             logger.info("Scheduler started successfully")
-            print("Scheduler started.")
+
+        # Check if job already exists, if not add it
+        try:
+            existing_job = scheduler.get_job("my_job")
+            if existing_job is None:
+                # Job doesn't exist, add it
+                scheduler.add_job(
+                    run_my_command,
+                    trigger=IntervalTrigger(
+                        minutes=1,
+                        timezone=settings.TIME_ZONE
+                    ),
+                    id="my_job",
+                    replace_existing=True
+                )
+                logger.info("Job 'my_job' added to the scheduler.")
+            else:
+                logger.info("Job 'my_job' already exists in the scheduler.")
+        except JobLookupError:
+            # Job doesn't exist, add it
+            scheduler.add_job(
+                run_my_command,
+                trigger=IntervalTrigger(
+                    minutes=1,
+                    timezone=settings.TIME_ZONE
+                ),
+                id="my_job",
+                replace_existing=True
+            )
+            logger.info("Job 'my_job' added to the scheduler.")
+
+        # Verify job was added successfully
+        if scheduler.get_job("my_job"):
+            logger.info("Job 'my_job' verified in scheduler.")
             return True
         else:
-            logger.info("Scheduler is already running")
-            return True
-            
+            logger.error("Failed to verify job 'my_job' in scheduler.")
+            return False
+
     except Exception as e:
         logger.error(f"Failed to start scheduler: {str(e)}")
         return False
@@ -138,49 +159,36 @@ def resume_scheduler():
 def shutdown_scheduler():
     """
     Safely shutdown the scheduler with comprehensive error handling.
+    Jobs are preserved in the jobstore for restart.
     Returns True if successful or no action needed, False if shutdown failed.
     """
     global _scheduler
-    
+
     if _scheduler is None:
         logger.info("No scheduler instance to shut down")
         return True
-        
+
     try:
-        # Check if scheduler exists and attempt to clean up jobs first
-        if _scheduler:
-            logger.info("Attempting to clean up jobs before shutdown")
-            try:
-                _scheduler.remove_all_jobs()
-                logger.info("All scheduler jobs removed successfully")
-            except Exception as job_error:
-                logger.warning(f"Could not remove all jobs: {str(job_error)}")
-            
-            # Check running state and attempt shutdown
-            try:
-                running = getattr(_scheduler, 'running', False)
-                if running:
-                    logger.info("Shutting down running scheduler")
-                    _scheduler.shutdown(wait=True)
-                    logger.info("Scheduler shutdown completed")
-                else:
-                    logger.info("Scheduler was not in running state")
-            except Exception as shutdown_error:
-                logger.error(f"Error during scheduler shutdown: {str(shutdown_error)}")
-                return False
-                
-            # Reset the scheduler instance
-            _scheduler = None
-            logger.info("Scheduler reference cleared")
-            return True
-        return True
-        
-    except Exception as e:
-        logger.error(f"Critical error in scheduler shutdown: {str(e)}", exc_info=True)
-        # Attempt force cleanup even after error
+        # Check running state and attempt shutdown
+        running = getattr(_scheduler, 'running', False)
+        if running:
+            logger.info("Shutting down running scheduler")
+            # Shutdown but keep jobs in the jobstore
+            _scheduler.shutdown(wait=False)
+            logger.info("Scheduler shutdown completed")
+        else:
+            logger.info("Scheduler was not in running state")
+
+        # Don't reset scheduler to None immediately - let it be recreated when needed
+        # This preserves job definitions in the jobstore
         _scheduler = None
+        logger.info("Scheduler reference cleared")
+        return True
+
+    except Exception as e:
+        logger.error(f"Error during scheduler shutdown: {str(e)}", exc_info=True)
         return False
-    
+
 def cleanup_scheduler_jobs():
     """
     Remove all jobs from the scheduler before restarting.
@@ -192,3 +200,48 @@ def cleanup_scheduler_jobs():
             logger.info("All jobs cleared from the scheduler.")
     except Exception as e:
         logger.error(f"Error clearing scheduler jobs: {str(e)}")
+
+def ensure_job_exists():
+    """
+    Utility function to ensure the main job exists in the scheduler.
+    Call this after starting the scheduler to guarantee job presence.
+    """
+    try:
+        scheduler = get_scheduler()
+        if scheduler and scheduler.running:
+            # Check if job exists
+            try:
+                job = scheduler.get_job("my_job")
+                if job is None:
+                    # Add the job
+                    scheduler.add_job(
+                        run_my_command,
+                        trigger=IntervalTrigger(
+                            minutes=1,
+                            timezone=settings.TIME_ZONE
+                        ),
+                        id="my_job",
+                        replace_existing=True
+                    )
+                    logger.info("Job 'my_job' ensured in scheduler.")
+                    return True
+                else:
+                    logger.info("Job 'my_job' already exists.")
+                    return True
+            except JobLookupError:
+                # Job doesn't exist, add it
+                scheduler.add_job(
+                    run_my_command,
+                    trigger=IntervalTrigger(
+                        minutes=1,
+                        timezone=settings.TIME_ZONE
+                    ),
+                    id="my_job",
+                    replace_existing=True
+                )
+                logger.info("Job 'my_job' ensured in scheduler.")
+                return True
+        return False
+    except Exception as e:
+        logger.error(f"Error ensuring job exists: {str(e)}")
+        return False

@@ -130,6 +130,8 @@ DATABASES = {
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': os.getenv('DATABASE_HOST'),
         'PORT': os.getenv('DATABASE_PORT'),
+        'CONN_MAX_AGE': 600,  # Persistent connections (in seconds)
+        # 'ATOMIC_REQUESTS': True,  # Wrap each request in a transaction
         'OPTIONS': {
             'connect_timeout': 600,  # Increased connection timeout
             'options': '-c statement_timeout=60000'  # Set a longer query timeout
