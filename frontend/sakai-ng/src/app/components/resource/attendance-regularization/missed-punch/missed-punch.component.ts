@@ -360,7 +360,41 @@ export class MissedPunchComponent implements OnInit {
                 this.timeOutChanged = false;
             },
             error: (error) => {
-                this.messageService.add({ severity: 'warn', summary: 'Failed', detail: 'Failed to Update Attendance Details' });
+                console.error('Error updating attendance details', error);
+
+                // Extract error details from the API response
+                if (error?.error) {
+                    const errorDetails = error.error;
+
+                    // Check if the error details are an object
+                    if (typeof errorDetails === 'object') {
+                        const errorMessages = Object.entries(errorDetails)
+                            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+                            .join('; ');
+
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: errorMessages
+                        });
+                    } else {
+                        // Fallback for non-object error details
+                        const errorMessage = errorDetails.message || 'An unexpected error occurred';
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: errorMessage
+                        });
+                    }
+                } else {
+                    // Generic fallback for unexpected errors
+                    const errorMessage = error?.message || 'An unexpected error occurred';
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: errorMessage
+                    });
+                }
             }
         });
 
