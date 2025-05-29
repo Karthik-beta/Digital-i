@@ -1,5 +1,5 @@
 # management/commands/sync_logs.py
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 import psycopg2
 import pyodbc
 from datetime import datetime
@@ -291,7 +291,8 @@ class Command(BaseCommand):
 
         except Exception as e:
             self.stderr.write(self.style.ERROR(f"Error occurred: {str(e)}"))
-            sys.exit(1)
+            # Replace sys.exit(1) with proper Django error handling
+            raise CommandError(f"Sync logs failed: {str(e)}")
 
         finally:
             # Close database connections

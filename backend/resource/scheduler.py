@@ -54,8 +54,11 @@ def run_my_command():
         
         for command in commands:
             try:
+                # Catch SystemExit exceptions to prevent job termination
                 call_command(command)
                 logger.info(f"Successfully executed command: {command}")
+            except SystemExit as e:
+                logger.warning(f"Command {command} exited with code {e.code}. Continuing with next command.")
             except Exception as e:
                 logger.error(f"Error executing command {command}: {str(e)}")
     finally:
@@ -215,8 +218,19 @@ def verify_and_restore_job():
                 logger.info("Job 'my_job' restored successfully.")
                 return True
             else:
-                logger.debug("Job 'my_job' verified present.")
+                # Check if job is actually scheduled to run
+                if job.next_run_time is None:
+                    logger.warning("Job 'my_job' exists but has no next run time. Rescheduling...")
+                    job.reschedule(trigger=IntervalTrigger(
+                        minutes=1,
+                        timezone=settings.TIME_ZONE
+                    ))
+                    logger.info("Job 'my_job' rescheduled successfully.")
+                else:
+                    logger.debug(f"Job 'my_job' verified present. Next run: {job.next_run_time}")
                 return True
+        else:
+            logger.warning("Scheduler is not running or not available")
         return False
     except Exception as e:
         logger.error(f"Error verifying job: {str(e)}")
