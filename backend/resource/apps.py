@@ -46,6 +46,19 @@ class ResourceConfig(AppConfig):
                     success = scheduler.start_scheduler()
                     if success:
                         print("Scheduler started successfully.")
+                        
+                        # Add a background job monitor that runs every 30 seconds
+                        def job_monitor():
+                            while True:
+                                time.sleep(30)  # Check every 30 seconds
+                                try:
+                                    scheduler.ensure_job_running()
+                                except Exception as e:
+                                    print(f"Job monitor error: {e}")
+                        
+                        monitor_thread = threading.Thread(target=job_monitor, daemon=True)
+                        monitor_thread.start()
+                        print("Job monitor started.")
                     else:
                         print("Failed to start scheduler.")
                         

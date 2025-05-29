@@ -2714,28 +2714,66 @@ class ResetAttendanceView(generics.GenericAPIView):
     """
     serializer_class = serializers.DummySerializer
 
-    def handle_scheduler(self, action='stop'):
+    def handle_scheduler(self, action='stop', max_retries=3):
         """
-        Safely handle scheduler operations (start/stop).
+        Safely handle scheduler operations (start/stop) with retries.
         Returns True if the operation was successful, otherwise False.
         """
+        for attempt in range(max_retries):
+            try:
+                if action == 'stop':
+                    result = shutdown_scheduler()
+                    if result:
+                        # Verify shutdown completed
+                        time.sleep(2)  # Wait for shutdown to complete
+                        scheduler = get_scheduler()
+                        if scheduler is None or not getattr(scheduler, 'running', False):
+                            logger.info("Scheduler shutdown verified.")
+                            return True
+                        else:
+                            logger.warning(f"Scheduler still running after shutdown attempt {attempt + 1}")
+                    
+                elif action == 'start':
+                    result = start_scheduler()
+                    if result:
+                        # Verify startup and ensure job exists
+                        time.sleep(3)  # Wait for startup to complete
+                        if ensure_job_exists():
+                            logger.info("Scheduler started and job verified.")
+                            return True
+                        else:
+                            logger.warning(f"Job verification failed after start attempt {attempt + 1}")
+                    
+                # If we get here, the operation failed
+                if attempt < max_retries - 1:
+                    logger.warning(f"Scheduler {action} attempt {attempt + 1} failed, retrying...")
+                    time.sleep(5)  # Wait before retry
+                    
+            except Exception as e:
+                logger.error(f"Error during scheduler {action} attempt {attempt + 1}: {str(e)}")
+                if attempt < max_retries - 1:
+                    time.sleep(5)
+                    
+        logger.error(f"Scheduler {action} failed after {max_retries} attempts")
+        return False
+    
+    def verify_scheduler_state(self, expected_running=False):
+        """Verify the current state of the scheduler"""
         try:
-            if action == 'stop':
-                result = shutdown_scheduler()
-                logger.info("Scheduler stopped successfully." if result else "Scheduler was not running.")
-                return result
+            scheduler = get_scheduler()
+            if scheduler is None:
+                return not expected_running  # If we expect stopped and it's None, that's good
             
-            elif action == 'start':
-                result = start_scheduler()
-                if result:
-                    # Ensure the job exists after starting
-                    ensure_job_exists()
-                logger.info("Scheduler started successfully." if result else "Failed to start scheduler.")
-                return result
-            
-            return False
+            is_running = getattr(scheduler, 'running', False)
+            if expected_running:
+                # Check if job exists when we expect it to be running
+                job = scheduler.get_job("my_job") if is_running else None
+                return is_running and job is not None
+            else:
+                return not is_running
+                
         except Exception as e:
-            logger.error(f"Error during scheduler {action}: {str(e)}")
+            logger.error(f"Error verifying scheduler state: {str(e)}")
             return False
     
     def cleanup_old_data(self):
@@ -2786,37 +2824,76 @@ class ResetAttendanceView(generics.GenericAPIView):
         Perform the reset attendance process in a separate thread.
         """
         try:
-            # Step 1: Stop the scheduler
-            scheduler_stopped = self.handle_scheduler('stop')
-            if not scheduler_stopped:
-                logger.error("Failed to stop the scheduler.")
+            logger.info("Starting attendance reset process...")
+
+            # Step 1: Stop the scheduler with verification
+            logger.info("Stopping scheduler...")
+            scheduler_was_stopped = self.handle_scheduler('stop')
+            if not scheduler_was_stopped:
+                logger.error("Failed to stop the scheduler. Aborting reset process.")
+                return
+            
+            # Verify scheduler is actually stopped
+            if not self.verify_scheduler_state(expected_running=False):
+                logger.error("Scheduler verification failed after stop. Aborting reset process.")
                 return
         
-            else:
-                logger.info("Scheduler stopped successfully.")
+            logger.info("Scheduler stopped and verified.")
+        
+            # Step 2: Clean up the old data
+            logger.info("Cleaning up old data...")
+            if not self.cleanup_old_data():
+                logger.error("Failed to clean up old data.")
+                return
 
-                # Step 2: Clean up the old data
-                if not self.cleanup_old_data():
-                    logger.error("Failed to clean up old data.")
-                    return
-
-                # Step 3: Run management commands
+            # Step 3: Run management commands
+            logger.info("Running management commands...")
+            try:
                 call_command('absentees', days=400)
+                logger.info("Absentees command completed.")
+            except Exception as e:
+                logger.error(f"Absentees command failed: {str(e)}")
+                
+            try:
                 call_command('reset_sequences')
+                logger.info("Reset sequences command completed.")
+            except Exception as e:
+                logger.error(f"Reset sequences command failed: {str(e)}")
 
-            # Step 4: Restart the scheduler
+            # Step 4: Restart the scheduler with verification
+            logger.info("Restarting scheduler...")
             if not self.handle_scheduler('start'):
                 logger.error("Failed to restart the scheduler.")
+                return
+
+            # Final verification
+            if self.verify_scheduler_state(expected_running=True):
+                logger.info("Attendance reset process completed successfully.")
+            else:
+                logger.error("Scheduler restart verification failed.")
+            
         except Exception as e:
             logger.error(f"Error occurred during reset attendance process: {str(e)}")
+        finally:
             # Ensure the scheduler is restarted if it was stopped
-            self.handle_scheduler('start')
+            if scheduler_was_stopped:
+                logger.info("Ensuring scheduler is restarted...")
+                if not self.verify_scheduler_state(expected_running=True):
+                    logger.warning("Scheduler not running, attempting emergency restart...")
+                    self.handle_scheduler('start')
     
     def post(self, request, *args, **kwargs):
         """
         Handle POST request to reset attendance data and restart the scheduler.
         """
         try:
+            # Check if scheduler is currently running before starting reset
+            if not self.verify_scheduler_state(expected_running=True):
+                return Response({
+                    'message': 'Scheduler is not currently running. Cannot perform reset.',
+                    'error': 'Scheduler not available'
+                }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+            
             # Start the reset process in a separate thread
             Thread(target=self.process_reset_attendance).start()
 
