@@ -167,6 +167,7 @@ import { EmpStrengthComponent } from './components/resource/resource-dashboard/e
 import { evacuationComponent } from './components/resource/resource-dashboard/evacuation/evacuation.component';
 import { FoodCourtComponent } from './components/resource/resource-dashboard/food-court/food-court.component';
 import { OperatorWorkAlocationComponent } from './components/resource/resource-dashboard/operator-work-alocation/operator-work-alocation.component';
+import { HeadcountComponent } from './components/resource/resource-dashboard/headcount/headcount.component';
 
 
 
@@ -199,7 +200,8 @@ import { OperatorWorkAlocationComponent } from './components/resource/resource-d
         FoodCourtComponent,
         DeviceConfigComponent,
         ResetReportComponent,
-        EmpAtendenceComponent
+        EmpAtendenceComponent,
+        HeadcountComponent
     ],
     imports: [
         AppRoutingModule,

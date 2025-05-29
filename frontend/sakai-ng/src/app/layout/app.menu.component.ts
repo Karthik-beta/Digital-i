@@ -33,9 +33,9 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Dashboard', icon: 'fa-solid fa-tachometer',
                                         items: [
-                                            { label: 'Shift Strength V/S Skill Matrix', icon: 'fa-solid fa-chart-pie', routerLink: ['/shift_skill'] },
+                                            // { label: 'Shift Strength V/S Skill Matrix', icon: 'fa-solid fa-chart-pie', routerLink: ['/shift_skill'] },
                                             { label: 'Shift Strength', icon: 'fa-solid fa-user-group', routerLink: ['/shift_strength'] },
-                                            { label: 'Evacuation', icon: 'fa-solid fa-door-open', routerLink: ['/evacuation_manage'] },
+                                            { label: 'Headcount Manage', icon: 'fa-solid fa-door-open', routerLink: ['/headcount_manage'] },
                                             { label: 'Evacuation Manage', icon: 'fa-solid fa-door-closed', routerLink: ['/evacuation_manage'] },
                                             { label: 'Employee Strength', icon: 'fa-solid fa-user-tie', routerLink: ['/employee_strength'] },
                                             { label: 'Employee Interval Strength', icon: 'fa-solid fa-clock', routerLink: ['/employee_interval_strength'] },

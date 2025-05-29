@@ -33,6 +33,7 @@ import { DepStrengthComponent } from './components/resource/resource-dashboard/d
 import { AgencyStrengthComponent } from './components/resource/resource-dashboard/agency-strength/agency-strength.component';
 import { OperatorWorkAlocationComponent } from './components/resource/resource-dashboard/operator-work-alocation/operator-work-alocation.component';
 import { FoodCourtComponent } from './components/resource/resource-dashboard/food-court/food-court.component';
+import { HeadcountComponent } from './components/resource/resource-dashboard/headcount/headcount.component';
 
 @NgModule({
     imports: [
@@ -91,6 +92,7 @@ import { FoodCourtComponent } from './components/resource/resource-dashboard/foo
                     { path: 'agency_strength', component: AgencyStrengthComponent, canActivate: [authGuard] },
                     { path: 'op_work_allocation', component: OperatorWorkAlocationComponent, canActivate: [authGuard] },
                     { path: 'food_court', component: FoodCourtComponent, canActivate: [authGuard] },
+                    { path: 'headcount_manage', component: HeadcountComponent, canActivate: [authGuard] },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

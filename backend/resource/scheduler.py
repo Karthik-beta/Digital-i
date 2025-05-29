@@ -82,35 +82,29 @@ def start_scheduler():
             scheduler.start()
             logger.info("Scheduler started successfully")
 
-        # Check if job already exists, if not add it
-        try:
-            existing_job = scheduler.get_job("my_job")
-            if existing_job is None:
-                # Job doesn't exist, add it
-                scheduler.add_job(
-                    run_my_command,
-                    trigger=IntervalTrigger(
-                        minutes=1,
-                        timezone=settings.TIME_ZONE
-                    ),
-                    id="my_job",
-                    replace_existing=True
-                )
-                logger.info("Job 'my_job' added to the scheduler.")
-            else:
-                logger.info("Job 'my_job' already exists in the scheduler.")
-        except JobLookupError:
-            # Job doesn't exist, add it
-            scheduler.add_job(
-                run_my_command,
-                trigger=IntervalTrigger(
-                    minutes=1,
-                    timezone=settings.TIME_ZONE
-                ),
-                id="my_job",
-                replace_existing=True
-            )
-            logger.info("Job 'my_job' added to the scheduler.")
+        # Always ensure the job exists (simplified logic)
+        scheduler.add_job(
+            run_my_command,
+            trigger=IntervalTrigger(
+                minutes=1,
+                timezone=settings.TIME_ZONE
+            ),
+            id="my_job",
+            replace_existing=True
+        )
+        logger.info("Job 'my_job' added/updated in the scheduler.")
+
+        # Add a periodic job verification task (optional)
+        scheduler.add_job(
+            verify_and_restore_job,
+            trigger=IntervalTrigger(
+                minutes=5, 
+                timezone=settings.TIME_ZONE
+            ),
+            id="job_verification",
+            replace_existing=True
+        )
+        logger.info("Job verification task added.")
 
         # Verify job was added successfully
         if scheduler.get_job("my_job"):
@@ -200,6 +194,33 @@ def cleanup_scheduler_jobs():
             logger.info("All jobs cleared from the scheduler.")
     except Exception as e:
         logger.error(f"Error clearing scheduler jobs: {str(e)}")
+
+def verify_and_restore_job():
+    """Verify the main job exists and restore it if missing"""
+    try:
+        scheduler = get_scheduler()
+        if scheduler and scheduler.running:
+            job = scheduler.get_job("my_job")
+            if job is None:
+                logger.warning("Job 'my_job' missing! Restoring...")
+                scheduler.add_job(
+                    run_my_command,
+                    trigger=IntervalTrigger(
+                        minutes=1,
+                        timezone=settings.TIME_ZONE
+                    ),
+                    id="my_job",
+                    replace_existing=True
+                )
+                logger.info("Job 'my_job' restored successfully.")
+                return True
+            else:
+                logger.debug("Job 'my_job' verified present.")
+                return True
+        return False
+    except Exception as e:
+        logger.error(f"Error verifying job: {str(e)}")
+        return False
 
 def ensure_job_exists():
     """
