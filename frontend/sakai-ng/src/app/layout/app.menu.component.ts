@@ -33,9 +33,16 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Dashboard', icon: 'fa-solid fa-tachometer',
                                         items: [
-                                            { label: 'Shift Strength V/S Skill Matrix', icon: 'fa-solid fa-scale-balanced', routerLink: ['/shift_skill'] },
-                                            { label: 'Shift Strength', icon: 'fa-solid fa-users', routerLink: ['/shift_strength'] },
-                                            { label: 'Evacuation', icon: 'fa-solid fa-right-from-bracket', routerLink: ['/evacuation'] },
+                                            { label: 'Shift Strength V/S Skill Matrix', icon: 'fa-solid fa-chart-pie', routerLink: ['/shift_skill'] },
+                                            { label: 'Shift Strength', icon: 'fa-solid fa-user-group', routerLink: ['/shift_strength'] },
+                                            { label: 'Evacuation', icon: 'fa-solid fa-door-open', routerLink: ['/evacuation_manage'] },
+                                            { label: 'Evacuation Manage', icon: 'fa-solid fa-door-closed', routerLink: ['/evacuation_manage'] },
+                                            { label: 'Employee Strength', icon: 'fa-solid fa-user-tie', routerLink: ['/employee_strength'] },
+                                            { label: 'Employee Interval Strength', icon: 'fa-solid fa-clock', routerLink: ['/employee_interval_strength'] },
+                                            { label: 'Department Strength', icon: 'fa-solid fa-building', routerLink: ['/dep_strength'] },
+                                            { label: 'Agency Strength', icon: 'fa-solid fa-handshake', routerLink: ['/agency_strength'] },
+                                            { label: 'Operator Work Allocation', icon: 'fa-solid fa-tools', routerLink: ['/op_work_allocation'] },
+                                            { label: 'Food Court', icon: 'fa-solid fa-hamburger', routerLink: ['/food_court'] },
                                         ]
                                     },
                                     { label: 'Onboarding', icon: 'fa-solid fa-user-plus', routerLink: ['/employee_master'] },
@@ -50,13 +57,13 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Attendance Regularization', icon: 'fa-solid fa-people-roof',
                                         items: [
                                             { label: 'Missed Punch Management', icon: 'fa-solid fa-fingerprint', routerLink: ['/missed_punch'] },
-                                            { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-plus' },
+                                            // { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'Leave Management', icon: 'fa-solid fa-calendar-days' },
                                             // { label: 'Compensatory Off Management', icon: 'fa-solid fa-calendar-plus' },
                                             // { label: 'On Duty Management', icon: 'fa-solid fa-calendar-minus' },
                                             // { label: 'Gate Pass Management', icon: 'fa-solid fa-address-card' },
-                                            // { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-check', routerLink: ['/emp_attendance'] },
-                                            // { label: 'Machine Allocation', icon: 'fa-solid fa-cogs', routerLink: ['/machine_allocation'] },
+                                            { label: 'Flexible Shift WO Schedule', icon: 'fa-solid fa-calendar-check', routerLink: ['/emp_attendance'] },
+                                            { label: 'Machine Allocation', icon: 'fa-solid fa-cogs', routerLink: ['/machine_allocation'] },
                                             { label: 'Holiday Management', icon: 'fa-solid fa-calendar-check', routerLink: ['/holiday_list'] },
                                         ]
                                     },

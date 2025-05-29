@@ -1,0 +1,424 @@
+.clock-container {
+  font-family: 'Digital-7', monospace;
+  font-size: 24px;
+  color: rgb(85, 82, 82); /* Green color */
+  text-shadow: 0 0 5px rgb(156, 215, 238);
+  background-color: rgba(0, 0, 0,0.9);
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: transparent;
+  width: 20rem;
+  margin: 0 auto;
+  margin-top: -1.8rem;
+}
+.page-header{
+  color: rgb(85, 82, 82); /* Green color */
+  text-shadow: 0 0 5px rgb(156, 215, 238);
+  background-color: rgba(0, 0, 0,0.9);
+  border-radius: 5px;
+  font-weight: 800;
+  background-color: transparent;
+  margin-left: 1rem;
+  margin-bottom: 0;
+}
+.dashboard-container {
+    padding: 0 1rem;
+    background-color: #f4f5f7;
+    border-radius: 0.2rem;
+    margin-top: -0.3rem;
+  }
+  
+  .cout-card {
+    text-align: center;
+    font-weight: bold;
+    padding: 15px;
+  }
+  .sam{
+    background-color: red;
+  }
+  .category-card.employee { background-color: #ff4d4d; color: white; }
+  .category-card.contract { background-color: #28a745; color: white; }
+  .category-card.temporary { background-color: #185c7e; color: white; }
+  .category-card.trainee { background-color: #7abbd6; color: white; }
+  .category-card.vendor { background-color: #9b59b6; color: white; }
+  .category-card.visitors { background-color: #e67e22; color: white; }
+  .category-card.vehicle { background-color: #1abc9c; color: white; }
+  .category-card.amc { background-color: #3498db; color: white; }
+  
+  .highlight {
+    font-size: 24px;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .count-flex-box{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0.5rem;
+  }
+  .count-item{
+    background-color: #ffffff;
+    border: 0.1rem solid rgb(231, 228, 228);
+    border-radius: 0.5rem;
+    min-width: 26rem;
+    padding: 0 0.8rem;
+  }
+  .count-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    max-height: 3rem;
+    height: 2.5rem;
+  }
+  .category-tag{
+    margin: 0.2rem 0;
+  }
+  .bg-blue{
+    background-color: #b9d3ee;
+    color: blue;
+    padding: 0.4rem;
+    border-radius: 0.3rem;
+}
+.bg-breen{
+    background-color: rgb(190, 235, 190);
+    color: green;
+    padding: 0.4rem;
+    border-radius: 0.3rem;
+}
+.bg-red{
+    background-color: rgb(247, 207, 207);
+    color: red;
+    padding: 0.4rem;
+    border-radius: 0.3rem;
+  }
+
+.p-grid{
+    display: flex;
+    flex-wrap: wrap;
+    padding: none;
+    justify-content: space-between;
+    height: 5.2rem;
+}
+.category-card {
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 0;
+    /* min-width: 16rem; */
+    min-height: 2.5rem;
+    padding: 0 0.8rem;
+ }
+
+.category-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    width: 13rem;
+    margin: 0;
+}
+
+.category-name {
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 6rem;
+  text-align: left;
+}
+
+.category-count {
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 50%;
+    margin-left: 3rem;
+}
+
+i {
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+.export-button {
+    float: right;
+    margin-top: 10px;
+}
+.flex-container{
+  display: flex;
+}
+.vehicle-section{
+  border: 0.1rem solid rgb(228, 224, 224);
+  background-color: #ffffff;
+  width: 17.2rem;
+  padding: 0 2.5rem;
+  height: 6rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.2rem;
+  display: flex;
+}
+.total-count{
+  text-align: center;
+  margin-left: 1rem;
+}
+.vehicle-card{
+  display: flex;
+  justify-content: space-between;
+  padding: 0.1rem;
+  width: 11rem;
+  margin-left: -1rem;
+  /* background-color: blue; */
+}
+.b-icon{
+  /* margin: auto; */
+  margin-right: 2.3rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+.vehicle-card i{
+  background-color: red;
+  height: 100px !important;
+  width: 100px !important;
+}
+.v-icon{
+  margin: auto;
+}
+.vehicle-info{
+  text-align: center;
+  align-items: center;
+  height: 3rem;
+  width: 6rem;
+  /* background-color: black; */
+}
+.count{
+  margin: 0.2rem 0;
+}
+.type{
+  margin: 0.2rem 0;
+}
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 70%;
+  gap: 0.2rem;
+  padding: 0.2rem;
+}
+
+.card {
+  background: white;
+  text-align: center;
+  height: 10rem;
+  background-color: #ffffff;
+  overflow-y: hidden;
+}
+
+.wide {
+  grid-column: span 2;
+  height: 16rem ;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+
+
+.gender-summary-card {
+  padding: 0.1rem;
+  height: 6rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.2rem;
+  background-color: #ffffff;
+}
+
+.gender-summary-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16.9rem;
+  gap: 10px;
+}
+.summary-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18rem;
+  gap: 10px;
+}
+
+.gender-summary-icon {
+  font-size: 1.8rem;
+  margin-right: 1rem;
+}
+
+.total {
+  color: #007bff;
+}
+
+.male {
+  color: #36A2EB;
+}
+
+.female {
+  color: #f18099;
+}
+/* .summary-icon{
+
+} */
+.gender-count{
+  /* background-color: blue; */
+  font-size: 12px;
+  margin: 0;
+}
+.gender-summary-text {
+  text-align: center;
+}
+.gender-summary-text h3 {
+  margin: 0.1rem 0;
+  font-size: 1.2rem;
+}
+
+.gender-summary-text p {
+  margin: 0;
+  color: #555;
+}
+
+.summary-card {
+  padding: 0.1rem;
+  height: 6rem;
+  width: 21.8rem;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.2rem;
+  background-color: #ffffff;
+}
+.summary-header{
+  background-color: #0a387d;
+  color: #ffffff;
+}
+
+
+.summary-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 26.3rem;
+  width: 23.8rem;
+  margin-top: 0.3rem;
+}
+.summary-content {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+}
+.summary-content h2{
+  color: #0a387d;
+  margin: 0.5rem;
+}
+
+.employee-icon {
+  font-size: 3rem;
+  color: #0a387d;
+}
+
+.small-flex-container{
+  display: flex;
+  gap:0.2rem;
+  width: 61%;
+}
+.donut-card{
+  background: white;
+  text-align: center;
+  width: 20rem;
+  height: 10rem;
+  background-color: #ffffff;
+}
+.age-card{
+  background: white;
+  text-align: center;
+  width: 21.8rem;
+  height: 10rem;
+  background-color: #ffffff;
+}
+.e-header{
+  background-color: #0a387d;
+  color: #ffffff;
+  font-size: 6px;
+  margin-top: 0;
+  padding: 0.3rem;
+}
+.header{
+  background-color: #0a387d;
+  color: #ffffff;
+  font-size: 8px;
+  margin-top: 0;
+  padding: 0.3rem;
+}
+.donut{
+  height: 15rem;
+  width: 15rem;
+  margin-top: -5.5rem;
+}
+.age-bar{
+  margin: 0 auto;
+  /* height: 4rem; */
+  width: 15rem;
+  margin-top: -1rem;
+}
+.work-bar{
+  margin: 0 auto;
+  width: 28.1rem;
+  margin-top: -1.3rem;
+}
+.dep-bar{
+  margin: 0.3rem 0;
+  width: 21rem;
+  display: flex;
+}
+.dep-bar button{
+  background-color: transparent;
+  height: 3rem;
+  color: blue;
+  margin: auto 0;
+  cursor: pointer;
+  border: none;
+}
+
+
+.work-permit-bar{
+  margin: 0.3rem auto;
+  height: 2.5rem;
+  width: 21rem;
+  margin-top: -1rem;
+}
+
+
+.chart-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination-buttons button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination-buttons button:hover {
+  background-color: #0056b3;
+}

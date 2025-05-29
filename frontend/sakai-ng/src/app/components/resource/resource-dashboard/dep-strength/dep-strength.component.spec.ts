@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EvacuationComponent } from './evacuation.component';
+import { DepStrengthComponent } from './dep-strength.component';
 
-describe('EvacuationComponent', () => {
-  let component: EvacuationComponent;
-  let fixture: ComponentFixture<EvacuationComponent>;
+describe('DepStrengthComponent', () => {
+  let component: DepStrengthComponent;
+  let fixture: ComponentFixture<DepStrengthComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EvacuationComponent]
+      imports: [DepStrengthComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EvacuationComponent);
+    fixture = TestBed.createComponent(DepStrengthComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

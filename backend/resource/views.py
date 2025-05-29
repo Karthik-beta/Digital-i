@@ -4191,9 +4191,14 @@ class ExportMonthlyPayrollExcel2(View):
         total_early_exit = str(total_early_exit) if total_early_exit else None
         total_overtime = str(total_overtime) if total_overtime else None
 
-        working_days = total_days - wo_count
+        # working_days = total_days - wo_count
         # paid_days = working_days - absent_total - mp_count
         paid_days = present_total + wo_count
+
+        if present_total == 0 and paid_days == 0:
+            working_days = 0
+        else:
+            working_days = total_days - wo_count
 
         return days, statuses, total_days, working_days, paid_days, present_total, absent_total, mp_count, ww_count, wo_count, total_working, total_late_entry, total_early_exit, total_overtime
 

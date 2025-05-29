@@ -1,18 +1,19 @@
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EvacuationComponent } from './evacuation.component';
+import { AgencyStrengthComponent } from './agency-strength.component';
 
-describe('EvacuationComponent', () => {
-  let component: EvacuationComponent;
-  let fixture: ComponentFixture<EvacuationComponent>;
+describe('AgencyStrengthComponent', () => {
+  let component: AgencyStrengthComponent;
+  let fixture: ComponentFixture<AgencyStrengthComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EvacuationComponent]
+      imports: [AgencyStrengthComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EvacuationComponent);
+    fixture = TestBed.createComponent(AgencyStrengthComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

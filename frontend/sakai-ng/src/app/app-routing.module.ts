@@ -9,7 +9,6 @@ import { ConfigComponent } from './components/configuration/config/config.compon
 import { EmployeeMasterComponent } from './components/resource/employee-master/employee-master.component';
 import { DailyReportComponent } from './components/resource/daily-report/daily-report.component';
 import { ShiftStrengthComponent } from './components/resource/resource-dashboard/shift-strength/shift-strength.component';
-import { EvacuationComponent } from './components/resource/resource-dashboard/evacuation/evacuation.component';
 import { AddEditEmployeeComponent } from './components/resource/employee-master/add-edit-employee/add-edit-employee.component';
 import { MonthlyInOutComponent } from './components/resource/monthly-in-out/monthly-in-out.component';
 // import { MissedPunchComponent } from './components/resource/attendance-reg/missed-punch/missed-punch.component';
@@ -23,17 +22,17 @@ import { InsufficientHoursReportComponent } from './components/resource/insuffic
 import { MandaysComponent } from './components/resource/mandays/mandays.component';
 import { LogsComponent } from './components/configurations/logs/logs.component';
 import { MissedPunchComponent } from './components/resource/attendance-regularization/missed-punch/missed-punch.component';
-import { HolidayListComponent } from './components/configuration/holiday-list/holiday-list.component';
-import { AgencyStrengthComponent } from './components/evacuation/agency-strength/agency-strength.component';
-import { DepStrengthComponent } from './components/evacuation/dep-strength/dep-strength.component';
-import { EmpIntervalStrengthComponent } from './components/evacuation/emp-interval-strength/emp-interval-strength.component';
-import { FoodCourtComponent } from './components/evacuation/food-court/food-court.component';
-import { OperatorWorkAllocationComponent } from './components/evacuation/operator-work-allocation/operator-work-allocation.component';
 import { DeviceConfigComponent } from './components/configuration/device-config/device-config.component';
-import { EmpStrengthComponent } from './components/evacuation/emp-strength/emp-strength.component';
 import { ResetReportComponent } from './components/resource/reset-report/reset-report.component';
 import { EmpAtendenceComponent } from './components/resource/attendance-regularization/emp-atendence/emp-atendence.component';
 import { MachineAllocationComponent } from './components/resource/attendance-regularization/machine-allocation/machine-allocation.component';
+import { EmpStrengthComponent } from './components/resource/resource-dashboard/emp-strength/emp-strength.component';
+import { evacuationComponent } from './components/resource/resource-dashboard/evacuation/evacuation.component';
+import { EmpIntervalStrengthComponent } from './components/resource/resource-dashboard/emp-interval-strength/emp-interval-strength.component';
+import { DepStrengthComponent } from './components/resource/resource-dashboard/dep-strength/dep-strength.component';
+import { AgencyStrengthComponent } from './components/resource/resource-dashboard/agency-strength/agency-strength.component';
+import { OperatorWorkAlocationComponent } from './components/resource/resource-dashboard/operator-work-alocation/operator-work-alocation.component';
+import { FoodCourtComponent } from './components/resource/resource-dashboard/food-court/food-court.component';
 
 @NgModule({
     imports: [
@@ -65,7 +64,6 @@ import { MachineAllocationComponent } from './components/resource/attendance-reg
                     { path: 'insufficient_hours_report', component: InsufficientHoursReportComponent, canActivate: [authGuard] },
                     { path: 'Monthly_In_Out', component: MonthlyInOutComponent, canActivate: [authGuard] },
                     { path: 'shift_strength', component: ShiftStrengthComponent, canActivate: [authGuard] },
-                    { path: 'evacuation', component: EvacuationComponent, canActivate: [authGuard] },
                     // { path: 'missed_punch', component: MissedPunchComponent, canActivate: [authGuard] },
                     { path: 'mandays_report', component: MandaysComponent, canActivate: [authGuard] },
 
@@ -77,21 +75,22 @@ import { MachineAllocationComponent } from './components/resource/attendance-reg
                     // Configuration
                     { path: 'configuration', component: ConfigComponent, canActivate: [authGuard] },
                     { path: 'logs', component: LogsComponent, canActivate: [authGuard] },
-                    { path: 'holiday_list', component: HolidayListComponent, canActivate: [authGuard] },
 
                     // Evacuation
-                    { path: 'agency_strength', component: AgencyStrengthComponent, canActivate: [authGuard] },
-                    { path: 'dep_strength', component: DepStrengthComponent, canActivate: [authGuard] },
-                    { path: 'emp_interval_strength', component: EmpIntervalStrengthComponent, canActivate: [authGuard] },
-                    { path: 'emp_strength', component: EmpStrengthComponent, canActivate: [authGuard] },
-                    { path: 'food_court', component: FoodCourtComponent, canActivate: [authGuard] },
-                    { path: 'operator_work_allocation', component: OperatorWorkAllocationComponent, canActivate: [authGuard] },
 
                     { path: 'device_config', component: DeviceConfigComponent, canActivate: [authGuard] },
                     { path: 'reset_report', component: ResetReportComponent, canActivate: [authGuard] },
 
                     { path: 'emp_attendance', component: EmpAtendenceComponent, canActivate: [authGuard] },
-                    { path: 'machine_allocation', component: MachineAllocationComponent, canActivate: [authGuard] }
+                    { path: 'machine_allocation', component: MachineAllocationComponent, canActivate: [authGuard] },
+
+                    { path: 'employee_strength', component: EmpStrengthComponent, canActivate: [authGuard] },
+                    { path: 'evacuation_manage', component: evacuationComponent, canActivate: [authGuard] },
+                    { path: 'employee_interval_strength', component: EmpIntervalStrengthComponent, canActivate: [authGuard] },
+                    { path: 'dep_strength', component: DepStrengthComponent, canActivate: [authGuard] },
+                    { path: 'agency_strength', component: AgencyStrengthComponent, canActivate: [authGuard] },
+                    { path: 'op_work_allocation', component: OperatorWorkAlocationComponent, canActivate: [authGuard] },
+                    { path: 'food_court', component: FoodCourtComponent, canActivate: [authGuard] },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

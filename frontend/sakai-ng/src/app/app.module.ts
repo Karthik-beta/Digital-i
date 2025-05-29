@@ -127,7 +127,7 @@ import { ShiftSkillComponent } from './components/resource/resource-dashboard/sh
 import { ConfigComponent } from './components/configuration/config/config.component';
 import { DailyReportComponent } from './components/resource/daily-report/daily-report.component';
 import { ShiftStrengthComponent } from './components/resource/resource-dashboard/shift-strength/shift-strength.component';
-import { EvacuationComponent } from './components/resource/resource-dashboard/evacuation/evacuation.component';
+// import { EvacuationComponent } from './components/resource/resource-dashboard/evacuation/evacuation.component';
 import { AddEditEmployeeComponent } from './components/resource/employee-master/add-edit-employee/add-edit-employee.component';
 import { CompanyComponent } from './components/configuration/company/company.component';
 import { LocationComponent } from './components/configuration/location/location.component';
@@ -155,16 +155,19 @@ import { FixedShiftComponent } from './components/configuration/fixed-shift/fixe
 import { OvertimeRoundoffComponent } from './components/configuration/overtime-roundoff/overtime-roundoff.component';
 import { HolidayListComponent } from './components/configuration/holiday-list/holiday-list.component';
 import { AbsenceCorrectionComponent } from './components/configuration/absence-correction/absence-correction.component';
-import { AgencyStrengthComponent } from './components/evacuation/agency-strength/agency-strength.component';
-import { DepStrengthComponent } from './components/evacuation/dep-strength/dep-strength.component';
-import { EmpIntervalStrengthComponent } from './components/evacuation/emp-interval-strength/emp-interval-strength.component';
-import { EmpStrengthComponent } from './components/evacuation/emp-strength/emp-strength.component';
-import { FoodCourtComponent } from './components/evacuation/food-court/food-court.component';
-import { OperatorWorkAllocationComponent } from './components/evacuation/operator-work-allocation/operator-work-allocation.component';
 import { DeviceConfigComponent } from './components/configuration/device-config/device-config.component';
 import { ResetReportComponent } from './components/resource/reset-report/reset-report.component';
 import { EmpAtendenceComponent } from './components/resource/attendance-regularization/emp-atendence/emp-atendence.component';
 import { MachineAllocationComponent } from './components/resource/attendance-regularization/machine-allocation/machine-allocation.component';
+
+import { AgencyStrengthComponent } from './components/resource/resource-dashboard/agency-strength/agency-strength.component';
+import { DepStrengthComponent } from './components/resource/resource-dashboard/dep-strength/dep-strength.component';
+import { EmpIntervalStrengthComponent } from './components/resource/resource-dashboard/emp-interval-strength/emp-interval-strength.component';
+import { EmpStrengthComponent } from './components/resource/resource-dashboard/emp-strength/emp-strength.component';
+import { evacuationComponent } from './components/resource/resource-dashboard/evacuation/evacuation.component';
+import { FoodCourtComponent } from './components/resource/resource-dashboard/food-court/food-court.component';
+import { OperatorWorkAlocationComponent } from './components/resource/resource-dashboard/operator-work-alocation/operator-work-alocation.component';
+
 
 
 
@@ -172,9 +175,9 @@ import { MachineAllocationComponent } from './components/resource/attendance-reg
 @NgModule({
     declarations: [
         AppComponent, NotfoundComponent, EmployeeMasterComponent, AddEditEmployeeComponent, ShiftSkillComponent, ConfigComponent,
-        DailyReportComponent, ShiftStrengthComponent, EvacuationComponent, CompanyComponent, LocationComponent, LocationComponent,
+        DailyReportComponent, ShiftStrengthComponent, CompanyComponent, LocationComponent, LocationComponent,
         DepartmentComponent, DesignationComponent, DivisionComponent, SubdivisionComponent, ShopfloorComponent, MonthlyInOutComponent,
-        MissedPunchComponent,
+        MissedPunchComponent, evacuationComponent, OperatorWorkAlocationComponent,
         ShiftComponent,
         AbsentComponent,
         LateEntryComponent,
@@ -194,7 +197,6 @@ import { MachineAllocationComponent } from './components/resource/attendance-reg
         EmpIntervalStrengthComponent,
         EmpStrengthComponent,
         FoodCourtComponent,
-        OperatorWorkAllocationComponent,
         DeviceConfigComponent,
         ResetReportComponent,
         EmpAtendenceComponent

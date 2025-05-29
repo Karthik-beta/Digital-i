@@ -1,0 +1,184 @@
+.clock-container {
+    font-family: 'Digital-7', monospace;
+    font-size: 24px;
+    color: rgb(85, 82, 82); /* Green color */
+    text-shadow: 0 0 5px rgb(156, 215, 238);
+    background-color: rgba(0, 0, 0,0.9);
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: transparent;
+    width: 20rem;
+    margin: 0 auto;
+  }
+  .p-tag {
+    width: 3.5rem;
+    height: 1rem;
+    font-size: 9px;
+    padding: 2px;
+    background-color: rgb(77, 77, 235);
+    border: none;
+    border-radius: 0.2rem;
+    color: #ffffff;
+    text-align: center;
+  }
+  .header-box{
+    display: flex;
+    margin-top: -1.8rem;
+    justify-content: space-between;
+    width: 94vw;
+  }
+  .label-box{
+    display: flex;
+    gap: 1px;
+    align-items: center;
+  }
+  .sg-bg{
+    background-color: #A8E6CF;
+  }
+  .b-bg{
+    background-color: #007bff;
+  }
+  .y-bg{
+    background-color: #FFD700;
+  }
+  .g-bg{
+    background-color: #28a745;
+  }
+  .r-bg{
+    background-color: #dc3545;
+  }
+  .page-header{
+    color: rgb(85, 82, 82); /* Green color */
+    text-shadow: 0 0 5px rgb(156, 215, 238);
+    background-color: rgba(0, 0, 0,0.9);
+    border-radius: 5px;
+    font-weight: 800;
+    background-color: transparent;
+    margin-left: 1rem;
+    margin-bottom: 0;
+  }
+  .logo-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .logo-image {
+    width: 120px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ffffff;
+  }
+  .p-carousel .p-carousel-content {
+    margin-left: 0 !important; /* Ensure it starts from the correct position */
+    padding-left: 0 !important; /* Remove extra padding */
+  }
+  
+  .p-carousel .p-carousel-container {
+    justify-content: flex-start !important; /* Align carousel items to the left */
+  }
+  
+  .dashboard-slide {
+    width: 100%; /* Make sure slides take full width */
+    display: flex;
+    justify-content: center; /* Adjust alignment */
+    align-items: center;
+  }
+  
+  .p-carousel .p-carousel-item:first-child {
+    margin-left: 0 !important;
+  }
+  
+  .dashboard {
+    background: white;
+    border-radius: 10px;
+    padding: 0.2rem;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #f1efef;
+    margin-left: 1rem;
+    height: 62vh;
+    width: 94vw;
+  }
+  .dashboard-card {
+    background: white;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid #f1efef;
+    width: 12rem;
+    height: 11rem;
+    margin: 0.3rem;
+    /* background-color: #007bff; */
+  }
+  
+  .dashboard-title {
+    font-size: 0.7rem;
+    font-weight: bold; 
+    margin-bottom: 15px;
+  }
+  
+  .status-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .status-btn {
+    padding: 0.1rem 0.2rem;
+    border-radius: 6px;
+    font-size: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .status-btn i {
+    font-size: 16px;
+  }
+  
+  .active { background-color: #007bff; }
+  .present { background-color: #28a745; }
+  .absent { background-color: #dc3545; }
+  .planned { background-color: #e91e63; }
+  .checkin { background-color: #007bff; }
+  
+  .charts-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.1rem;
+    width: 22rem;
+    max-height: 2rem;
+  }
+  .flex-box{
+    background-color: rgb(199, 217, 226);
+    display: flex;
+    justify-content:start;
+    width: 89vw;
+    flex-wrap: wrap;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #f1efef;
+    border-radius: 10px;
+    padding: 0 auto;
+    margin: 0 auto;
+  }
+  .pie-chart-box{
+    width: 20%;
+    margin-left: -10.5em;
+    margin-top: -7rem;
+  }
+  /* background-color: red; */
+  .pie{
+    height: 1rem;
+    width: 1rem;
+  }
+  .chart-box {
+    width: 30%;
+    margin-top: -1rem;
+    overflow-y: hidden;
+    max-height: 9rem;
+  }
+   
+  
