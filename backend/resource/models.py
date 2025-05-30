@@ -175,9 +175,6 @@ class Employee(models.Model):
         if self.employee_name is not None:
             self.employee_name = self.employee_name.title()
 
-        if self.device_enroll_id is not None:
-            self.device_enroll_id = self.device_enroll_id.upper()
-
         if self.email is not None:
             self.email = self.email.lower()
 

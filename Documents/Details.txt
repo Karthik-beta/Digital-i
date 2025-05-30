@@ -43,7 +43,7 @@ Running Backend :
 sudo docker run -d -p 8000:8000 --name backend --restart always karth1k/backend_digital:latest
 
 Consolidated Update Command :
-docker compose pull && docker compose down && docker compose up -d
+docker compose pull django && docker compose down && docker compose up -d
  
  
 Database : 
