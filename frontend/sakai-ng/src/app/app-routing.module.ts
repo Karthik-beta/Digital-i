@@ -34,6 +34,7 @@ import { AgencyStrengthComponent } from './components/resource/resource-dashboar
 import { OperatorWorkAlocationComponent } from './components/resource/resource-dashboard/operator-work-alocation/operator-work-alocation.component';
 import { FoodCourtComponent } from './components/resource/resource-dashboard/food-court/food-court.component';
 import { HeadcountComponent } from './components/resource/resource-dashboard/headcount/headcount.component';
+import { HolidayListComponent } from './components/configuration/holiday-list/holiday-list.component';
 
 @NgModule({
     imports: [
@@ -76,6 +77,8 @@ import { HeadcountComponent } from './components/resource/resource-dashboard/hea
                     // Configuration
                     { path: 'configuration', component: ConfigComponent, canActivate: [authGuard] },
                     { path: 'logs', component: LogsComponent, canActivate: [authGuard] },
+                    { path: 'holiday_list', component: HolidayListComponent, canActivate: [authGuard] },
+
 
                     // Evacuation
 
