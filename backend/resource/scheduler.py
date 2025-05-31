@@ -34,15 +34,15 @@ def get_scheduler():
             _scheduler.add_jobstore(DjangoJobStore(), "default")
             logger.info("Created new scheduler instance")
             
-            # Important: Start the scheduler to load existing jobs from jobstore
-            if not _scheduler.running:
-                register_events(_scheduler)
-                _scheduler.start()
-                logger.info("Scheduler started and existing jobs loaded from jobstore")
+            # # Important: Start the scheduler to load existing jobs from jobstore
+            # if not _scheduler.running:
+            #     register_events(_scheduler)
+            #     _scheduler.start()
+            #     logger.info("Scheduler started and existing jobs loaded from jobstore")
                 
-                # Log what jobs were loaded
-                existing_jobs = _scheduler.get_jobs()
-                logger.info(f"Loaded {len(existing_jobs)} existing jobs from database: {[job.id for job in existing_jobs]}")
+            #     # Log what jobs were loaded
+            #     existing_jobs = _scheduler.get_jobs()
+            #     logger.info(f"Loaded {len(existing_jobs)} existing jobs from database: {[job.id for job in existing_jobs]}")
         
         return _scheduler
     except Exception as e:
