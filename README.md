@@ -136,6 +136,10 @@ python manage.py runserver  # Backend dev server
 - **Database**: 5432
 - **Redis**: 6379 (internal)
 
+## Tracing the Execution Flow
+
+When diagnosing issues or understanding how a particular feature or API endpoint works, a common and effective approach is **tracing the execution flow**. This involves starting from an entry point—such as a URL pattern, function call, or user action—and systematically following the references, function calls, or imports through the codebase to locate the relevant logic or implementation. This method is fundamental for debugging, code comprehension, and extending system functionality.
+
 ## Additional Documentation
 
 - **Frontend Documentation**: See [Documents/frontend-docs](Documents/frontend-docs) for detailed guides and references related to the Angular/PrimeNG frontend.
